@@ -1,51 +1,51 @@
 using System.IO;
 using UnityEngine;
 
-public class SavedData
+namespace ArTiX.Utils.FileManagement
 {
-    // The index represent the level.
-    public int[] nbStarPerLevel;
-    public int[] scorePerLevel;
-    public float[] killedPercentagePerLevel;
-}
-
-public static class SavingSystem
-{
-    private const string SAVING_PATH = "/Json/PlayerData.json";
-    private static readonly string completePath;
-
-    static SavingSystem()
+    public class SavedData
     {
-        completePath = Application.persistentDataPath + SAVING_PATH;
+        public Vector2Int[] cells;
     }
 
-    public static void Save(in SavedData dataToSave)
+    public static class SavingSystem
     {
-        if (dataToSave == null) return;
+        private const string SAVING_PATH = "/Json/PlayerData.json";
+        private static readonly string completePath;
 
-        if (!Directory.Exists(Application.persistentDataPath + "/Json"))
-            Directory.CreateDirectory(Application.persistentDataPath + "/Json");
-
-        if (!File.Exists(completePath))
+        static SavingSystem()
         {
-            FileStream file = File.Create(completePath);
-            file.Close();
+            completePath = Application.persistentDataPath + SAVING_PATH;
         }
 
-        StreamWriter writer = new StreamWriter(completePath, false);
+        public static void Save(in SavedData dataToSave)
+        {
+            if (dataToSave == null) return;
 
-        string jsonTxt = JsonUtility.ToJson(dataToSave, true);
-        writer.Write(jsonTxt);
-        writer.Close();
-    }
+            if (!Directory.Exists(Application.persistentDataPath + "/Json"))
+                Directory.CreateDirectory(Application.persistentDataPath + "/Json");
 
-    public static SavedData LoadData()
-    {
-        if (!File.Exists(completePath)) return null;
+            if (!File.Exists(completePath))
+            {
+                FileStream file = File.Create(completePath);
+                file.Close();
+            }
 
-        StreamReader reader = File.OpenText(completePath);
-        SavedData loadedDatas = JsonUtility.FromJson<SavedData>(reader.ReadToEnd());
-        reader.Close();
-        return loadedDatas;
+            StreamWriter writer = new StreamWriter(completePath, false);
+
+            string jsonTxt = JsonUtility.ToJson(dataToSave, true);
+            writer.Write(jsonTxt);
+            writer.Close();
+        }
+
+        public static SavedData LoadData()
+        {
+            if (!File.Exists(completePath)) return null;
+
+            StreamReader reader = File.OpenText(completePath);
+            SavedData loadedDatas = JsonUtility.FromJson<SavedData>(reader.ReadToEnd());
+            reader.Close();
+            return loadedDatas;
+        }
     }
 }

@@ -4,15 +4,15 @@ namespace ArTiX.Utils
 {
     public class Grid<T>
     {
-        private int width;
-        private int height;
+        public int Width { get; private set; }
+        public int Height {  get; private set; }
 
         private T[,] grid;
 
         public Grid(in int width, in int height)
         {
-            this.width = width;
-            this.height = height;
+            Width = width;
+            Height = height;
 
             grid = new T[width, height];
         }
@@ -31,14 +31,14 @@ namespace ArTiX.Utils
         }
         public void SetCellValue(in Vector2Int cell, in T value) => SetCellValue(cell.x, cell.y, value);
 
-        public bool IsCellWithinGrid(in int x, in int y) => x >= 0 && x < width && y >= 0 && y < height;
+        public bool IsCellWithinGrid(in int x, in int y) => x >= 0 && x < Width && y >= 0 && y < Height;
         public bool IsCellWithinGrid(in Vector2Int cell) => IsCellWithinGrid(cell.x, cell.y);
 
         public void Clear()
         {
-            for (int x =  0; x < width; x++)
+            for (int x =  0; x < Width; x++)
             {
-                for (int y = 0; y < height; y++)
+                for (int y = 0; y < Height; y++)
                 {
                     grid[x, y] = default;
                 }

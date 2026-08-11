@@ -96,6 +96,8 @@ namespace ArTiX.GridBuildingSystem
             gridMat.SetFloat(GridDatas.LINE_WIDTH, datas.LineWidth);
         }
 
+        public PlacedObject GetObjectOnCell(Vector2Int cell) => grid.GetCellValue(cell);
+
         #region World pos, grid pos
 
         private Vector2Int ConvertWorldPosToCellPos(Vector3 worldPos)
