@@ -26,6 +26,10 @@ MonoBehaviour:
     - 47cad78feeef0be4db01c2728544d2fe
     - c1de3e2e76644224aab67542c4d470d8
     - 3e67fb863f25f60478c2f183f633ee5f
+    - 2614ead5611b24d419a9f28223dcd276
+    - 45ccad15f96dc584dbc2df1f282ab787
+    - b979553774336fb49a76ccfc1f37b0eb
+    - 2e97318f38c0fca4d8387bfcb6b760c0
     values:
     - iconNameOrGuid: Prefab Icon
       colorIndex: 1
@@ -75,4 +79,20 @@ MonoBehaviour:
       colorIndex: 8
       isIconRecursive: 0
       isColorRecursive: 1
+    - iconNameOrGuid: cs Script Icon
+      colorIndex: 0
+      isIconRecursive: 1
+      isColorRecursive: 0
+    - iconNameOrGuid: Material Icon
+      colorIndex: 0
+      isIconRecursive: 1
+      isColorRecursive: 0
+    - iconNameOrGuid: cs Script Icon
+      colorIndex: 0
+      isIconRecursive: 1
+      isColorRecursive: 0
+    - iconNameOrGuid: Material Icon
+      colorIndex: 0
+      isIconRecursive: 1
+      isColorRecursive: 0
   bookmarks: []

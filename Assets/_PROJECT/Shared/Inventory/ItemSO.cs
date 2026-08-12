@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ArTiX.Inventory
 {
-    [CreateAssetMenu(fileName = "ItemSO", menuName = "Scriptable Objects/ItemSO")]
+    [CreateAssetMenu(fileName = "ItemSO", menuName = "Datas/ItemSO")]
     public class ItemSO : ScriptableObject
     {
         [SerializeField] private string _name;
@@ -13,5 +13,8 @@ namespace ArTiX.Inventory
 
         [SerializeField] private Transform prefab;
         public Transform Prefab => prefab;
+
+        [SerializeField] private int maxStackSize;
+        public int MaxStackSize => maxStackSize;
     }
 }

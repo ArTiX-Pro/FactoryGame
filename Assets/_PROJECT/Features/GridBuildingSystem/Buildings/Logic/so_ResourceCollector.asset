@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bd611841a0d88e4881029237edd042c, type: 3}
+  m_Script: {fileID: 11500000, guid: 86ed7574198c08348a05eacb7d2e7c39, type: 3}
   m_Name: so_ResourceCollector
-  m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Datas.PlacedObjectDatas
-  objName: ResourceCollector
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceCollectorSO
+  objName: Resource Collector
   icon: {fileID: 0}
   prefab: {fileID: 935323192725363434, guid: 2581dc11f60089e4ea2f2a4c102e14e6, type: 3}
   ghost: {fileID: 531027036826306693, guid: 1f821757d0c0c2c459711ac649ab5153, type: 3}
+  miningTime: 1

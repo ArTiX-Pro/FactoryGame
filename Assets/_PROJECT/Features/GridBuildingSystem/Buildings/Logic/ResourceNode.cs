@@ -1,30 +1,23 @@
 using ArTiX.GridBuildingSystem.Datas;
+using ArTiX.Inventory;
 
 namespace ArTiX.GridBuildingSystem.Buildings
 {
-    public class ResourceNode : PlacedObject, IResourceHolder
+    public class ResourceNode : PlacedObject
     {
-        private ResourceSO resource;
-        public ResourceSO Resource => resource;
-
         private int quantity;
 
         private void Awake()
         {
-            ResourceNodeSO nodeDatas = datas as ResourceNodeSO;
-            quantity = nodeDatas.Quantity;
-            resource = nodeDatas.Resource;
+            quantity = (datas as ResourceNodeSO).Quantity;
         }
 
-        public ResourceSO TakeResource()
+        public ItemSO GiveItem()
         {
-            if (quantity == 0) return null;
-
             quantity--;
-
             if (quantity == 0) GridBuildingSystem.Instance.DestroyBuilding(this);
 
-            return resource;
+            return (datas as ResourceNodeSO).Resource;
         }
     }
 }

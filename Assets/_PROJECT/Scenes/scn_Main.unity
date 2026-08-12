@@ -208,7 +208,7 @@ MonoBehaviour:
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: 2768bf12b650cb34588ea545f070b421, type: 2}
-          m_ObjectArgumentAssemblyTypeName: ArTiX.GridBuildingSystem.Datas.PlacedObjectDatas,
+          m_ObjectArgumentAssemblyTypeName: ArTiX.GridBuildingSystem.Datas.PlacedObjectSO,
             Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -1162,7 +1162,7 @@ MonoBehaviour:
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: 276777ea371c04b4caee330530ec345a, type: 2}
-          m_ObjectArgumentAssemblyTypeName: ArTiX.GridBuildingSystem.Datas.PlacedObjectDatas,
+          m_ObjectArgumentAssemblyTypeName: ArTiX.GridBuildingSystem.Datas.PlacedObjectSO,
             Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0

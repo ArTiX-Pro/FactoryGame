@@ -9,8 +9,7 @@ using UnityEngine;
 
 namespace ArTiX.GridBuildingSystem.Datas
 {
-    [CreateAssetMenu(fileName = "BuildingDatas", menuName = "Datas/PlacedObject/Building")]
-    public class PlacedObjectSO : ScriptableObject
+    public abstract class PlacedObjectSO : ScriptableObject
     {
         [Title("Base datas")]
         [SerializeField] private string objName;
@@ -25,7 +24,7 @@ namespace ArTiX.GridBuildingSystem.Datas
         [Button]
         public void SetCells()
         {
-            EditorSceneManager.OpenScene("Assets/_PROJECT/Scenes/GridCellCreator.unity");
+            EditorSceneManager.OpenScene("Assets/_PROJECT/Scenes/scn_GridCellCreator.unity");
             EditorApplication.EnterPlaymode();
             SetupGridValue.Instance.Building = this;
         }

@@ -1,3 +1,4 @@
+using ArTiX.Inventory;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,17 +11,17 @@ namespace ArTiX.GridBuildingSystem.Datas
         [Serializable]
         private struct SResources
         {
-            public ResourceSO resource;
+            public ItemSO resource;
             public int quantity;
         }
 
         [SerializeField] private SResources[] resourcesRequiered;
-        public Dictionary<ResourceSO, int> ResourcesQuantityRequiered { get; private set; } = new();
+        public Dictionary<ItemSO, int> ResourcesQuantityRequiered { get; private set; } = new();
 
         [SerializeField] private SResources output;
-        public KeyValuePair<ResourceSO, int> ResourceOutput
+        public KeyValuePair<ItemSO, int> ResourceOutput
         {
-            get => new KeyValuePair<ResourceSO, int>(output.resource, output.quantity);
+            get => new KeyValuePair<ItemSO, int>(output.resource, output.quantity);
         }
 
         private void Awake()

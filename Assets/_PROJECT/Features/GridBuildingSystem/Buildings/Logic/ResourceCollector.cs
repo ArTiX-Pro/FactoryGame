@@ -3,9 +3,12 @@ using UnityEngine;
 
 namespace ArTiX.GridBuildingSystem.Buildings
 {
+    [RequireComponent(typeof(Inventory.Inventory))]
     public class ResourceCollector : PlacedObject
     {
-        private List<ResourceNode> adjacentResourceNodes = new List<ResourceNode>();
+        private Inventory.Inventory inventory;
+
+        private readonly List<ResourceNode> adjacentResourceNodes = new List<ResourceNode>();
 
         private ResourceCollectorSO resourceCollectorDatas;
         private float miningTimer;
@@ -15,6 +18,7 @@ namespace ArTiX.GridBuildingSystem.Buildings
         private void Awake()
         {
             resourceCollectorDatas = datas as ResourceCollectorSO;
+            inventory = GetComponent<Inventory.Inventory>();
         }
 
         private void Update()
@@ -37,7 +41,12 @@ namespace ArTiX.GridBuildingSystem.Buildings
                     }
                 }
 
-                adjacentResourceNodes[0].TakeResource();
+                int quantity = 1;
+                inventory.TakeItem(adjacentResourceNodes[0].GiveItem(), ref quantity);
+                if (quantity == 1)
+                {
+                    Debug.Log("Inventory full");
+                }
             }
         }
 

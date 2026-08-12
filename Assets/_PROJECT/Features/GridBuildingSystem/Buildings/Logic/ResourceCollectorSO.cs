@@ -1,7 +1,7 @@
 using ArTiX.GridBuildingSystem.Datas;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ResourceCollectorSO", menuName = "Scriptable Objects/ResourceCollectorSO")]
+[CreateAssetMenu(fileName = "ResourceCollectorSO", menuName = "Datas/PlacedObject/ResourceCollectorSO")]
 public class ResourceCollectorSO : PlacedObjectSO
 {
     [SerializeField] private float miningTime;
