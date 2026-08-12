@@ -232,7 +232,7 @@ namespace AssetInventory
         public int packageTileSize = 150;
         public PackageTileStatus packageTileStatuses = PackageTileStatus.StoreStatus;
         public int noPackageTileTextBelow = 110;
-        public int tagListHeight = 250;
+        public int tagListHeight = 320;
         public int tileMargin = 2;
         public bool enlargeTiles = true;
         public bool centerTiles;
@@ -538,7 +538,7 @@ namespace AssetInventory
         // wizard state
         public bool wizardCompleted;
         public int wizardCurrentPage;
-        public bool welcomeShown; // show welcome window once
+        public bool welcomeShown; // legacy serialized welcome marker retained for compatibility
 
         public List<UpdateActionStates> actionStates = new List<UpdateActionStates>();
         public List<FolderSpec> folders = new List<FolderSpec>();

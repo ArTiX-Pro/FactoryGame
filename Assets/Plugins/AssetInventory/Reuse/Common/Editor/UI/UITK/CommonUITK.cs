@@ -963,13 +963,15 @@ namespace ImpossibleRobert.Common
 
         /// <summary>
         /// Stops a handled UI Toolkit event before a child control or ancestor handles it again.
-        /// Unity versions before 6 also require cancelling the legacy default action.
+        /// Unity 2022.3 also requires cancelling the legacy default action explicitly.
         /// </summary>
         public static void ConsumeEvent(EventBase evt, bool immediate = false)
         {
             if (evt == null) return;
 
-#if !UNITY_6000_0_OR_NEWER
+#if UNITY_2023_2_OR_NEWER
+            (evt.target as VisualElement)?.panel?.focusController?.IgnoreEvent(evt);
+#else
             evt.PreventDefault();
 #endif
             if (immediate)

@@ -9,7 +9,7 @@ AssetOrigin:
   serializedVersion: 1
   productId: 349582
   packageName: Asset Inventory 4
-  packageVersion: 4.7.0
-  assetPath: Assets/AssetInventory/Reuse/Common.Imaging/Editor/ThirdParty/ImageSharp/NuGet
+  packageVersion: 4.7.1
+  assetPath: Assets/Plugins/AssetInventory/Reuse/Common.Imaging/Editor/ThirdParty/ImageSharp/NuGet
     Gallery - SixLabors.ImageSharp 2.1.13.url
-  uploadId: 964104
+  uploadId: 969138

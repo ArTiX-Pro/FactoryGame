@@ -14,7 +14,7 @@ namespace AssetInventory
     {
         public static event Action OnUpgradeDone;
 
-        public const int CURRENT_CONFIG_VERSION = 9;
+        public const int CURRENT_CONFIG_VERSION = 10;
         public const int CURRENT_DB_VERSION = 29;
         public const int CURRENT_SEED_VERSION = 1;
 
@@ -324,6 +324,10 @@ namespace AssetInventory
                 AI.Config.aiCaptionsFeatureEnabled = IsConfiguredActionEnabled(AI.Config, ActionHandler.ACTION_AI_CAPTIONS);
                 AI.Config.semanticSearchFeatureEnabled = IsConfiguredActionEnabled(AI.Config, ActionHandler.ACTION_SEMANTIC_INDEX);
                 AI.Config.codeSearchFeatureEnabled = IsConfiguredActionEnabled(AI.Config, ActionHandler.ACTION_CODE_INDEX);
+            }
+            if (oldConfigVersion < 10 && AI.Config.tagListHeight == 250)
+            {
+                AI.Config.tagListHeight = 320;
             }
             if (oldConfigVersion < CURRENT_CONFIG_VERSION)
             {

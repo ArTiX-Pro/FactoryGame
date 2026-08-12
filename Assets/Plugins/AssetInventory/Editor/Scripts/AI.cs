@@ -18,7 +18,7 @@ namespace AssetInventory
     /// <summary>Process-wide Asset Inventory facade for initialization, configuration persistence, dependency calculation, refresh notifications, and supported editor automation.</summary>
     public static class AI
     {
-        public const string VERSION = "4.7.0";
+        public const string VERSION = "4.7.1";
         public const string DEFINE_SYMBOL = "ASSET_INVENTORY";
 
         public const string DEFINE_SYMBOL_HIDE_AI = DEFINE_SYMBOL + "_HIDE_AI";
@@ -325,8 +325,6 @@ namespace AssetInventory
             Actions.Init(force);
 
             InitState = InitializationState.Initialized;
-
-            ShowWelcomeIfNeeded();
         }
 
         /// <summary>
@@ -612,20 +610,32 @@ namespace AssetInventory
             ImageUtils.LogImageOperations = _config.LogImageExtraction;
         }
 
-        private static void InitForWelcomeIfNeeded()
+        private static void InitForProjectSetupIfNeeded()
         {
-            if (Application.isBatchMode || (Config.welcomeShown && ActionHandler.IsProjectSetupDone)) return;
-
-            if (IsInitialized)
+            bool autoInitAttempted = SessionState.GetBool(AutoInitAttemptedKey, false);
+            if (!ShouldInitializeProjectSetup(
+                    Application.isBatchMode,
+                    ActionHandler.IsProjectSetupDone,
+                    IsInitialized,
+                    autoInitAttempted))
             {
-                ShowWelcomeIfNeeded();
                 return;
             }
 
-            if (SessionState.GetBool(AutoInitAttemptedKey, false)) return;
-
             SessionState.SetBool(AutoInitAttemptedKey, true);
             Init();
+        }
+
+        internal static bool ShouldInitializeProjectSetup(
+            bool isBatchMode,
+            bool isProjectSetupDone,
+            bool isInitialized,
+            bool autoInitAttempted)
+        {
+            return !isBatchMode &&
+                   !isProjectSetupDone &&
+                   !isInitialized &&
+                   !autoInitAttempted;
         }
 
         private static void InitAfterDomainReload()
@@ -636,16 +646,7 @@ namespace AssetInventory
                 return;
             }
 
-            InitForWelcomeIfNeeded();
-        }
-
-        private static void ShowWelcomeIfNeeded()
-        {
-            if (Application.isBatchMode || Config.welcomeShown) return;
-
-            Config.welcomeShown = true;
-            SaveConfig();
-            WelcomeWindow.ShowWindow();
+            InitForProjectSetupIfNeeded();
         }
 
         /// <summary>Persists the current Asset Inventory configuration to its package-independent settings file.</summary>

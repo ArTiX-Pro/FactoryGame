@@ -512,6 +512,20 @@ namespace ImpossibleRobert.Common
             Action refresh,
             long intervalMs)
         {
+            return SchedulePeriodicRefresh(inspectorRoot, refresh, null, intervalMs);
+        }
+
+        /// <summary>
+        /// Schedules a recurring inspector refresh with a lightweight fallback that remains active
+        /// during pointer-driven field edits. The interaction refresh must not update bindings,
+        /// rebuild retained containers, or otherwise disturb the active field's pointer capture.
+        /// </summary>
+        public static IVisualElementScheduledItem SchedulePeriodicRefresh(
+            VisualElement inspectorRoot,
+            Action refresh,
+            Action interactionRefresh,
+            long intervalMs)
+        {
             if (inspectorRoot == null)
                 throw new ArgumentNullException(nameof(inspectorRoot));
             if (refresh == null)
@@ -522,7 +536,9 @@ namespace ImpossibleRobert.Common
             InspectorInteractionState interactionState = GetInteractionState(inspectorRoot);
             return inspectorRoot.schedule.Execute(() =>
             {
-                if (!interactionState.BlocksPeriodicRefresh)
+                if (interactionState.BlocksPeriodicRefresh)
+                    interactionRefresh?.Invoke();
+                else
                     refresh();
             }).Every(intervalMs);
         }

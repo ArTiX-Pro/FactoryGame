@@ -122,7 +122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 531027036826306693}
   m_Layer: 0
-  m_Name: prfb_Ghost_ResourceCollector
+  m_Name: prfb_GhostResourceCollector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

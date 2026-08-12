@@ -7,21 +7,28 @@ namespace AudioTool
 {
     internal sealed class AudioToolsWelcomeWindow : EditorWindow
     {
-        private const string ShownPreference = "AudioTools.WelcomeShown.v2";
+        private const string PackageId = "com.wetzold.audio-tools";
+        private const int WelcomeRevision = 1;
         private const string DocumentationUrl = "https://www.wetzold.com/tools/audiotools/docs/";
 
+        private static readonly CommonWelcomeController<AudioToolsWelcomeWindow> WelcomeController =
+            new CommonWelcomeController<AudioToolsWelcomeWindow>(PackageId, WelcomeRevision, OpenWindow);
+
         [InitializeOnLoadMethod]
-        private static void ShowOnFirstStart()
+        private static void ScheduleAutomaticWelcome()
         {
-            if (EditorPrefs.GetBool(ShownPreference, false)) return;
-            EditorPrefs.SetBool(ShownPreference, true);
-            EditorApplication.delayCall += ShowWindow;
+            WelcomeController.ScheduleAutomaticOpen();
         }
 
         [MenuItem(AudioToolsMenuPaths.Welcome, false, AudioToolsMenuPaths.WelcomePriority)]
         internal static void ShowWindow()
         {
-            CommonWelcomeWindow.ShowUtility<AudioToolsWelcomeWindow>("Welcome to Audio Tools");
+            WelcomeController.OpenManually();
+        }
+
+        private static AudioToolsWelcomeWindow OpenWindow()
+        {
+            return CommonWelcomeWindow.ShowUtility<AudioToolsWelcomeWindow>("Welcome to Audio Tools");
         }
 
         private void OnEnable()

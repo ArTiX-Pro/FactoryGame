@@ -8,9 +8,26 @@ namespace AssetInventory
 {
     public sealed class WelcomeWindow : BasicEditorUI
     {
+        private const string PackageId = "com.wetzold.asset-inventory";
+        private const int WelcomeRevision = 1;
+
+        private static readonly CommonWelcomeController<WelcomeWindow> WelcomeController =
+            new CommonWelcomeController<WelcomeWindow>(PackageId, WelcomeRevision, OpenWindow);
+
+        [InitializeOnLoadMethod]
+        private static void ScheduleAutomaticWelcome()
+        {
+            WelcomeController.ScheduleAutomaticOpen();
+        }
+
         public static void ShowWindow()
         {
-            CommonWelcomeWindow.ShowUtility<WelcomeWindow>("Welcome to Asset Inventory");
+            WelcomeController.OpenManually();
+        }
+
+        private static WelcomeWindow OpenWindow()
+        {
+            return CommonWelcomeWindow.ShowUtility<WelcomeWindow>("Welcome to Asset Inventory");
         }
 
         private void OnEnable()

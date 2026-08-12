@@ -71,6 +71,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 349582
   packageName: Asset Inventory 4
-  packageVersion: 4.7.0
-  assetPath: Assets/AssetInventory/Editor/ThirdParty/SSH.Net/System.Formats.Asn1.dll
-  uploadId: 964104
+  packageVersion: 4.7.1
+  assetPath: Assets/Plugins/AssetInventory/Editor/ThirdParty/SSH.Net/System.Formats.Asn1.dll
+  uploadId: 969138

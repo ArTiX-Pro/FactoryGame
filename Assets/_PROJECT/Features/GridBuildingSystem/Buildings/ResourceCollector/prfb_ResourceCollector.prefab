@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6346468245926439882}
-  - component: {fileID: 935323192725363434}
   - component: {fileID: 3568853022211362011}
+  - component: {fileID: 935323192725363434}
   m_Layer: 0
   m_Name: prfb_ResourceCollector
   m_TagString: Untagged
@@ -34,19 +34,6 @@ Transform:
   - {fileID: 3010989979524690871}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &935323192725363434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2715999718127645219}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa460aec2d250f2438ecb7cae7b50e14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Buildings.ResourceCollector
-  datas: {fileID: 11400000, guid: 2768bf12b650cb34588ea545f070b421, type: 2}
 --- !u!114 &3568853022211362011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,6 +47,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.Inventory.Inventory
   datas: {fileID: 11400000, guid: 5d88320c98482b64392266ef97b63dea, type: 2}
+--- !u!114 &935323192725363434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2715999718127645219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa460aec2d250f2438ecb7cae7b50e14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Buildings.ResourceCollector
+  datas: {fileID: 11400000, guid: 2768bf12b650cb34588ea545f070b421, type: 2}
 --- !u!1 &4413510701689319247
 GameObject:
   m_ObjectHideFlags: 0

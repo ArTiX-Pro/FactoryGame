@@ -156,9 +156,15 @@ namespace ArTiX.GridBuildingSystem
         {
             // Snap to cell pos
             Vector2Int cellPos = GetMouseCellPos();
-            ghost.position = ConvertCellPosToWorldPos(cellPos);
-            ghost.GetComponentInChildren<Renderer>().material.SetColor(Utilities.COLOR, 
-                value: CanBuild(cellPos) ? datas.ValidColor : datas.UnvalidColor);
+            ghost.position = MasterTween.InterpolateValue(
+                startValue: ghost.position,
+                targetValue: ConvertCellPosToWorldPos(cellPos),
+                percentage: Time.deltaTime * datas.GhostSpeed,
+                transition: datas.GhostMoveTransition);
+
+            foreach (Renderer renderer in ghost.GetComponentsInChildren<Renderer>())
+                renderer.material.SetColor(Utilities.COLOR, 
+                    value: CanBuild(cellPos) ? datas.ValidColor : datas.UnvalidColor);
         }
 
         private void ExitBuildingState()

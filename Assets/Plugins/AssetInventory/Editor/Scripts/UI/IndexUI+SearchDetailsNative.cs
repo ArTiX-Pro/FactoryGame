@@ -651,6 +651,14 @@ namespace AssetInventory
             bool busy = _blockingInProgress;
             bool canImport = available && !string.IsNullOrEmpty(_importFolder);
 
+            AssetInfo subPackage = ResolveSearchSubPackage(info);
+            if (subPackage != null)
+            {
+                AddNativePackageAction(actions, "package.actions.opensubpackage", "Jump into Sub-Package",
+                    () => OpenInSearch(subPackage, true, false), !busy,
+                    tooltip: "Filter Search to the indexed contents of this sub-package.");
+            }
+
             if (available && !info.InProject && string.IsNullOrEmpty(_importFolder))
             {
                 section.Add(AssetInventoryUITK.CreateHelpBox("Select a folder in the Project view to enable import actions.", MessageType.Info));
@@ -815,6 +823,16 @@ namespace AssetInventory
                 section.Add(progress);
             }
             return section;
+        }
+
+        internal static AssetInfo ResolveSearchSubPackage(AssetInfo info)
+        {
+            if (info == null || info.Id <= 0 || (!info.IsUnityPackage() && !info.IsArchive())) return null;
+
+            string childLocation = info.Location + Asset.SUB_PATH + info.Path;
+            return info.FirstChildInfoOrDefault(child => child != null
+                && child.Id > 0
+                && string.Equals(child.Location, childLocation, StringComparison.Ordinal));
         }
 
         private void AddNativeSearchCaptionActions(VisualElement actions, AssetInfo info, bool busy)

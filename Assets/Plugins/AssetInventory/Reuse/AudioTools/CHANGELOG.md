@@ -1,14 +1,18 @@
 # Changelog
+
 All notable changes to this package will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-08-07
+
+- The welcome guide now opens once for standalone installations, stays quiet when bundled inside another Wetzold tool, and remains available from the Tools menu.
+
 ## [1.1.0] - 2026-07-30
 
-- Reduced scripting clutter by keeping the audio editor, menus, and context-menu implementation internal.
-
 - Rebuilt the Audio Editor with a polished, responsive UI Toolkit workspace.
+- Reduced scripting clutter by keeping the audio editor, menus, and context-menu implementation internal.
 - Added waveform zooming, precise selection timing, keyboard controls, and undo support.
 - Restored automatic looping preview, responsive selection timing beneath the waveform, intuitive outside-click deselection, and streamlined zoom, source, and export controls.
 - Improved empty and selection guidance while preserving the editor's warm audio-focused identity.

@@ -568,6 +568,9 @@ namespace AssetInventory
                 {
                     int action = SGrid.LastClickAlt ? AI.Config.doubleClickAltAction : AI.Config.doubleClickAction;
 
+                    AudioManager.StopAudio();
+                    DisposeBlocking();
+
                     switch (action)
                     {
                         case 2:

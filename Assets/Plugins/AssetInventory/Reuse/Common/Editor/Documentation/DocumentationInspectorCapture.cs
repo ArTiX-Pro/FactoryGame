@@ -60,7 +60,8 @@ namespace ImpossibleRobert.Common.Editor.Documentation
             "dark",
             "Dark",
             "InspectorWindow",
-            "CommonInspector"
+            "CommonInspector",
+            "DocumentationInspectorCapture"
         };
 
         public int Width { get; set; } = 720;
@@ -229,7 +230,33 @@ namespace ImpossibleRobert.Common.Editor.Documentation
             {
                 yield return null;
                 for (int index = 0; index < _specs.Count; index++)
-                    yield return Capture(_specs[index]);
+                {
+                    IEnumerator capture = Capture(_specs[index]);
+                    bool captureFailed = false;
+                    while (true)
+                    {
+                        bool hasNext = false;
+                        object current = null;
+                        try
+                        {
+                            hasNext = capture.MoveNext();
+                            if (hasNext)
+                                current = capture.Current;
+                        }
+                        catch (Exception exception)
+                        {
+                            captureFailed = true;
+                            Debug.LogException(exception);
+                        }
+
+                        if (captureFailed || !hasNext)
+                            break;
+                        yield return current;
+                    }
+
+                    if (captureFailed)
+                        yield break;
+                }
 
                 AssetDatabase.Refresh();
                 succeeded = true;
@@ -383,7 +410,33 @@ namespace ImpossibleRobert.Common.Editor.Documentation
                 if (string.IsNullOrEmpty(directory))
                     throw new InvalidOperationException("The output path has no directory: " + spec.OutputPath + ".");
                 Directory.CreateDirectory(directory);
-                File.WriteAllBytes(fullPath, cropped.EncodeToPNG());
+                byte[] pngData = cropped.EncodeToPNG();
+                IOException writeException = null;
+                bool written = false;
+                for (int attempt = 0; attempt < 3 && !written; attempt++)
+                {
+                    AssetDatabase.ReleaseCachedFileHandles();
+                    try
+                    {
+                        File.WriteAllBytes(fullPath, pngData);
+                        written = true;
+                    }
+                    catch (IOException exception)
+                    {
+                        writeException = exception;
+                    }
+
+                    if (!written && attempt < 2)
+                        yield return null;
+                }
+
+                if (!written)
+                {
+                    throw new IOException(
+                        "Could not replace the documentation screenshot after releasing Unity's cached file handles: " +
+                        fullPath,
+                        writeException);
+                }
             }
             finally
             {
@@ -481,12 +534,29 @@ namespace ImpossibleRobert.Common.Editor.Documentation
             HashSet<StyleSheet> added = new HashSet<StyleSheet>();
             for (int nameIndex = 0; nameIndex < wantedNames.Count; nameIndex++)
             {
+                bool found = false;
                 for (int sheetIndex = 0; sheetIndex < loaded.Length; sheetIndex++)
                 {
                     StyleSheet sheet = loaded[sheetIndex];
                     if (sheet == null || sheet.name != wantedNames[nameIndex] || !added.Add(sheet))
                         continue;
                     root.styleSheets.Add(sheet);
+                    found = true;
+                }
+
+                if (found)
+                    continue;
+
+                string[] guids = AssetDatabase.FindAssets(wantedNames[nameIndex] + " t:StyleSheet");
+                for (int guidIndex = 0; guidIndex < guids.Length; guidIndex++)
+                {
+                    string assetPath = AssetDatabase.GUIDToAssetPath(guids[guidIndex]);
+                    StyleSheet sheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(assetPath);
+                    if (sheet == null || sheet.name != wantedNames[nameIndex] || !added.Add(sheet))
+                        continue;
+
+                    root.styleSheets.Add(sheet);
+                    break;
                 }
             }
         }

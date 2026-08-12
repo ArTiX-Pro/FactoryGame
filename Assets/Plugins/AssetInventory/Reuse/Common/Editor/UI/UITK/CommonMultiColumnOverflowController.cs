@@ -34,7 +34,7 @@ namespace ImpossibleRobert.Common
             _view.RegisterCallback<AttachToPanelEvent>(_ => ScheduleRefresh());
             _view.RegisterCallback<GeometryChangedEvent>(OnViewGeometryChanged);
             _view.RegisterCallback<PointerUpEvent>(_ => ScheduleRefresh());
-#if UNITY_2023_2_OR_NEWER
+#if UNITY_6000_0_OR_NEWER
             _view.columns.propertyChanged += (_, __) => ScheduleRefresh();
 
             foreach (Column column in _view.columns)

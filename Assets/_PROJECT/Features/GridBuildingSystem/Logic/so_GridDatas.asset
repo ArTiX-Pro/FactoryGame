@@ -19,5 +19,7 @@ MonoBehaviour:
   color: {r: 1, g: 1, b: 1, a: 1}
   origin: {x: 0, y: 0, z: 0}
   prfbGridVisual: {fileID: 7488025045110592918, guid: cb78e3ab320ba8340a4a9ca0a3ed7669, type: 3}
-  validColor: {r: 0, g: 1, b: 0, a: 1}
-  unvalidColor: {r: 1, g: 0, b: 0, a: 1}
+  ghostMoveTransition: 7
+  ghostSpeed: 5
+  validColor: {r: 0, g: 1, b: 0, a: 0.5882353}
+  unvalidColor: {r: 1, g: 0, b: 0, a: 0.5882353}

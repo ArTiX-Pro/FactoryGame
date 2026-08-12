@@ -67,10 +67,10 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 7b70ba9227dfb3149b9054ce22704732, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 94abf4c7f7cf1da42a51c5f894632b05, type: 2}
+      objectReference: {fileID: 2100000, guid: bce72746c0a9b7248a0d9acc51204850, type: 2}
     - target: {fileID: 919132149155446097, guid: 7b70ba9227dfb3149b9054ce22704732, type: 3}
       propertyPath: m_Name
-      value: Ghost_GoldOre
+      value: prfb_GhostGoldOre
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

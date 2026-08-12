@@ -2,6 +2,7 @@ using ArTiX.GridBuildingSystem.Datas;
 using ArTiX.Utils;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -39,6 +40,8 @@ namespace ArTiX.GridBuildingSystem.Tools
                 building = value;
             }
         }
+
+        public string previousScenePath;
 
         private struct SCell
         {
@@ -115,6 +118,13 @@ namespace ArTiX.GridBuildingSystem.Tools
 
             building.CellArray = currentCells.ToArray();
             EditorApplication.ExitPlaymode();
+            EditorApplication.playModeStateChanged += OnClosingPlayMode;
+        }
+
+        private void OnClosingPlayMode(PlayModeStateChange obj)
+        {
+            EditorApplication.playModeStateChanged -= OnClosingPlayMode;
+            EditorSceneManager.OpenScene(previousScenePath);
         }
     }
 }
