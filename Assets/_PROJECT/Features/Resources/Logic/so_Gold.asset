@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6cb98aa92fc15643bb17885362ff7c5, type: 3}
+  m_Name: so_Gold
+  m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Datas.Resource
+  _name: Gold
+  icon: {fileID: 0}
+  prefab: {fileID: 8950746166293500551, guid: bc27b7c89961fb44296052ce903be77d, type: 3}

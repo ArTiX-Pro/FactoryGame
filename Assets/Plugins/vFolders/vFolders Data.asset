@@ -23,6 +23,9 @@ MonoBehaviour:
     - 45aab2c99bca6a7429c69b3cef20f930
     - a512f6afb66405f4b87ff5f30e416a27
     - fae75eebf3e51c1458fe20872867a6a1
+    - 47cad78feeef0be4db01c2728544d2fe
+    - c1de3e2e76644224aab67542c4d470d8
+    - 3e67fb863f25f60478c2f183f633ee5f
     values:
     - iconNameOrGuid: Prefab Icon
       colorIndex: 1
@@ -59,5 +62,17 @@ MonoBehaviour:
     - iconNameOrGuid: ScriptableObject Icon
       colorIndex: 2
       isIconRecursive: 1
+      isColorRecursive: 1
+    - iconNameOrGuid: 
+      colorIndex: 1
+      isIconRecursive: 0
+      isColorRecursive: 0
+    - iconNameOrGuid: 
+      colorIndex: 2
+      isIconRecursive: 0
+      isColorRecursive: 1
+    - iconNameOrGuid: 
+      colorIndex: 8
+      isIconRecursive: 0
       isColorRecursive: 1
   bookmarks: []
