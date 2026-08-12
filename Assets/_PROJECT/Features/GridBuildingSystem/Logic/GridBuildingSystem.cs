@@ -205,7 +205,8 @@ namespace ArTiX.GridBuildingSystem
 
         private void CreateBuilding()
         {
-            if (CanBuild(GetMouseCellPos()))
+            Vector2Int origin = GetMouseCellPos();
+            if (CanBuild(origin))
             {
                 PlacedObject building = Instantiate(
                     original: currentBuildingDatas.Prefab,
@@ -213,14 +214,13 @@ namespace ArTiX.GridBuildingSystem
                     rotation: Quaternion.Euler(x: 0, BuildingRotationInWorld, z: 0)
                 );
 
-                Vector2Int startCell = GetMouseCellPos();
-                List<Vector2Int> occupiedCells = currentBuildingDatas.GetOccupiedCells(startCell, currentRotation);
+                List<Vector2Int> occupiedCells = currentBuildingDatas.GetOccupiedCells(origin, currentRotation);
                 foreach (Vector2Int cell in occupiedCells)
                 {
                     grid.SetCellValue(cell, building);
                 }
 
-                building.Initialize(occupiedCells.ToArray());
+                building.Initialize(origin);
             }
             else
             {
@@ -228,9 +228,9 @@ namespace ArTiX.GridBuildingSystem
             }
         }
 
-        private bool CanBuild(in Vector2Int centerCell)
+        private bool CanBuild(in Vector2Int origin)
         {
-            foreach (Vector2Int cell in currentBuildingDatas.GetOccupiedCells(centerCell, currentRotation))
+            foreach (Vector2Int cell in currentBuildingDatas.GetOccupiedCells(origin, currentRotation))
             {
                 if (grid.GetCellValue(cell) != null || !grid.IsCellWithinGrid(cell))
                     return false;
@@ -241,7 +241,7 @@ namespace ArTiX.GridBuildingSystem
 
         public void DestroyBuilding(PlacedObject building)
         {
-            foreach (Vector2Int cell in building.OccupiedCells)
+            foreach (Vector2Int cell in building.GetOccupiedCells())
             {
                 grid.SetCellValue(cell, null);
             }

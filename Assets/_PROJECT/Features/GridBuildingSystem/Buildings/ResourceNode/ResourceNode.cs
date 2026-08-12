@@ -6,6 +6,7 @@ namespace ArTiX.GridBuildingSystem.Buildings
     public class ResourceNode : PlacedObject
     {
         private int quantity;
+        public ItemSO Item => (datas as ResourceNodeSO).Resource;
 
         private void Awake()
         {

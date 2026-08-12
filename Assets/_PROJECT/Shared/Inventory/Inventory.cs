@@ -3,57 +3,66 @@ using UnityEngine;
 
 namespace ArTiX.Inventory
 {
-    public class Inventory : MonoBehaviour, IItemGiver, IItemTaker
+    public class Inventory : MonoBehaviour, IItemHolder
     {
+        private class ItemSlot
+        {
+            public ItemSO item;
+            public int quantity;
+        }
+
         [SerializeField] private InventorySO datas;
 
-        private readonly Dictionary<ItemSO, int> inventory = new Dictionary<ItemSO, int>();
+        private readonly List<ItemSlot> inventory = new List<ItemSlot>();
 
+        public ItemSO Item
+        {
+            get
+            {
+                if (inventory.Count == 0) return null;
+                return inventory[0].item;
+            }
+        }
+
+        public bool CanGiveItem() => Item != null;
         public ItemSO GiveItem()
         {
-            foreach (KeyValuePair<ItemSO, int> itemQuantPair in inventory)
-            {
-                inventory[itemQuantPair.Key]--;
-                if (inventory[itemQuantPair.Key] == 0) inventory.Remove(itemQuantPair.Key);
-                
-                return itemQuantPair.Key;
-            }
-
-            return null;
+            inventory[0].quantity--;
+            ItemSO item = inventory[0].item;
+            if (inventory[0].quantity == 0) inventory.RemoveAt(0);
+            return item;
         }
 
-        public ItemSO GiveItem(in ItemSO item, ref int quantity)
+        public bool CanTakeItem(ItemSO item)
         {
-            if (inventory.TryGetValue(item, out int currentQuantity))
+            foreach (ItemSlot slot in inventory)
             {
-                quantity = Mathf.Min(quantity, currentQuantity);
-                inventory[item] -= quantity;
-                if (inventory[item] == 0) inventory.Remove(item);
-
-                return item;
+                if (slot.item == item && slot.quantity < item.MaxStackSize) return true;
             }
-            else return null;
+
+            if (inventory.Count < datas.NbMaxDifferentItem) return true;
+
+            return false;
         }
 
-        public void TakeItem(in ItemSO item, ref int quantity)
+        public void TakeItem(ItemSO item)
         {
-            if (!inventory.ContainsKey(item)) 
+            int inventorySize = inventory.Count;
+            for (int i = 0; i < inventorySize; i++)
             {
-                if (inventory.Keys.Count == datas.NbMaxDifferentItem) return;
-
-                inventory.Add(item, 0); 
+                if (inventory[i].item == item)
+                {
+                    inventory[i].quantity++;
+                    return;
+                }
             }
 
-            if (inventory[item] + quantity <= item.MaxStackSize)
+            inventory.Add(new ItemSlot
             {
-                inventory[item] += quantity;
-                quantity = 0;
-            }
-            else
-            {
-                quantity -= item.MaxStackSize - inventory[item];
-                inventory[item] = item.MaxStackSize;
-            }
+                item = item,
+                quantity = 1
+            });
+            
         }
     }
 }

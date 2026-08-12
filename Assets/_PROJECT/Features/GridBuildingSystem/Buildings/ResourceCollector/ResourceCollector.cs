@@ -4,60 +4,26 @@ using UnityEngine;
 namespace ArTiX.GridBuildingSystem.Buildings
 {
     [RequireComponent(typeof(Inventory.Inventory))]
-    public class ResourceCollector : PlacedObject
+    public class ResourceCollector : ActiveBuilding
     {
         private Inventory.Inventory inventory;
 
         private readonly List<ResourceNode> adjacentResourceNodes = new List<ResourceNode>();
 
-        private ResourceCollectorSO resourceCollectorDatas;
-        private float miningTimer;
-
-        private bool active = true;
-
-        private void Awake()
+        protected override void Awake()
         {
-            resourceCollectorDatas = datas as ResourceCollectorSO;
+            base.Awake();
             inventory = GetComponent<Inventory.Inventory>();
         }
 
-        private void Update()
+        public override void Initialize(Vector2Int origin)
         {
-            if (!active) return;
+            base.Initialize(origin);
 
-            miningTimer += Time.deltaTime;
-
-            if (miningTimer >= resourceCollectorDatas.MiningTime)
-            {
-                miningTimer = 0;
-
-                if (adjacentResourceNodes[0] == null) 
-                {
-                    adjacentResourceNodes.RemoveAt(0); 
-                    if (adjacentResourceNodes.Count == 0)
-                    {
-                        active = false;
-                        return;
-                    }
-                }
-
-                int quantity = 1;
-                inventory.TakeItem(adjacentResourceNodes[0].GiveItem(), ref quantity);
-                if (quantity == 1)
-                {
-                    Debug.Log("Inventory full");
-                }
-            }
-        }
-
-        public override void Initialize(Vector2Int[] occupiedCells)
-        {
-            base.Initialize(occupiedCells);
-
-            Vector2Int bottomLeftCell = occupiedCells[0], topRightCell = occupiedCells[0];
+            Vector2Int bottomLeftCell = Origin, topRightCell = Origin;
 
             // Get extremities
-            foreach (Vector2Int cell in occupiedCells)
+            foreach (Vector2Int cell in GetOccupiedCells())
             {
                 bottomLeftCell.x = Mathf.Min(bottomLeftCell.x, cell.x);
                 bottomLeftCell.y = Mathf.Min(bottomLeftCell.y, cell.y);
@@ -99,8 +65,28 @@ namespace ArTiX.GridBuildingSystem.Buildings
             for (i = 0; i < height; i++)
                 AddResourceNodeToList(startCell + (Vector2Int.down * i));
 
-            foreach (ResourceNode nodes in adjacentResourceNodes)
-                Debug.Log(nodes);
+            if (adjacentResourceNodes.Count == 0) active = false;
+        }
+
+        protected override void OnTimerFinished()
+        {
+            if (adjacentResourceNodes[0] == null)
+            {
+                adjacentResourceNodes.RemoveAt(0);
+                if (adjacentResourceNodes.Count == 0)
+                {
+                    active = false;
+                    return;
+                }
+            }
+
+            if (inventory.CanTakeItem(adjacentResourceNodes[0].Item))
+            {
+                inventory.TakeItem(adjacentResourceNodes[0].GiveItem());
+                Debug.Log("took item");
+            }
+            else
+                Debug.Log("Inventory full");
         }
     }
 }
