@@ -17,8 +17,8 @@ namespace ArTiX.GridBuildingSystem.Datas
         [SerializeField] private Sprite icon;
         [SerializeField] private PlacedObject prefab;
         [SerializeField] private Transform ghost;
-        
-        private Vector2Int[] cellArray;
+
+        [SerializeField] private Vector2Int[] cellArray;
 
 #if UNITY_EDITOR
 

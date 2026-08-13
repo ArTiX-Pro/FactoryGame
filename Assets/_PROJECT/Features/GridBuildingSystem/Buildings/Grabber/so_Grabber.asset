@@ -16,4 +16,6 @@ MonoBehaviour:
   icon: {fileID: 0}
   prefab: {fileID: 8059234526852225456, guid: 07b5fc1bab5a16447926c819a07350d2, type: 3}
   ghost: {fileID: 3539623884627047264, guid: 822b2eda704dde542b86773749a3cfdb, type: 3}
+  cellArray:
+  - {x: 0, y: 0}
   duration: 1
