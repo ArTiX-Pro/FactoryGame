@@ -14,6 +14,11 @@ namespace ArTiX.GridBuildingSystem.Buildings
 
         public virtual void Initialize(Vector2Int origin) => Origin = origin;
 
+        public virtual void Remove()
+        {
+            // SFX && VFX
+        }
+
         public List<Vector2Int> GetOccupiedCells()
         {
             List<Vector2Int> occupiedCells = new List<Vector2Int>();

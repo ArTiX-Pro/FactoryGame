@@ -25,14 +25,15 @@ namespace ArTiX.GridBuildingSystem.Buildings
             if (inputCell != null && inputCell.TryGetComponent(out IItemHolder itemHolder)) inputHolder = itemHolder;
             if (outputCell != null && outputCell.TryGetComponent(out itemHolder)) outputHolder = itemHolder;
 
-            active = inputHolder != null && outputHolder != null;
+            if (inputHolder == null || outputHolder == null)
+                Activate(false);
         }
 
-        protected override void OnTimerFinished()
+        protected override void OnTickAction()
         {
-            if (inputHolder == null || outputHolder == null) 
+            if (inputHolder == null || outputHolder == null)
             {
-                active = false;
+                Activate(false);
                 return; 
             }
 

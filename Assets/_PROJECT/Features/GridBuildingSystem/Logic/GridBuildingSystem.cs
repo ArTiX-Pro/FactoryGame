@@ -3,7 +3,6 @@ using ArTiX.GridBuildingSystem.Buildings;
 using ArTiX.GridBuildingSystem.Datas;
 using ArTiX.Input;
 using ArTiX.Utils;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -214,11 +213,8 @@ namespace ArTiX.GridBuildingSystem
                     rotation: Quaternion.Euler(x: 0, BuildingRotationInWorld, z: 0)
                 );
 
-                List<Vector2Int> occupiedCells = currentBuildingDatas.GetOccupiedCells(origin, currentRotation);
-                foreach (Vector2Int cell in occupiedCells)
-                {
+                foreach (Vector2Int cell in currentBuildingDatas.GetOccupiedCells(origin, currentRotation))
                     grid.SetCellValue(cell, building);
-                }
 
                 building.Initialize(origin);
             }

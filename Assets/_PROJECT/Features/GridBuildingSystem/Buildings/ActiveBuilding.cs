@@ -1,34 +1,39 @@
 using ArTiX.GridBuildingSystem.Datas;
-using UnityEngine;
+using System;
 
 namespace ArTiX.GridBuildingSystem.Buildings
 {
     public abstract class ActiveBuilding : PlacedObject
     {
-        protected bool active = true;
-
-        protected ActiveBuildingSO activeDatas;
-        protected float timer;
+        private int tickCounter;
+        private int ticksPerUpdate;
 
         protected virtual void Awake()
         {
-            activeDatas = datas as ActiveBuildingSO;
+            ticksPerUpdate = (datas as ActiveBuildingSO).TicksPerUpdate;
         }
 
-        private void Update()
+        private void Start()
         {
-            if (!active) return;
+            TickSystem.Instance.OnTick += IncrementTickCounter;
+        }
 
-            timer += Time.deltaTime;
+        protected void Activate(in bool active)
+        {
+            if (active) TickSystem.Instance.OnTick += IncrementTickCounter;
+            else TickSystem.Instance.OnTick -= IncrementTickCounter;
+        }
 
-            if (timer >= activeDatas.Duration)
+        protected abstract void OnTickAction();
+
+        private void IncrementTickCounter(object sender, EventArgs args)
+        {
+            tickCounter++;
+            if (tickCounter == ticksPerUpdate)
             {
-                timer = 0;
-
-                OnTimerFinished();
+                tickCounter = 0;
+                OnTickAction();
             }
         }
-
-        protected abstract void OnTimerFinished();
     }
 }

@@ -18,4 +18,4 @@ MonoBehaviour:
   ghost: {fileID: 3539623884627047264, guid: 822b2eda704dde542b86773749a3cfdb, type: 3}
   cellArray:
   - {x: 0, y: 0}
-  duration: 1
+  ticksPerUpdate: 5

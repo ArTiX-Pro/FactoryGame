@@ -65,17 +65,17 @@ namespace ArTiX.GridBuildingSystem.Buildings
             for (i = 0; i < height; i++)
                 AddResourceNodeToList(startCell + (Vector2Int.down * i));
 
-            if (adjacentResourceNodes.Count == 0) active = false;
+            if (adjacentResourceNodes.Count == 0) Activate(false);
         }
 
-        protected override void OnTimerFinished()
+        protected override void OnTickAction()
         {
             if (adjacentResourceNodes[0] == null)
             {
                 adjacentResourceNodes.RemoveAt(0);
                 if (adjacentResourceNodes.Count == 0)
                 {
-                    active = false;
+                    Activate(false);
                     return;
                 }
             }
