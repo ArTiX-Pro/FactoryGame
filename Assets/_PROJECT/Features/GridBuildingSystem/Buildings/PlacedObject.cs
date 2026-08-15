@@ -1,5 +1,6 @@
 using ArTiX.GridBuildingSystem.Datas;
 using ArTiX.Utils;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,12 +13,23 @@ namespace ArTiX.GridBuildingSystem.Buildings
 
         public Vector2Int Origin { get; private set; }
 
+        protected Vector2Int[] AdjacentCellArray
+        {
+            get
+            {
+                return new Vector2Int[]
+                {
+                    Origin + Vector2Int.right, 
+                    Origin + Vector2Int.up,
+                    Origin + Vector2Int.left, 
+                    Origin + Vector2Int.down 
+                };
+            }
+        }
+
         public virtual void Initialize(Vector2Int origin) => Origin = origin;
 
-        public virtual void Remove()
-        {
-            // SFX && VFX
-        }
+        public virtual void Remove() { /* SFX && VFX*/ }
 
         public List<Vector2Int> GetOccupiedCells()
         {
@@ -29,6 +41,11 @@ namespace ArTiX.GridBuildingSystem.Buildings
             }
 
             return occupiedCells;
+        }
+
+        protected bool IsAdjacent(Vector2Int cell)
+        {
+            return Array.IndexOf(AdjacentCellArray, cell) != -1;
         }
     }
 }

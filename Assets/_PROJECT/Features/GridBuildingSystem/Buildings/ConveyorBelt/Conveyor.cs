@@ -1,4 +1,3 @@
-using ArTiX.Effects.Tween;
 using ArTiX.Inventory;
 using System;
 using System.Collections.Generic;
@@ -16,12 +15,9 @@ namespace ArTiX.GridBuildingSystem.Buildings
                 get => lastConveyor;
                 private set
                 {
+                    if (lastConveyor != null) lastConveyor.transform.localScale = Vector3.one;
                     lastConveyor = value;
-                    lastConveyor.transform.TweenScale(Vector3.one * 1.2f,
-                        new MasterTween.AnimParams(
-                            duration: 1, 
-                            transition: MasterTween.ETransition.Arch2)
-                        );
+                    lastConveyor.transform.localScale = Vector3.one * 1.2f;
                 }
             }
             private Conveyor firstConveyor;
@@ -30,12 +26,9 @@ namespace ArTiX.GridBuildingSystem.Buildings
                 get => firstConveyor;
                 private set
                 {
+                    if (firstConveyor != null) firstConveyor.transform.localScale = Vector3.one;
                     firstConveyor = value;
-                    firstConveyor.transform.TweenScale(Vector3.one * .8f,
-                        new MasterTween.AnimParams(
-                            duration: 1,
-                            transition: MasterTween.ETransition.Arch2)
-                        );
+                    firstConveyor.transform.localScale = Vector3.one * .8f;
                 }
             }
 
@@ -52,30 +45,36 @@ namespace ArTiX.GridBuildingSystem.Buildings
                 NbConveyor++;
             }
 
-            public void AddConveyor(Conveyor newConveyor, Conveyor adjacentConveyor)
+            public void AddConveyor(Conveyor newConveyor)
             {
-                if (adjacentConveyor.nextConveyor != null && adjacentConveyor.previousConveyor != null)
-                    return;
-
-                if (adjacentConveyor == LastConveyor) // Add after
+                if (LastConveyor.IsAdjacent(newConveyor.Origin))
                 {
                     Debug.Log("add at end of belt");
-                    LastConveyor = newConveyor;
 
-                    adjacentConveyor.nextConveyor = newConveyor;
-                    newConveyor.previousConveyor = adjacentConveyor;
-                    adjacentConveyor.UpdateRotation();
+                    newConveyor.previousConveyor = LastConveyor;
+                    LastConveyor.nextConveyor = newConveyor;
+
+                    LastConveyor.UpdateRotation();
                     newConveyor.UpdateRotation();
+
+                    LastConveyor = newConveyor;
+                    newConveyor.belt = this;
                 }
-                else // Add before
+                if (FirstConveyor.IsAdjacent(newConveyor.Origin))
                 {
                     Debug.Log("add at start of belt");
-                    FirstConveyor = newConveyor;
-                    newConveyor.nextConveyor = adjacentConveyor;
-                    adjacentConveyor.previousConveyor = newConveyor;
-                    adjacentConveyor.UpdateRotation();
+
+                    newConveyor.nextConveyor = FirstConveyor;
+                    FirstConveyor.previousConveyor = newConveyor;
+
+                    FirstConveyor.UpdateRotation();
                     newConveyor.UpdateRotation();
+                    newConveyor.belt ??= this;
+
+                    if (!newConveyor.IsLastConveyor) FirstConveyor = newConveyor;
                 }
+                else return;
+
                 NbConveyor++;
             }
 
@@ -118,11 +117,13 @@ namespace ArTiX.GridBuildingSystem.Buildings
                         conv = conv.nextConveyor;
                     }
                 }
+
+                mergingConveyor.UpdateRotation();
             }
 
             public void RemoveConveyor(in Conveyor conveyor)
             {
-
+                if (conveyor == null) return;
             }
 
             private void Reverse()
@@ -177,80 +178,31 @@ namespace ArTiX.GridBuildingSystem.Buildings
         {
             base.Initialize(origin);
 
-            // Check for adjacent conveyors
-            Vector2Int[] adjacentCellList =
-            {
-                Origin + Vector2Int.right,
-                Origin + Vector2Int.up,
-                Origin + Vector2Int.left,
-                Origin + Vector2Int.down
-            };
-
             GridBuildingSystem grid = GridBuildingSystem.Instance;
-            List<Conveyor> adjacentConveyorList = new List<Conveyor>();
-            Conveyor adjacentConveyor = null;
-            ConveyorBelt biggestBelt = null;
+            List<ConveyorBelt> adjacentBeltList = new List<ConveyorBelt>();
+            Conveyor adjacentConveyor;
 
-            foreach (Vector2Int adjacentCell in adjacentCellList)
+            foreach (Vector2Int adjacentCell in AdjacentCellArray)
             {
                 if (grid.GetObjectOnCell(adjacentCell) is Conveyor)
+                {
                     adjacentConveyor = grid.GetObjectOnCell(adjacentCell) as Conveyor;
-
-                if (adjacentConveyor == null || adjacentConveyorList.Contains(adjacentConveyor)) continue;
-                
-                if (biggestBelt == null || (adjacentConveyor.belt.NbConveyor > biggestBelt.NbConveyor
-                && (adjacentConveyor.IsLastConveyor || adjacentConveyor.IsFirstConveyor)))
-                {
-                    biggestBelt = adjacentConveyor.belt;
+                    if (!adjacentBeltList.Contains(adjacentConveyor.belt))
+                        adjacentBeltList.Add(adjacentConveyor.belt);
                 }
-
-                adjacentConveyorList.Add(adjacentConveyor);
             }
 
-            if (adjacentConveyor == null)
+            switch (adjacentBeltList.Count)
             {
-                belt = new ConveyorBelt(this); // Alone
-                return;
-            }
-            if (adjacentConveyorList.Count == 4) // Conveyor not active if surrounded by 4 conveyors
-            {
-                Debug.Log(message: "Inactive conveyor");
-                return;
-            }
-            
-            belt = adjacentConveyor.belt;
-            belt.AddConveyor(this, adjacentConveyor);
-            adjacentConveyorList.Remove(adjacentConveyor);
-
-            if ((nextConveyor != null || previousConveyor != null) && adjacentConveyorList.Count == 1)
-            {
-                adjacentConveyor = adjacentConveyorList[0];
-                if (adjacentConveyor.belt == belt)
-                {
-                    if (IsLastConveyor)
-                    {
-                        nextConveyor = adjacentConveyor;
-                        adjacentConveyor.previousConveyor = this;
-                    }
-                    else
-                    {
-                        previousConveyor = adjacentConveyor;
-                        adjacentConveyor.nextConveyor = this;
-                    }
-
-                    UpdateRotation();
-                    adjacentConveyor.UpdateRotation();
-                    return; 
-                }
-
-                belt.MergeBelt(this, adjacentConveyor);
-                
-                if (IsFirstConveyor)
-                    previousConveyor = adjacentConveyor;
-                else
-                    nextConveyor = adjacentConveyor;
-
-                UpdateRotation();
+                case 0:
+                    belt = new ConveyorBelt(this);
+                    break;
+                case 1:
+                    adjacentBeltList[0].AddConveyor(this);
+                    belt ??= new ConveyorBelt(this);
+                    break;
+                case 2:
+                    break;
             }
         }
 
