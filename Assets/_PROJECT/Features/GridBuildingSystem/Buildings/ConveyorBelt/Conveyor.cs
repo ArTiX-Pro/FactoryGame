@@ -207,15 +207,14 @@ namespace ArTiX.GridBuildingSystem.Buildings
                 adjacentConveyorList.Add(adjacentConveyor);
             }
 
+            if (adjacentConveyor == null)
+            {
+                belt = new ConveyorBelt(this); // Alone
+                return;
+            }
             if (adjacentConveyorList.Count == 4) // Conveyor not active if surrounded by 4 conveyors
             {
                 Debug.Log(message: "Inactive conveyor");
-                return;
-            }
-
-            if (adjacentConveyor == null) 
-            {
-                belt = new ConveyorBelt(this); // Alone
                 return;
             }
             
@@ -226,7 +225,23 @@ namespace ArTiX.GridBuildingSystem.Buildings
             if ((nextConveyor != null || previousConveyor != null) && adjacentConveyorList.Count == 1)
             {
                 adjacentConveyor = adjacentConveyorList[0];
-                if (adjacentConveyor.belt == belt) return;
+                if (adjacentConveyor.belt == belt)
+                {
+                    if (IsLastConveyor)
+                    {
+                        nextConveyor = adjacentConveyor;
+                        adjacentConveyor.previousConveyor = this;
+                    }
+                    else
+                    {
+                        previousConveyor = adjacentConveyor;
+                        adjacentConveyor.nextConveyor = this;
+                    }
+
+                    UpdateRotation();
+                    adjacentConveyor.UpdateRotation();
+                    return; 
+                }
 
                 belt.MergeBelt(this, adjacentConveyor);
                 
