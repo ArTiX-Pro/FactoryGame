@@ -1,4 +1,5 @@
 using ArTiX.GridBuildingSystem.Datas;
+using ArTiX.Utils.TickSystem;
 using System;
 
 namespace ArTiX.GridBuildingSystem.Buildings
@@ -15,13 +16,42 @@ namespace ArTiX.GridBuildingSystem.Buildings
 
         private void Start()
         {
-            TickSystem.Instance.OnTick += IncrementTickCounter;
+            Activate(true);
         }
 
         protected void Activate(in bool active)
         {
-            if (active) TickSystem.Instance.OnTick += IncrementTickCounter;
-            else TickSystem.Instance.OnTick -= IncrementTickCounter;
+            if (active)
+            {
+                switch ((datas as ActiveBuildingSO).TickType)
+                {
+                    case TickSystem.ETick.First:
+                        TickSystem.Instance.OnFirstTick += IncrementTickCounter;
+                        break;
+                    case TickSystem.ETick.Main:
+                        TickSystem.Instance.OnTick += IncrementTickCounter;
+                        break;
+                    case TickSystem.ETick.Late:
+                        TickSystem.Instance.OnLateTick += IncrementTickCounter;
+                        break;
+                }
+            }
+            else
+            {
+
+                switch ((datas as ActiveBuildingSO).TickType)
+                {
+                    case TickSystem.ETick.First:
+                        TickSystem.Instance.OnFirstTick -= IncrementTickCounter;
+                        break;
+                    case TickSystem.ETick.Main:
+                        TickSystem.Instance.OnTick -= IncrementTickCounter;
+                        break;
+                    case TickSystem.ETick.Late:
+                        TickSystem.Instance.OnLateTick -= IncrementTickCounter;
+                        break;
+                }
+            }
         }
 
         protected abstract void OnTickAction();

@@ -16,25 +16,16 @@ namespace ArTiX.GridBuildingSystem.Buildings
         { 
             base.Initialize(origin);
 
-            PlacedObject inputCell = GridBuildingSystem.Instance.GetObjectOnCell(
-                cell: origin + Vector2Int.left.Rotate(transform.eulerAngles.y));
-
-            PlacedObject outputCell = GridBuildingSystem.Instance.GetObjectOnCell(
-                cell: origin + Vector2Int.right.Rotate(transform.eulerAngles.y));
-
-            if (inputCell != null && inputCell.TryGetComponent(out IItemHolder itemHolder)) inputHolder = itemHolder;
-            if (outputCell != null && outputCell.TryGetComponent(out itemHolder)) outputHolder = itemHolder;
-
-            if (inputHolder == null || outputHolder == null)
-                Activate(false);
+            CheckForHolders();
         }
 
         protected override void OnTickAction()
         {
-            if (inputHolder == null || outputHolder == null)
+            if (inputHolder == null || outputHolder == null) 
             {
-                Activate(false);
-                return; 
+                CheckForHolders();
+                Debug.Log("check for holders");
+                if (inputHolder == null || outputHolder == null) return; 
             }
 
             if (inputHolder.CanGiveItem() && outputHolder.CanTakeItem(inputHolder.Item))
@@ -42,6 +33,22 @@ namespace ArTiX.GridBuildingSystem.Buildings
                 outputHolder.TakeItem(inputHolder.GiveItem());
                 Debug.Log("Transfer item");
             }
+            else
+                Debug.Log("catch");
+        }
+
+        private void CheckForHolders()
+        {
+            PlacedObject inputBuilding = GridBuildingSystem.Instance.GetObjectOnCell(
+                cell: Origin + inputCell.Rotate(-transform.eulerAngles.y));
+
+            PlacedObject outputBuilding = GridBuildingSystem.Instance.GetObjectOnCell(
+                cell: Origin + outputCell.Rotate(-transform.eulerAngles.y));
+
+            if (inputBuilding != null && inputBuilding.TryGetComponent(out IItemHolder itemHolder)) 
+                inputHolder = itemHolder;
+            if (outputBuilding != null && outputBuilding.TryGetComponent(out itemHolder)) 
+                outputHolder = itemHolder;
         }
     }
 }

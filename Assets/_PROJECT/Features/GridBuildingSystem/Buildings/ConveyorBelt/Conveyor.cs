@@ -1,38 +1,26 @@
+using ArTiX.Effects.Tween;
 using ArTiX.Inventory;
 using ArTiX.Utils;
+using ArTiX.Utils.TickSystem;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ArTiX.GridBuildingSystem.Buildings
 {
-    public class Conveyor : PlacedObject
+    public class Conveyor : PlacedObject, IItemHolder
     {
         private class ConveyorBelt
         {
-            private Conveyor lastConveyor;
             public Conveyor LastConveyor
             {
-                get => lastConveyor;
-                private set
-                {
-                    if (lastConveyor != null) lastConveyor.transform.localScale = Vector3.one;
-                    lastConveyor = value;
-                    if (lastConveyor != null)
-                        lastConveyor.transform.localScale = Vector3.one * 1.2f;
-                }
+                get;
+                private set;
             }
-            private Conveyor firstConveyor;
             public Conveyor FirstConveyor
             {
-                get => firstConveyor;
-                private set
-                {
-                    if (firstConveyor != null) firstConveyor.transform.localScale = Vector3.one;
-                    firstConveyor = value;
-                    if (firstConveyor != null)
-                        firstConveyor.transform.localScale = Vector3.one * .8f;
-                }
+                get;
+                private set;
             }
 
             private const int TICKS_PER_UPDATE = 5;
@@ -44,16 +32,14 @@ namespace ArTiX.GridBuildingSystem.Buildings
             {
                 Debug.Log("create new belt");
                 TickSystem.Instance.OnTick += IncrementTickCounter;
-                firstConveyor = lastConveyor = conveyor;
+                FirstConveyor = LastConveyor = conveyor;
                 NbConveyor++;
             }
 
             public void AddConveyor(Conveyor newConveyor)
             {
-                if (lastConveyor.IsAdjacent(newConveyor.Origin))
+                if (LastConveyor.IsAdjacent(newConveyor.Origin))
                 {
-                    Debug.Log("add at end of belt");
-
                     newConveyor.previousConveyor = LastConveyor;
                     LastConveyor.nextConveyor = newConveyor;
 
@@ -63,10 +49,8 @@ namespace ArTiX.GridBuildingSystem.Buildings
                     LastConveyor = newConveyor;
                     newConveyor.belt = this;
                 }
-                if (firstConveyor.IsAdjacent(newConveyor.Origin) && NbConveyor > 1)
+                if (FirstConveyor.IsAdjacent(newConveyor.Origin) && NbConveyor > 1)
                 {
-                    Debug.Log("add at start of belt");
-
                     newConveyor.nextConveyor = FirstConveyor;
                     FirstConveyor.previousConveyor = newConveyor;
 
@@ -174,10 +158,13 @@ namespace ArTiX.GridBuildingSystem.Buildings
             }
         }
 
+        #region Variables & Properties
+
+        [SerializeField] private Transform itemPos;
+
         private ConveyorBelt belt;
         private Conveyor previousConveyor;
         private Conveyor nextConveyor;
-        private ItemSO item;
 
         private bool IsLastConveyor => belt.LastConveyor == this;
         private bool IsFirstConveyor => belt.FirstConveyor == this;
@@ -185,6 +172,27 @@ namespace ArTiX.GridBuildingSystem.Buildings
         // The base direction of the conveyor is right, so right is considered to be front.
         private Vector2Int FrontCell => Origin + Vector2Int.right.Rotate(transform.eulerAngles.y);
         private Vector2Int BackCell => Origin + Vector2Int.left.Rotate(transform.eulerAngles.y);
+
+        private Transform worldItem;
+        private MasterTween.Tween tween;
+        private Transform WorldItem
+        {
+            set
+            {
+                worldItem = value;
+                tween?.Kill();
+                tween = MasterTween.Create();
+                worldItem.transform.TweenPosition(itemPos.position,
+                    animParams: new MasterTween.AnimParams(
+                        duration: 0.5f,
+                        transition: MasterTween.ETransition.SmoothStop5),
+                    tween: tween);
+            }
+        }
+        private ItemSO item;
+        public ItemSO Item => item;
+
+        #endregion
 
         public override void Initialize(Vector2Int origin)
         {
@@ -217,10 +225,10 @@ namespace ArTiX.GridBuildingSystem.Buildings
                     // 1. Decide which belt the other will be merged into based on rotation
                     adjacentConveyor = null;
 
-                    if (grid.GetObjectOnCell(BackCell) is Conveyor)
-                        adjacentConveyor = grid.GetObjectOnCell(BackCell) as Conveyor;
-                    else if (grid.GetObjectOnCell(FrontCell) is Conveyor)
+                    if (grid.GetObjectOnCell(FrontCell) is Conveyor)
                         adjacentConveyor = grid.GetObjectOnCell(FrontCell) as Conveyor;
+                    else if (grid.GetObjectOnCell(BackCell) is Conveyor)
+                        adjacentConveyor = grid.GetObjectOnCell(BackCell) as Conveyor;
 
                     if (adjacentConveyor == null)
                     {
@@ -255,10 +263,13 @@ namespace ArTiX.GridBuildingSystem.Buildings
             }
         }
 
-        public void MoveItem()
+        #region Conveyor
+
+        private void MoveItem()
         {
             if (item == null || nextConveyor.item != null) return;
 
+            nextConveyor.WorldItem = worldItem;
             nextConveyor.item = item;
             item = null;
         }
@@ -285,5 +296,28 @@ namespace ArTiX.GridBuildingSystem.Buildings
             nextConveyor = previousConv;
             UpdateRotation();
         }
+
+        #endregion
+
+        #region ItemHolder
+
+        public ItemSO GiveItem()
+        {
+            ItemSO item = this.item;
+            this.item = null;
+            Destroy(worldItem.gameObject);
+            tween?.Kill();
+            return item;
+        }
+        public bool CanGiveItem() => item != null;
+
+        public void TakeItem(ItemSO item) 
+        {
+            this.item = item;
+            worldItem = Instantiate(item.Prefab, itemPos.position, Quaternion.identity);
+        }
+        public bool CanTakeItem(ItemSO item) => this.item == null;
+
+        #endregion
     }
 }

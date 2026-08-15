@@ -1,3 +1,4 @@
+using ArTiX.Utils.TickSystem;
 using UnityEngine;
 
 namespace ArTiX.GridBuildingSystem.Datas
@@ -7,5 +8,8 @@ namespace ArTiX.GridBuildingSystem.Datas
     {
         [SerializeField, Tooltip("Number of ticks between actions.")] private int ticksPerUpdate;
         public int TicksPerUpdate => ticksPerUpdate;
+
+        [SerializeField] private TickSystem.ETick tickType;
+        public TickSystem.ETick TickType => tickType;
     }
 }

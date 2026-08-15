@@ -9,7 +9,7 @@ namespace ArTiX.GridBuildingSystem.Datas
     public class RecipeSO : ScriptableObject
     {
         [Serializable]
-        private struct SResources
+        public struct SResources
         {
             public ItemSO resource;
             public int quantity;

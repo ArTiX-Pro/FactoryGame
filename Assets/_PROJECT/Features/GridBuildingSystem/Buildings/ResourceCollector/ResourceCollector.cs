@@ -81,10 +81,7 @@ namespace ArTiX.GridBuildingSystem.Buildings
             }
 
             if (inventory.CanTakeItem(adjacentResourceNodes[0].Item))
-            {
                 inventory.TakeItem(adjacentResourceNodes[0].GiveItem());
-                Debug.Log("took item");
-            }
             else
                 Debug.Log("Inventory full");
         }
