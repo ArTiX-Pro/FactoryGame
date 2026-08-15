@@ -27,13 +27,11 @@ namespace ArTiX.GridBuildingSystem
         #region Variables
 
         [SerializeField] private GridSO datas;
-
         private Grid<PlacedObject> grid;
 
         private Transform ghost;
         private PlacedObjectSO currentBuildingDatas;
         private float currentRotation;
-        private float BuildingRotationInWorld => -currentRotation;
         private MasterTween.Tween buildingRotationTween;
 
         private const float ROTATION_DELTA = 90f;
@@ -166,6 +164,13 @@ namespace ArTiX.GridBuildingSystem
                     value: CanBuild(cellPos) ? datas.ValidColor : datas.UnvalidColor);
         }
 
+        private void DestroyState()
+        {
+            // Snap to cell pos
+            Vector2Int cellPos = GetMouseCellPos();
+
+        }
+
         private void ExitBuildingState()
         {
             doAction = null;
@@ -196,8 +201,9 @@ namespace ArTiX.GridBuildingSystem
             currentRotation = (currentRotation + (ROTATION_DELTA * rotateDirection)) % MAX_ROTATION;
             buildingRotationTween?.Kill();
             buildingRotationTween = MasterTween.Create("buildingRotationTween");
+
             ghost.TweenRotation(
-                targetRota: Quaternion.Euler(x: 0, BuildingRotationInWorld, z: 0),
+                targetRota: Quaternion.Euler(x: 0, currentRotation, z: 0),
                 animParams: new MasterTween.AnimParams(duration: .4f, transition: MasterTween.ETransition.SmoothStop3),
                 tween: buildingRotationTween);
         }
@@ -210,7 +216,7 @@ namespace ArTiX.GridBuildingSystem
                 PlacedObject building = Instantiate(
                     original: currentBuildingDatas.Prefab,
                     position: SnapPos(RealWorldMousePosOnGrid()),
-                    rotation: Quaternion.Euler(x: 0, BuildingRotationInWorld, z: 0)
+                    rotation: Quaternion.Euler(x: 0, currentRotation, z: 0)
                 );
 
                 foreach (Vector2Int cell in currentBuildingDatas.GetOccupiedCells(origin, currentRotation))

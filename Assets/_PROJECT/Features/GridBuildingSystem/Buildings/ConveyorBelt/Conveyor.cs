@@ -99,7 +99,6 @@ namespace ArTiX.GridBuildingSystem.Buildings
                         conv.belt = this;
                         conv = conv.previousConveyor;
                     }
-                    Debug.Log("easy merge");
                 }
                 else
                 {
@@ -118,7 +117,6 @@ namespace ArTiX.GridBuildingSystem.Buildings
                         conv.belt = this;
                         conv = conv.nextConveyor;
                     }
-                    Debug.Log("easy merge");
                 }
             }
 
@@ -180,64 +178,65 @@ namespace ArTiX.GridBuildingSystem.Buildings
             base.Initialize(origin);
 
             // Check for adjacent conveyors
-            Vector2Int[] adjacentCellList = new Vector2Int[4];
-            adjacentCellList[0] = Origin + Vector2Int.right;
-            adjacentCellList[1] = Origin + Vector2Int.up;
-            adjacentCellList[2] = Origin + Vector2Int.left;
-            adjacentCellList[3] = Origin + Vector2Int.down;
+            Vector2Int[] adjacentCellList =
+            {
+                Origin + Vector2Int.right,
+                Origin + Vector2Int.up,
+                Origin + Vector2Int.left,
+                Origin + Vector2Int.down
+            };
 
             GridBuildingSystem grid = GridBuildingSystem.Instance;
-            Conveyor adjacentConveyor = null;
             List<Conveyor> adjacentConveyorList = new List<Conveyor>();
+            Conveyor adjacentConveyor = null;
+            ConveyorBelt biggestBelt = null;
+
             foreach (Vector2Int adjacentCell in adjacentCellList)
             {
-                adjacentConveyor = grid.GetObjectOnCell(adjacentCell) as Conveyor;
-                if (adjacentConveyor != null) adjacentConveyorList.Add(adjacentConveyor);
-                if (adjacentConveyorList.Count > 3)
+                if (grid.GetObjectOnCell(adjacentCell) is Conveyor)
+                    adjacentConveyor = grid.GetObjectOnCell(adjacentCell) as Conveyor;
+
+                if (adjacentConveyor == null || adjacentConveyorList.Contains(adjacentConveyor)) continue;
+                
+                if (biggestBelt == null || (adjacentConveyor.belt.NbConveyor > biggestBelt.NbConveyor
+                && (adjacentConveyor.IsLastConveyor || adjacentConveyor.IsFirstConveyor)))
                 {
-                    Debug.Log(message: "Inactive conveyor");
-                    return; 
+                    biggestBelt = adjacentConveyor.belt;
                 }
+
+                adjacentConveyorList.Add(adjacentConveyor);
             }
 
-            if (adjacentConveyorList.Count > 0) 
+            if (adjacentConveyorList.Count == 4) // Conveyor not active if surrounded by 4 conveyors
             {
-                int maxNbConveyor = 0;
-                for (int i = 0; i < adjacentConveyorList.Count; i++)
-                {
-                    if (adjacentConveyorList[i].belt.NbConveyor > maxNbConveyor)
-                    {
-                        maxNbConveyor = adjacentConveyorList[i].belt.NbConveyor;
-                        adjacentConveyor = adjacentConveyorList[i];
-                    }
-                }
-
-                belt = adjacentConveyor.belt;
-                belt.AddConveyor(this, adjacentConveyor);
-                adjacentConveyorList.Remove(adjacentConveyor);
-
-                if (nextConveyor != null || previousConveyor != null)
-                {
-                    if (adjacentConveyorList.Count == 0) return; // Finish
-
-                    if (adjacentConveyorList.Count == 1)
-                    {
-                        adjacentConveyor = adjacentConveyorList[0];
-                        belt.MergeBelt(this, adjacentConveyor);
-                        if (adjacentConveyor.belt == belt)
-                        {
-                            if (IsFirstConveyor)
-                                previousConveyor = adjacentConveyor;
-                            else
-                                nextConveyor = adjacentConveyor;
-
-                            UpdateRotation();
-                        }
-                    }
-                }
+                Debug.Log(message: "Inactive conveyor");
+                return;
             }
 
-            belt = new ConveyorBelt(this); // Alone
+            if (adjacentConveyor == null) 
+            {
+                belt = new ConveyorBelt(this); // Alone
+                return;
+            }
+            
+            belt = adjacentConveyor.belt;
+            belt.AddConveyor(this, adjacentConveyor);
+            adjacentConveyorList.Remove(adjacentConveyor);
+
+            if ((nextConveyor != null || previousConveyor != null) && adjacentConveyorList.Count == 1)
+            {
+                adjacentConveyor = adjacentConveyorList[0];
+                if (adjacentConveyor.belt == belt) return;
+
+                belt.MergeBelt(this, adjacentConveyor);
+                
+                if (IsFirstConveyor)
+                    previousConveyor = adjacentConveyor;
+                else
+                    nextConveyor = adjacentConveyor;
+
+                UpdateRotation();
+            }
         }
 
         public void MoveItem()
