@@ -71,9 +71,11 @@ namespace ArTiX.GridBuildingSystem.Buildings
                 void MergeFromLast(in ConveyorBelt mergedBelt)
                 {
                     mergedBelt.FirstConveyor.previousConveyor = LastConveyor;
+                    LastConveyor.nextConveyor = mergedBelt.FirstConveyor;
+                    LastConveyor.UpdateRotation();
                     LastConveyor = mergedBelt.LastConveyor;
                     Conveyor conv = LastConveyor;
-                    while (conv != null)
+                    while (conv.belt != this)
                     {
                         conv.belt = this;
                         conv = conv.previousConveyor;
@@ -82,22 +84,26 @@ namespace ArTiX.GridBuildingSystem.Buildings
                 void MergeFromFirst(in ConveyorBelt mergedBelt)
                 {
                     mergedBelt.LastConveyor.nextConveyor = FirstConveyor;
+                    FirstConveyor.previousConveyor = mergedBelt.LastConveyor;
+                    FirstConveyor.UpdateRotation();
                     FirstConveyor = mergedBelt.FirstConveyor;
                     Conveyor conv = FirstConveyor;
-                    while (conv != null)
+                    while (conv.belt != this)
                     {
                         conv.belt = this;
                         conv = conv.nextConveyor;
                     }
                 }
 
-                if (LastConveyor.IsAdjacent(mergedBelt.FirstConveyor.Origin)) MergeFromLast(mergedBelt);
+                if (LastConveyor.IsAdjacent(mergedBelt.FirstConveyor.Origin)) 
+                    MergeFromLast(mergedBelt);
                 else if (LastConveyor.IsAdjacent(mergedBelt.LastConveyor.Origin))
                 {
                     mergedBelt.Reverse(); 
                     MergeFromLast(mergedBelt);
                 }
-                else if (FirstConveyor.IsAdjacent(mergedBelt.LastConveyor.Origin)) MergeFromFirst(mergedBelt);
+                else if (FirstConveyor.IsAdjacent(mergedBelt.LastConveyor.Origin)) 
+                    MergeFromFirst(mergedBelt);
                 else if (FirstConveyor.IsAdjacent(mergedBelt.FirstConveyor.Origin))
                 {
                     mergedBelt.Reverse();
@@ -222,6 +228,8 @@ namespace ArTiX.GridBuildingSystem.Buildings
                     belt ??= new ConveyorBelt(this);
                     break;
                 case 2:
+                case 3:
+                case 4:
                     // 1. Decide which belt the other will be merged into based on rotation
                     adjacentConveyor = null;
 
@@ -229,8 +237,7 @@ namespace ArTiX.GridBuildingSystem.Buildings
                         adjacentConveyor = grid.GetObjectOnCell(FrontCell) as Conveyor;
                     else if (grid.GetObjectOnCell(BackCell) is Conveyor)
                         adjacentConveyor = grid.GetObjectOnCell(BackCell) as Conveyor;
-
-                    if (adjacentConveyor == null)
+                    else
                     {
                         foreach (ConveyorBelt conveyorBelt in adjacentBeltList)
                         {
@@ -245,22 +252,41 @@ namespace ArTiX.GridBuildingSystem.Buildings
                                 break;
                             }
                         }
-
-                        if (adjacentConveyor == null)
-                        {
-                            belt = new ConveyorBelt(this);
-                            return;
-                        }
                     }
 
                     adjacentConveyor.belt.AddConveyor(this);
                     adjacentBeltList.Remove(adjacentConveyor.belt);
 
                     // Call the merge func
-                    belt.MergeBelt(adjacentBeltList[0]);
+                    adjacentConveyor = null;
+                    if (IsLastConveyor && grid.GetObjectOnCell(FrontCell) is Conveyor)
+                        adjacentConveyor = grid.GetObjectOnCell(FrontCell) as Conveyor;
+                    else if (IsFirstConveyor && grid.GetObjectOnCell(BackCell) is Conveyor)
+                        adjacentConveyor = grid.GetObjectOnCell(BackCell) as Conveyor;
+                    else
+                    {
+                        foreach (ConveyorBelt conveyorBelt in adjacentBeltList)
+                        {
+                            if (conveyorBelt.LastConveyor.FrontCell == Origin)
+                            {
+                                adjacentConveyor = conveyorBelt.LastConveyor;
+                                break;
+                            }
+                            else if (conveyorBelt.FirstConveyor.BackCell == Origin)
+                            {
+                                adjacentConveyor = conveyorBelt.FirstConveyor;
+                                break;
+                            }
+                        }
+                    }
+
+                    belt.MergeBelt(adjacentConveyor != null ? adjacentConveyor.belt : adjacentBeltList[0]);
                     UpdateRotation();
                     break;
             }
+
+            if (belt == null)
+                Debug.LogError("I have no belt");
         }
 
         #region Conveyor
