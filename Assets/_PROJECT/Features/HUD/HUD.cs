@@ -60,7 +60,7 @@ namespace ArTiX.GridBuildingSystem
             );
         }
 
-        public void SelectBuilding(PlacedObjectSO buildingDatas)
+        public void SelectBuilding(BuildingSO buildingDatas)
         {
             GridBuildingSystem.Instance.SelectBuilding(buildingDatas);
         }

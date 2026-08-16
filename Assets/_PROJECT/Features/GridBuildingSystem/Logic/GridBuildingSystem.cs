@@ -1,4 +1,3 @@
-using ArTiX.Effects.Tween;
 using ArTiX.GridBuildingSystem.Buildings;
 using ArTiX.GridBuildingSystem.Datas;
 using ArTiX.Input;
@@ -29,10 +28,11 @@ namespace ArTiX.GridBuildingSystem
         [SerializeField] private GridSO datas;
         private Grid<PlacedObject> grid;
 
-        private Transform ghost;
-        private PlacedObjectSO currentBuildingDatas;
+        private Vector2Int currentCell;
+
+        private Ghost ghost;
+        private BuildingSO currentBuildingDatas;
         private float currentRotation;
-        private MasterTween.Tween buildingRotationTween;
 
         private const float ROTATION_DELTA = 90f;
         private const float MAX_ROTATION = 360;
@@ -153,41 +153,35 @@ namespace ArTiX.GridBuildingSystem
         {
             // Snap to cell pos
             Vector2Int cellPos = GetMouseCellPos();
-            ghost.position = MasterTween.InterpolateValue(
-                startValue: ghost.position,
-                targetValue: ConvertCellPosToWorldPos(cellPos),
-                percentage: Time.deltaTime * datas.GhostSpeed,
-                transition: datas.GhostMoveTransition);
+            if (currentCell == cellPos) return;
+            currentCell = cellPos;
 
-            foreach (Renderer renderer in ghost.GetComponentsInChildren<Renderer>())
-                renderer.material.SetColor(Utilities.COLOR, 
-                    value: CanBuild(cellPos) ? datas.ValidColor : datas.UnvalidColor);
-        }
-
-        private void DestroyState()
-        {
-            // Snap to cell pos
-            Vector2Int cellPos = GetMouseCellPos();
-
+            ghost.SetPosition(ConvertCellPosToWorldPos(cellPos));
+            ghost.SetIsValid(CanBuild(cellPos));
         }
 
         private void ExitBuildingState()
         {
             doAction = null;
             currentRotation = 0;
-            Destroy(ghost.gameObject);
+            ghost.Kill();
+
             InputManager.Instance.OnSelect -= CreateBuilding;
             InputManager.Instance.OnCancel -= ExitBuildingState;
             InputManager.Instance.OnRotate -= RotateBuilding;
+        }
 
-            buildingRotationTween?.Kill();
+        private void DestroyState()
+        {
+            // Snap to cell pos
+            Vector2Int cellPos = GetMouseCellPos();
         }
 
         #endregion
 
         #region Building
 
-        public void SelectBuilding(PlacedObjectSO buildingDatas)
+        public void SelectBuilding(BuildingSO buildingDatas)
         {
             if (doAction == BuildingState) Destroy(ghost.gameObject);
             else InitBuildingState();
@@ -199,13 +193,7 @@ namespace ArTiX.GridBuildingSystem
         private void RotateBuilding(int rotateDirection)
         {
             currentRotation = (currentRotation + (ROTATION_DELTA * rotateDirection)) % MAX_ROTATION;
-            buildingRotationTween?.Kill();
-            buildingRotationTween = MasterTween.Create("buildingRotationTween");
-
-            ghost.TweenRotation(
-                targetRota: Quaternion.Euler(x: 0, currentRotation, z: 0),
-                animParams: new MasterTween.AnimParams(duration: .4f, transition: MasterTween.ETransition.SmoothStop3),
-                tween: buildingRotationTween);
+            ghost.SetRotation(currentRotation);
         }
 
         private void CreateBuilding()

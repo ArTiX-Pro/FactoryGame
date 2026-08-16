@@ -1,4 +1,3 @@
-using ArTiX.Effects.Tween;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -33,18 +32,5 @@ namespace ArTiX.GridBuildingSystem.Datas
 
         [SerializeField] private GameObject prfbGridVisual;
         public GameObject PrfbGridVisual => prfbGridVisual;
-
-        [Title("Building Ghost")]
-        [SerializeField] private MasterTween.ETransition ghostMoveTransition;
-        public MasterTween.ETransition GhostMoveTransition => ghostMoveTransition;
-
-        [SerializeField] private float ghostSpeed;
-        public float GhostSpeed => ghostSpeed;
-
-        [SerializeField] private Color validColor = Color.green;
-        public Color ValidColor => validColor;
-
-        [SerializeField] private Color unvalidColor = Color.red;
-        public Color UnvalidColor => unvalidColor;
     }
 }
