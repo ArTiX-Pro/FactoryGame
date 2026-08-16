@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ArTiX.Inventory
@@ -14,7 +15,14 @@ namespace ArTiX.Inventory
         [SerializeField] private Transform prefab;
         public Transform Prefab => prefab;
 
-        [SerializeField] private int maxStackSize;
-        public int MaxStackSize => maxStackSize;
+        [SerializeField] private bool infiniteStack;
+        [SerializeField, HideIf("infiniteStack")] private int maxStackSize;
+        public int MaxStackSize
+        {
+            get
+            {
+                return infiniteStack ? int.MaxValue : maxStackSize;
+            }
+        }
     }
 }

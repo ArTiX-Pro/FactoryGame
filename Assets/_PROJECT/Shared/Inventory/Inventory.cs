@@ -62,8 +62,6 @@ namespace ArTiX.Inventory
                 item = item,
                 quantity = 1
             });
-
-            Debug.Log("took item");
         }
     }
 }

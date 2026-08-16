@@ -12,6 +12,15 @@ namespace ArTiX.GridBuildingSystem
         private MasterTween.Tween rotationTween;
         private MasterTween.Tween positionTween;
 
+        private MasterTween.Tween colorTween;
+
+        private bool isValid;
+
+        private void Start()
+        {
+            SetIsValid(true);
+        }
+
         public void SetPosition(in Vector3 position)
         {
             positionTween?.Kill();
@@ -32,8 +41,19 @@ namespace ArTiX.GridBuildingSystem
 
         public void SetIsValid(in bool isValid)
         {
+            if (isValid == this.isValid) return;
+            this.isValid = isValid;
+
+            colorTween?.Kill();
             foreach (Renderer renderer in transform.GetComponentsInChildren<Renderer>())
-                renderer.material.SetColor(Utilities.COLOR, isValid ? datas.ValidColor : datas.UnvalidColor);
+            {
+                renderer.material.TweenColorProperty(
+                    property: Utilities.COLOR,
+                    targetColor: isValid ? datas.ValidColor : datas.UnvalidColor,
+                    animParams: datas.ColorChangeAnim,
+                    tween: colorTween
+                );
+            }
         }
 
         public void Kill()

@@ -15,5 +15,5 @@ MonoBehaviour:
   prefab: {fileID: 4489198831494162027, guid: 5fa49c273f32f344baa050b190c23a25, type: 3}
   cellArray:
   - {x: 0, y: 0}
-  resource: {fileID: 11400000, guid: 883f58969df0cdc49947e742fd725d0e, type: 2}
+  resource: {fileID: 11400000, guid: 5ba0368a2d3861c4aa9d5e4b26307efc, type: 2}
   quantity: 50

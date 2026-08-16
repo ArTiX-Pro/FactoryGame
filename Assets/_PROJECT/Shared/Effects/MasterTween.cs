@@ -229,6 +229,39 @@ namespace ArTiX.Effects.Tween
             }
         }
 
+        private class ColorTweener : EventTweener<Color>
+        {
+            private Material mat;
+            private string property;
+
+            public ColorTweener(MasterTween masterTween, Color startValue, Color targetValue, Action<Color> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+                base(masterTween, startValue, targetValue, tweenEvent, animParams, delay, scaled, onFinishedStepEvent)
+            {
+            }
+
+            public ColorTweener(MasterTween masterTween, Material material, in string property, Color startValue, Color targetValue, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+                base(masterTween, startValue, targetValue, null, animParams, delay, scaled, onFinishedStepEvent)
+            {
+                mat = material;
+                this.property = property;
+            }
+
+            protected override void InvokeEvent()
+            {
+                if (mat != null)
+                {
+                    mat.SetColor(property, InterpolateValue());
+                }
+                else
+                    base.InvokeEvent();
+            }
+
+            protected override Color InterpolateValue()
+            {
+                return MasterTween.InterpolateValue(startValue, targetValue, timer, animParams);
+            }
+        }
+
         #endregion
 
         [Serializable]
@@ -306,6 +339,10 @@ namespace ArTiX.Effects.Tween
             public void TweenProperty(Material material, in string property, float startValue, float targetValue, AnimParams animParams,
                 float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
                  => tween.TweenProperty(material, property, startValue, targetValue, animParams, delay, parrallel, timeScaled, onFinishedStepEvent);
+
+            public void TweenProperty(Material material, in string property, Color startColor, Color targetColor, AnimParams animParams,
+                float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
+                 => tween.TweenProperty(material, property, startColor, targetColor, animParams, delay, parrallel, timeScaled, onFinishedStepEvent);
 
             public void TweenProperty(CanvasGroup group, float startValue, float targetValue, AnimParams animParams,
                 float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
@@ -599,6 +636,21 @@ namespace ArTiX.Effects.Tween
         public static Quaternion InterpolateValue(Quaternion startValue, Quaternion targetValue, float duration, float elapsedTime, ETransition transition = ETransition.Linear)
             => InterpolateValue(startValue, targetValue, elapsedTime / duration, transition);
 
+        #region COLORS
+        public static Color InterpolateValue(Color startValue, Color targetValue, float percentage, ETransition transition)
+        {
+            percentage = Mathf.Clamp01(percentage);
+            float result = GetValue(percentage, transition);
+            return Color.LerpUnclamped(startValue, targetValue, result);
+        }
+
+        public static Color InterpolateValue(Color startValue, Color targetValue, float elapsedTime, AnimParams animParams)
+            => InterpolateValue(startValue, targetValue, animParams.Duration, elapsedTime, animParams.Transition);
+
+        public static Color InterpolateValue(Color startValue, Color targetValue, float duration, float elapsedTime, ETransition transition = ETransition.Linear)
+            => InterpolateValue(startValue, targetValue, elapsedTime / duration, transition);
+
+
         #endregion
 
         /// <summary>
@@ -740,6 +792,8 @@ namespace ArTiX.Effects.Tween
 
         #endregion
 
+        #endregion
+
         #region Instance
 
         private MasterTween() { }
@@ -803,6 +857,13 @@ namespace ArTiX.Effects.Tween
         {
             SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
             tweenerList.Add(new FloatTweener(this, material, property, startValue, targetValue, animParams, delay, timeScaled, onFinishedStepEvent));
+        }
+
+        private void TweenProperty(Material material, in string property, Color startColor, Color targetColor, AnimParams animParams,
+            float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
+        {
+            SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
+            tweenerList.Add(new ColorTweener(this, material, property, startColor, targetColor, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
         private void TweenProperty(CanvasGroup group, float startValue, float targetValue, AnimParams animParams, float delay, bool parrallel, bool timeScaled, Action onFinishedStepEvent)
@@ -1012,6 +1073,22 @@ namespace ArTiX.Effects.Tween
         {
             if (tween == null) tween = MasterTween.Create();
             tween.TweenProperty(mat, property, mat.GetFloat(property), targetValue, animParams, delay, parrallel, timeScaled, onFinishedStepEvent);
+            return tween;
+        }
+
+        public static MasterTween.Tween TweenColorProperty(this Material mat, in string property, in Color startColor, in Color targetColor, MasterTween.AnimParams animParams,
+            float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null, MasterTween.Tween tween = null)
+        {
+            if (tween == null) tween = MasterTween.Create();
+            tween.TweenProperty(mat, property, startColor, targetColor, animParams, delay, parrallel, timeScaled, onFinishedStepEvent);
+            return tween;
+        }
+
+        public static MasterTween.Tween TweenColorProperty(this Material mat, in string property, in Color targetColor, MasterTween.AnimParams animParams,
+            float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null, MasterTween.Tween tween = null)
+        {
+            if (tween == null) tween = MasterTween.Create();
+            tween.TweenProperty(mat, property, mat.GetColor(property), targetColor, animParams, delay, parrallel, timeScaled, onFinishedStepEvent);
             return tween;
         }
 

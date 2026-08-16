@@ -208,7 +208,7 @@ namespace ArTiX.Utils
 
     #region Class Extension
 
-    public static class ArrayExtension
+    public static class CollectionsExtension
     {
         public static bool Contains<T>(this T[] array, T element) => Array.IndexOf(array, element) >= 0;
 
@@ -226,6 +226,13 @@ namespace ArTiX.Utils
             foreach (T element in array) list.Add(element);
 
             return list;
+        }
+
+        public static T GetRandomElement<T>(this List<T> list)
+        {
+            if (list.Count == 0) return default;
+
+            return list[UnityEngine.Random.Range(0, list.Count)];
         }
     }
 

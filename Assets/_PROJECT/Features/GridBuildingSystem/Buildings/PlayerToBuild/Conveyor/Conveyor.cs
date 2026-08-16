@@ -299,7 +299,7 @@ namespace ArTiX.GridBuildingSystem.Buildings
 
         #endregion
 
-        #region ItemHolder
+        #region Item Holder
 
         public ItemSO GiveItem()
         {

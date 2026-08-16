@@ -33,6 +33,11 @@ namespace ArTiX.GridBuildingSystem
         private Ghost ghost;
         private BuildingSO currentBuildingDatas;
         private float currentRotation;
+        /// <summary>
+        /// Because the Y axis goes UP and we want to rotate our building positively by looking FROM up, 
+        /// we need to invert the rotation.
+        /// </summary>
+        private float WorldRotation => -currentRotation;
 
         private const float ROTATION_DELTA = 90f;
         private const float MAX_ROTATION = 360;
@@ -51,10 +56,7 @@ namespace ArTiX.GridBuildingSystem
             }
 
             instance = this;
-        }
 
-        private void Start()
-        {
             GenerateGrid();
         }
 
@@ -93,9 +95,37 @@ namespace ArTiX.GridBuildingSystem
             gridMat.SetFloat(GridSO.LINE_WIDTH, datas.LineWidth);
         }
 
+        public void CreateBuilding(PlacedObjectSO placedObjectDatas, Vector2Int origin)
+        {
+            if (CanBuild(placedObjectDatas, origin))
+            {
+                PlacedObject building = Instantiate(
+                    original: placedObjectDatas.Prefab,
+                    position: SnapPos(ConvertCellPosToWorldPos(origin)),
+                    rotation: Quaternion.Euler(x: 0, WorldRotation, z: 0)
+                );
+
+                foreach (Vector2Int cell in placedObjectDatas.GetOccupiedCells(origin, currentRotation))
+                    grid.SetCellValue(cell, building);
+
+                building.Initialize(origin);
+            }
+        }
+
+        private bool CanBuild(in PlacedObjectSO placedObjectDatas, in Vector2Int origin)
+        {
+            foreach (Vector2Int cell in placedObjectDatas.GetOccupiedCells(origin, currentRotation))
+            {
+                if (grid.GetCellValue(cell) != null || !grid.IsCellWithinGrid(cell))
+                    return false;
+            }
+
+            return true;
+        }
+
         public PlacedObject GetObjectOnCell(Vector2Int cell) => grid.GetCellValue(cell);
 
-        #region World pos, grid pos
+        #region World pos, grid pos Conversion
 
         private Vector2Int ConvertWorldPosToCellPos(Vector3 worldPos)
         {
@@ -157,7 +187,7 @@ namespace ArTiX.GridBuildingSystem
             currentCell = cellPos;
 
             ghost.SetPosition(ConvertCellPosToWorldPos(cellPos));
-            ghost.SetIsValid(CanBuild(cellPos));
+            UpdateGhost();
         }
 
         private void ExitBuildingState()
@@ -193,7 +223,13 @@ namespace ArTiX.GridBuildingSystem
         private void RotateBuilding(int rotateDirection)
         {
             currentRotation = (currentRotation + (ROTATION_DELTA * rotateDirection)) % MAX_ROTATION;
-            ghost.SetRotation(currentRotation);
+            ghost.SetRotation(WorldRotation);
+            UpdateGhost();
+        }
+
+        private void UpdateGhost()
+        {
+            ghost.SetIsValid(CanBuild(currentCell));
         }
 
         private void CreateBuilding()
@@ -204,7 +240,7 @@ namespace ArTiX.GridBuildingSystem
                 PlacedObject building = Instantiate(
                     original: currentBuildingDatas.Prefab,
                     position: SnapPos(RealWorldMousePosOnGrid()),
-                    rotation: Quaternion.Euler(x: 0, currentRotation, z: 0)
+                    rotation: Quaternion.Euler(x: 0, WorldRotation, z: 0)
                 );
 
                 foreach (Vector2Int cell in currentBuildingDatas.GetOccupiedCells(origin, currentRotation))
@@ -220,6 +256,7 @@ namespace ArTiX.GridBuildingSystem
 
         private bool CanBuild(in Vector2Int origin)
         {
+            // Using the opposite of the rotation to
             foreach (Vector2Int cell in currentBuildingDatas.GetOccupiedCells(origin, currentRotation))
             {
                 if (grid.GetCellValue(cell) != null || !grid.IsCellWithinGrid(cell))

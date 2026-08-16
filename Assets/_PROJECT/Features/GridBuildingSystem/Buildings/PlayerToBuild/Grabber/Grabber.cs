@@ -24,7 +24,6 @@ namespace ArTiX.GridBuildingSystem.Buildings
             if (inputHolder == null || outputHolder == null) 
             {
                 CheckForHolders();
-                Debug.Log("check for holders");
                 if (inputHolder == null || outputHolder == null) return; 
             }
 
@@ -34,7 +33,11 @@ namespace ArTiX.GridBuildingSystem.Buildings
                 Debug.Log("Transfer item");
             }
             else
-                Debug.Log("catch");
+            {
+                Debug.Log("can't transfer item");
+                if (!inputHolder.CanGiveItem()) Debug.Log("Input holder can't give item");
+                if (!outputHolder.CanTakeItem(inputHolder.Item)) Debug.Log("Output holder can't take item");
+            }
         }
 
         private void CheckForHolders()

@@ -19,4 +19,4 @@ MonoBehaviour:
   icon: {fileID: 0}
   ghost: {fileID: -8574767209978949976, guid: 822b2eda704dde542b86773749a3cfdb, type: 3}
   ticksPerUpdate: 5
-  tickType: 0
+  tickType: 2

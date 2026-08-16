@@ -12,6 +12,9 @@ namespace ArTiX.GridBuildingSystem.Datas
         [SerializeField] private MasterTween.AnimParams rotationAnim;
         public MasterTween.AnimParams RotationAnim => rotationAnim;
 
+        [SerializeField] private MasterTween.AnimParams colorChangeAnim;
+        public MasterTween.AnimParams ColorChangeAnim => colorChangeAnim;
+
         [SerializeField] private Color validColor = Color.green;
         public Color ValidColor => validColor;
 
