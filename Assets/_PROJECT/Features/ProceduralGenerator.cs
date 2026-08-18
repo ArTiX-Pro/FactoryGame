@@ -1,9 +1,10 @@
+using ArTiX.FactoryGame.Datas;
 using ArTiX.GridBuildingSystem.Datas;
 using ArTiX.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ArTiX.GridBuildingSystem
+namespace ArTiX.FactoryGame
 {
     public class ProceduralGenerator : MonoBehaviour
     {
@@ -25,7 +26,7 @@ namespace ArTiX.GridBuildingSystem
             {
                 selectedCell = possibleCells.GetRandomElement();
                 possibleCells.Remove(selectedCell);
-                GridBuildingSystem.Instance.CreateBuilding(resourceNodes[0], selectedCell);
+                GridBuildingSystem.GridBuildingSystem.Instance.CreateBuilding(resourceNodes[0], selectedCell);
                 resourceNodes.RemoveAt(0);
             }
 

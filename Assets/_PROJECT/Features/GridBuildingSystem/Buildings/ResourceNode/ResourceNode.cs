@@ -1,7 +1,8 @@
-using ArTiX.GridBuildingSystem.Datas;
+using ArTiX.FactoryGame.Datas;
+using ArTiX.GridBuildingSystem.Buildings;
 using ArTiX.Inventory;
 
-namespace ArTiX.GridBuildingSystem.Buildings
+namespace ArTiX.FactoryGame.Buildings
 {
     public class ResourceNode : PlacedObject
     {
@@ -16,7 +17,7 @@ namespace ArTiX.GridBuildingSystem.Buildings
         public ItemSO GiveItem()
         {
             quantity--;
-            if (quantity == 0) GridBuildingSystem.Instance.DestroyBuilding(this);
+            if (quantity == 0) GridBuildingSystem.GridBuildingSystem.Instance.DestroyBuilding(this);
 
             return (datas as ResourceNodeSO).Resource;
         }

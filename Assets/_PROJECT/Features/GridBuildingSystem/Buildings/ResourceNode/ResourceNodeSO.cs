@@ -1,8 +1,9 @@
+using ArTiX.GridBuildingSystem.Datas;
 using ArTiX.Inventory;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace ArTiX.GridBuildingSystem.Datas
+namespace ArTiX.FactoryGame.Datas
 {
     [CreateAssetMenu(fileName = "PlacedObjectDatas", menuName = "Datas/PlacedObject/ResourceNode")]
     public class ResourceNodeSO : PlacedObjectSO

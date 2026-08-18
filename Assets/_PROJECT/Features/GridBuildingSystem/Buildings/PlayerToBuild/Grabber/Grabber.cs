@@ -1,8 +1,9 @@
+using ArTiX.GridBuildingSystem.Buildings;
 using ArTiX.Inventory;
 using ArTiX.Utils;
 using UnityEngine;
 
-namespace ArTiX.GridBuildingSystem.Buildings
+namespace ArTiX.FactoryGame.Buildings
 {
     public class Grabber : ActiveBuilding
     {
@@ -30,7 +31,6 @@ namespace ArTiX.GridBuildingSystem.Buildings
             if (inputHolder.CanGiveItem() && outputHolder.CanTakeItem(inputHolder.Item))
             {
                 outputHolder.TakeItem(inputHolder.GiveItem());
-                Debug.Log("Transfer item");
             }
             else
             {
@@ -42,10 +42,10 @@ namespace ArTiX.GridBuildingSystem.Buildings
 
         private void CheckForHolders()
         {
-            PlacedObject inputBuilding = GridBuildingSystem.Instance.GetObjectOnCell(
+            PlacedObject inputBuilding = GridBuildingSystem.GridBuildingSystem.Instance.GetObjectOnCell(
                 cell: Origin + inputCell.Rotate(-transform.eulerAngles.y));
 
-            PlacedObject outputBuilding = GridBuildingSystem.Instance.GetObjectOnCell(
+            PlacedObject outputBuilding = GridBuildingSystem.GridBuildingSystem.Instance.GetObjectOnCell(
                 cell: Origin + outputCell.Rotate(-transform.eulerAngles.y));
 
             if (inputBuilding != null && inputBuilding.TryGetComponent(out IItemHolder itemHolder)) 

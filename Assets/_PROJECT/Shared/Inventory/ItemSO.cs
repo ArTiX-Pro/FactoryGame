@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ArTiX.Inventory
 {
-    [CreateAssetMenu(fileName = "ItemSO", menuName = "Datas/ItemSO")]
+    [CreateAssetMenu(fileName = "ItemSO", menuName = "Datas/Inventory/ItemSO")]
     public class ItemSO : ScriptableObject
     {
         [SerializeField] private string _name;

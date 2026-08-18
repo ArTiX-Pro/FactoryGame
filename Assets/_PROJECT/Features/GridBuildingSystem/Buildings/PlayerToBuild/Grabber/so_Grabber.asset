@@ -16,7 +16,7 @@ MonoBehaviour:
   cellArray:
   - {x: 0, y: 0}
   objName: Grabber
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 602981b860d86654f85a28e9b916d27e, type: 3}
   ghost: {fileID: -8574767209978949976, guid: 822b2eda704dde542b86773749a3cfdb, type: 3}
   ticksPerUpdate: 5
   tickType: 2

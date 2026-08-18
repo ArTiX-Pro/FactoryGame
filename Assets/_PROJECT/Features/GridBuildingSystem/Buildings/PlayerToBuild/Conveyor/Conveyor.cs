@@ -1,4 +1,5 @@
 using ArTiX.Effects.Tween;
+using ArTiX.GridBuildingSystem.Buildings;
 using ArTiX.Inventory;
 using ArTiX.Utils;
 using ArTiX.Utils.TickSystem;
@@ -6,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ArTiX.GridBuildingSystem.Buildings
+namespace ArTiX.FactoryGame.Buildings
 {
     public class Conveyor : PlacedObject, IItemHolder
     {
@@ -204,7 +205,7 @@ namespace ArTiX.GridBuildingSystem.Buildings
         {
             base.Initialize(origin);
 
-            GridBuildingSystem grid = GridBuildingSystem.Instance;
+            GridBuildingSystem.GridBuildingSystem grid = GridBuildingSystem.GridBuildingSystem.Instance;
             List<ConveyorBelt> adjacentBeltList = new List<ConveyorBelt>();
             Conveyor adjacentConveyor;
 

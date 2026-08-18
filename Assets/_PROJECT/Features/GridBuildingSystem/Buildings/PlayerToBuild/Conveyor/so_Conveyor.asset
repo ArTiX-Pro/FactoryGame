@@ -16,5 +16,5 @@ MonoBehaviour:
   cellArray:
   - {x: 0, y: 0}
   objName: Conveyor
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: e61fb3f6946083841a093b52745df138, type: 3}
   ghost: {fileID: -6965254433872448468, guid: 0f020bfacf4c1ba44bb8a1096c676dd1, type: 3}

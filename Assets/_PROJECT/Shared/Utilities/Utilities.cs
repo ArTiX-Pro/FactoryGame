@@ -273,6 +273,14 @@ namespace ArTiX.Utils
             Vector3 vector = transform.position - other.position;
             return normalized ? vector.normalized : vector;
         }
+
+        public static void DestroyChildren(this Transform transform)
+        {
+            for (int i = transform.childCount - 1; i >= 0; i--)
+            {
+                MonoBehaviour.Destroy(transform.GetChild(i).gameObject);
+            }
+        }
     }
 
     public static class SpriteExtension

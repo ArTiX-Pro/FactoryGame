@@ -1,8 +1,9 @@
-using ArTiX.GridBuildingSystem.Datas;
+using ArTiX.FactoryGame.Datas;
+using ArTiX.GridBuildingSystem.Buildings;
 using ArTiX.Utils.TickSystem;
 using System;
 
-namespace ArTiX.GridBuildingSystem.Buildings
+namespace ArTiX.FactoryGame.Buildings
 {
     public abstract class ActiveBuilding : PlacedObject
     {

@@ -1,7 +1,8 @@
+using ArTiX.GridBuildingSystem.Datas;
 using ArTiX.Utils.TickSystem;
 using UnityEngine;
 
-namespace ArTiX.GridBuildingSystem.Datas
+namespace ArTiX.FactoryGame.Datas
 {
     [CreateAssetMenu(fileName = "ActiveBuildingSO", menuName = "Datas/PlacedObject/ActiveBuildingSO")]
     public class ActiveBuildingSO : BuildingSO
