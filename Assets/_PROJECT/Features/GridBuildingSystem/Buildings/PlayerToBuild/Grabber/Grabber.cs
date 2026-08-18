@@ -10,6 +10,8 @@ namespace ArTiX.FactoryGame.Buildings
         [SerializeField, Tooltip("The cell is relative to the building.")] private Vector2Int inputCell;
         [SerializeField, Tooltip("The cell is relative to the building.")] private Vector2Int outputCell;
 
+        [SerializeField] private ItemSO itemToGrab;
+
         private IItemHolder inputHolder;
         private IItemHolder outputHolder;
 
@@ -28,15 +30,12 @@ namespace ArTiX.FactoryGame.Buildings
                 if (inputHolder == null || outputHolder == null) return; 
             }
 
-            if (inputHolder.CanGiveItem() && outputHolder.CanTakeItem(inputHolder.Item))
+            if (itemToGrab != null) Debug.Log(itemToGrab);
+            if (inputHolder.CanGiveItem(itemToGrab) && 
+                outputHolder.CanTakeItem(itemToGrab == null ? inputHolder.Item : itemToGrab))
             {
-                outputHolder.TakeItem(inputHolder.GiveItem());
-            }
-            else
-            {
-                Debug.Log("can't transfer item");
-                if (!inputHolder.CanGiveItem()) Debug.Log("Input holder can't give item");
-                if (!outputHolder.CanTakeItem(inputHolder.Item)) Debug.Log("Output holder can't take item");
+                Debug.Log("transfer item");
+                outputHolder.TakeItem(inputHolder.GiveItem(itemToGrab));
             }
         }
 

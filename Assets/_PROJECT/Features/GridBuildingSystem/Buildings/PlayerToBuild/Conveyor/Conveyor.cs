@@ -31,7 +31,6 @@ namespace ArTiX.FactoryGame.Buildings
 
             public ConveyorBelt(Conveyor conveyor)
             {
-                Debug.Log("create new belt");
                 TickSystem.Instance.OnTick += IncrementTickCounter;
                 FirstConveyor = LastConveyor = conveyor;
                 NbConveyor++;
@@ -328,15 +327,20 @@ namespace ArTiX.FactoryGame.Buildings
 
         #region Item Holder
 
-        public ItemSO GiveItem()
+        public ItemSO GiveItem(ItemSO item = null, int quantity = 1)
         {
-            ItemSO item = this.item;
+            item = this.item;
             this.item = null;
             Destroy(worldItem.gameObject);
             tween?.Kill();
             return item;
         }
-        public bool CanGiveItem() => item != null;
+        public bool CanGiveItem(ItemSO item = null, int quantity = 1) 
+        {
+            if (item != null) return item == this.item;
+
+            return this.item != null;
+        }
 
         public void TakeItem(ItemSO item) 
         {

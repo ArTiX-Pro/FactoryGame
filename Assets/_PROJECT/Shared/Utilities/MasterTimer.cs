@@ -79,12 +79,6 @@ namespace ArTiX.Utils
         /// <returns></returns>
         public static Timer Create(in MonoBehaviour target, float duration, bool startOnCreate = false, bool autodestroy = false, bool scaled = true, int repetitionNumber = 0, in bool infinite = false, Action onTimerActiveEvent = null, Action onFinishedEvent = null, string name = "Timer")
         {
-            if (duration <= 0)
-            {
-                onFinishedEvent?.Invoke();
-                Debug.LogWarning("Duration is negative or null. No timer created. Try passing a duration strictly greater than 0.");
-                return null;
-            }
             if (target == null) return null;
 
             pool.Take(out MasterTimer timer);

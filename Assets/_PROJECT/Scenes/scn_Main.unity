@@ -606,7 +606,7 @@ MonoBehaviour:
   availableBuildings:
   - {fileID: 11400000, guid: 18b1824a54419234683f2d927edb0753, type: 2}
   - {fileID: 11400000, guid: 2768bf12b650cb34588ea545f070b421, type: 2}
-  - {fileID: 11400000, guid: 5c7b2079cfa19b3458ddcf93ee3b9475, type: 2}
+  - {fileID: 11400000, guid: 4ed2dda66af1fba40b3263685d1c8eb6, type: 2}
   - {fileID: 11400000, guid: dff1f3170b3000e428ed046aaaaae174, type: 2}
   - {fileID: 11400000, guid: f0881adf2f0ed0041a04e27285e235ca, type: 2}
   availableRecipes:

@@ -2,10 +2,10 @@ namespace ArTiX.Inventory
 {
     public interface IItemHolder
     {
-        ItemSO Item { get; }
-        ItemSO GiveItem();
-        bool CanGiveItem();
-        void TakeItem(ItemSO item);
-        bool CanTakeItem(ItemSO item);
+        public ItemSO Item { get; }
+        public ItemSO GiveItem(ItemSO item = null, int quantity = 1);
+        public bool CanGiveItem(ItemSO item = null, int quantity = 1);
+        public void TakeItem(ItemSO item);
+        public bool CanTakeItem(ItemSO item);
     }
 }

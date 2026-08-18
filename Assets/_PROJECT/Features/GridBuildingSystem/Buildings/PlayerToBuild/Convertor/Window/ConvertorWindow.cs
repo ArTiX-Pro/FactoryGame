@@ -1,6 +1,7 @@
 using ArTiX.FactoryGame.Buildings;
 using ArTiX.FactoryGame.Datas;
 using ArTiX.Utils;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,8 +19,9 @@ namespace ArTiX.FactoryGame.UI
         [SerializeField] private RecipeButton prefabRecipeButton;
         [SerializeField] private Image prefabResourceNeeded;
 
-
         private Convertor convertor;
+
+        public event Action OnClosingWindow;
 
         public void Initialize(in Convertor convertor, in RecipeSO currentRecipe)
         {
@@ -67,7 +69,7 @@ namespace ArTiX.FactoryGame.UI
 
         public override void CloseWindow() 
         {
-            convertor.CloseWindow();
+            OnClosingWindow?.Invoke();
             base.CloseWindow(); 
         }
     }
