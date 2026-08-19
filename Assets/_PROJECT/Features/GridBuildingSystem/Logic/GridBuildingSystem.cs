@@ -28,6 +28,7 @@ namespace ArTiX.GridBuildingSystem
         private Grid<PlacedObject> grid;
 
         private BuildingState buildingState;
+        private DestroyState destroyState;
         private GameState currentState;
         private GameState CurrentState
         {
@@ -68,6 +69,7 @@ namespace ArTiX.GridBuildingSystem
             GenerateGrid();
 
             buildingState = new BuildingState();
+            destroyState = new DestroyState();
         }
 
         private void Update()
@@ -155,6 +157,11 @@ namespace ArTiX.GridBuildingSystem
             buildingState.SetBuildingDatas(buildingDatas);
         }
 
+        public void EnterDestructionState()
+        {
+            CurrentState = destroyState;
+        }
+
         public void CreateBuilding(PlacedObjectSO placedObjectDatas, Vector2Int origin, float rotation = 0)
         {
             if (CanBuild(placedObjectDatas, origin))
@@ -194,7 +201,7 @@ namespace ArTiX.GridBuildingSystem
                 grid.SetCellValue(cell, null);
             }
 
-            Destroy(building.gameObject);
+            building.Destroy();
         }
 
         #endregion

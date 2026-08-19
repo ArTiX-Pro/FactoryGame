@@ -8,17 +8,41 @@ namespace ArTiX.Interaction
     [RequireComponent(typeof(PlayerInput))]
     public class Interactor : MonoBehaviour
     {
+        private static Interactor instance;
+        public static Interactor Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new GameObject(nameof(Interactor), typeof(Interactor))
+                        .GetComponent<Interactor>();
+                }
+                return instance;
+            }
+        }
+
         [SerializeField] private Camera interactionCamera;
         [SerializeField] private InteractorSO datas;
 
         private IInteractable interactable;
         private Outline outline;
 
+        private void Awake()
+        {
+            if (instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            instance = this;
+        }
+
         private void Start()
         {
-            TickSystem.Instance.OnTick += CheckForInteractable;
-
             interactionCamera ??= Camera.main;
+            Enable();
         }
 
         public void Interact(InputAction.CallbackContext ctxt)
@@ -30,7 +54,6 @@ namespace ArTiX.Interaction
         private void CheckForInteractable(object sender, EventArgs e)
         {
             Ray ray = interactionCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-
             if (Physics.Raycast(ray, out RaycastHit hit, datas.InteractionDistance, datas.InteractionMask))
             {
                 if (!hit.collider.TryGetComponent(out IInteractable foundInteractable))
@@ -62,6 +85,15 @@ namespace ArTiX.Interaction
                 outline.enabled = false;
                 outline = null;
             }
+        }
+
+        public void Enable()
+        {
+            TickSystem.Instance.OnTick += CheckForInteractable;
+        }
+        public void Disable()
+        {
+            TickSystem.Instance.OnTick -= CheckForInteractable;
         }
     }
 }

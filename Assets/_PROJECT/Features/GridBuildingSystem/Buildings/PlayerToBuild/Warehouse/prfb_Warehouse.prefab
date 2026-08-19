@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4851473813910682344}
   - component: {fileID: 3012291950165089675}
   - component: {fileID: 5305128570584063920}
-  - component: {fileID: 1268574960031155924}
   m_Layer: 0
   m_Name: Hangar
   m_TagString: Untagged
@@ -91,28 +90,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1268574960031155924
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 42116644540435580}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 6423858710480308729, guid: b10acaa238debc243b62eeb81816729a, type: 3}
 --- !u!1 &3131521976970486460
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,7 +101,6 @@ GameObject:
   - component: {fileID: 2323494607961716742}
   - component: {fileID: 1698259052873185187}
   - component: {fileID: 3491867328751600489}
-  - component: {fileID: 3342648846161487923}
   m_Layer: 8
   m_Name: Tile
   m_TagString: Untagged
@@ -204,27 +180,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3342648846161487923
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3131521976970486460}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 30, y: 0.050000016, z: 30}
-  m_Center: {x: 0, y: 0.025, z: 0}
 --- !u!1 &3609220389939470248
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,6 +223,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8122123335037267399}
+  - component: {fileID: 1925866349783527793}
   - component: {fileID: 971248559325835365}
   - component: {fileID: 8891069033652704787}
   m_Layer: 0
@@ -293,6 +249,27 @@ Transform:
   - {fileID: 4133555135932531986}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1925866349783527793
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6352166761222429112}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4, y: 1.15, z: 3.4}
+  m_Center: {x: 0.5, y: 0.6, z: 0.8}
 --- !u!114 &971248559325835365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -330,7 +307,6 @@ GameObject:
   - component: {fileID: 7035577675607816818}
   - component: {fileID: 1398008692577765805}
   - component: {fileID: 179953323379117472}
-  - component: {fileID: 1402093903738311295}
   m_Layer: 0
   m_Name: Roof
   m_TagString: Untagged
@@ -410,25 +386,3 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1402093903738311295
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6433181803410030246}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3562073674547505438, guid: b10acaa238debc243b62eeb81816729a, type: 3}

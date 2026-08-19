@@ -73,6 +73,11 @@ namespace ArTiX.FactoryGame.UI
             );
         }
 
+        public void EnterDestructionMode()
+        {
+            GridBuildingSystem.GridBuildingSystem.Instance.EnterDestructionState();
+        }
+
         private void SelectBuilding(BuildingSO buildingDatas)
         {
             GridBuildingSystem.GridBuildingSystem.Instance.SelectBuilding(buildingDatas);

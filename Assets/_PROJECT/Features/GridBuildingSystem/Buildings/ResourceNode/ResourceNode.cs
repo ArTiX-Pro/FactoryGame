@@ -9,8 +9,9 @@ namespace ArTiX.FactoryGame.Buildings
         private int quantity;
         public ItemSO Item => (datas as ResourceNodeSO).Resource;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             quantity = (datas as ResourceNodeSO).Quantity;
         }
 

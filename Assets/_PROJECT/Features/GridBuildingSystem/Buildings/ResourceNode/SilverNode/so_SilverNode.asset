@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22843bb78a94968478ebaa0a158bfdfe, type: 3}
   m_Name: so_SilverNode
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Datas.ResourceNodeSO
-  prefab: {fileID: 130885965557583239, guid: 4723c30d6282cad439ec5c30a5ac0a61, type: 3}
+  prefab: {fileID: 9031085022997704516, guid: 4bca179789dedc24081a2a9c1112f828, type: 3}
   cellArray:
   - {x: 0, y: 0}
   resource: {fileID: 11400000, guid: 6703cdeaf5539674ebcec8054ed60750, type: 2}

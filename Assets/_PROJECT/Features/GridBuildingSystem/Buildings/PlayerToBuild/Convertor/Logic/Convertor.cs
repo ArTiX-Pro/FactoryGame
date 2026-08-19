@@ -19,8 +19,10 @@ namespace ArTiX.FactoryGame.Buildings
 
         private bool IsConverting => conversionTimer.IsActive;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             GetComponent<BoxCollider>().isTrigger = true;
             conversionTimer = MasterTimer.Create(this, 0, onFinishedEvent: Convert, name: "ConversionTimer");
 

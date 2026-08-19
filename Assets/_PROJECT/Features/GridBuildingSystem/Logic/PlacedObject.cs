@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace ArTiX.GridBuildingSystem.Buildings
 {
+    [RequireComponent(typeof(BoxCollider))]
     public abstract class PlacedObject : MonoBehaviour
     {
         [SerializeField] protected PlacedObjectSO datas;
@@ -29,7 +30,10 @@ namespace ArTiX.GridBuildingSystem.Buildings
 
         public virtual void Initialize(Vector2Int origin) => Origin = origin;
 
-        public virtual void Remove() { /* SFX && VFX*/ }
+        protected virtual void Awake()
+        {
+            GetComponent<BoxCollider>().isTrigger = true;
+        }
 
         public List<Vector2Int> GetOccupiedCells()
         {
@@ -46,6 +50,11 @@ namespace ArTiX.GridBuildingSystem.Buildings
         protected bool IsAdjacent(Vector2Int cell)
         {
             return Array.IndexOf(AdjacentCellArray, cell) != -1;
+        }
+
+        public virtual void Destroy()
+        {
+            Destroy(gameObject);
         }
     }
 }

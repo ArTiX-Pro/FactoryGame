@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22843bb78a94968478ebaa0a158bfdfe, type: 3}
   m_Name: so_CopperNode
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Datas.ResourceNodeSO
-  prefab: {fileID: 5999941484022407376, guid: 439ca1e0a30462b4383bc2dd39c32b9a, type: 3}
+  prefab: {fileID: 8780446616576635593, guid: 245b64fab59b9a74ba6fa2a76f428c54, type: 3}
   cellArray:
   - {x: 0, y: 0}
   resource: {fileID: 11400000, guid: 972527ec23e91eb4c8011a0078686665, type: 2}

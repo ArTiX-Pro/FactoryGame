@@ -611,6 +611,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f0881adf2f0ed0041a04e27285e235ca, type: 2}
   availableRecipes:
   - {fileID: 11400000, guid: 6035fbf6496fd66439a59f16934b07b5, type: 2}
+  - {fileID: 11400000, guid: 39c3b6645c5b53746b3edea18be7abe4, type: 2}
+  - {fileID: 11400000, guid: 388908abb3b90ac42a3ace2fcf40fcf1, type: 2}
+  - {fileID: 11400000, guid: 498ce5880fa82684f8b862de1999d519, type: 2}
 --- !u!1001 &5695841962099820439
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -676,10 +679,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1148625376251044622, guid: 5593dbf6b529ffc43a3632d1abae46f5, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1744523407}
     - target: {fileID: 2090358572072654955, guid: 5593dbf6b529ffc43a3632d1abae46f5, type: 3}
       propertyPath: m_Name
       value: HUD

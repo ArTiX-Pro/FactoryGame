@@ -115,7 +115,47 @@ namespace ArTiX.FactoryGame.Buildings
 
             public void RemoveConveyor(in Conveyor conveyor)
             {
-                if (conveyor == null) return;
+                NbConveyor--;
+
+                if (NbConveyor == 0) 
+                {
+                    FirstConveyor = LastConveyor = null;
+                    TickSystem.Instance.OnTick -= IncrementTickCounter;
+                    return;
+                }
+
+                if (conveyor == LastConveyor)
+                    LastConveyor = conveyor.previousConveyor;
+                else if (conveyor == FirstConveyor)
+                    FirstConveyor = conveyor.nextConveyor;
+                else // Create a new belt to make 2 distinct belts
+                {
+                    ConveyorBelt newBelt = new ConveyorBelt(conveyor.nextConveyor)
+                    {
+                        LastConveyor = LastConveyor
+                    };
+                    newBelt.UpdateBelt();
+
+                    LastConveyor = conveyor.previousConveyor;
+                    UpdateBelt();
+                }
+            }
+
+            /// <summary>
+            /// Make sure the belt has the correct number of conveyor and that those conveyors reference the correct belt 
+            /// Always start from the LastConveyor
+            /// </summary>
+            private void UpdateBelt()
+            {
+                Conveyor conveyor = LastConveyor;
+                NbConveyor = 0;
+
+                while (conveyor != null)
+                {
+                    NbConveyor++;
+                    conveyor.belt = this;
+                    conveyor = conveyor.previousConveyor;
+                }
             }
 
             private void Reverse()
@@ -179,14 +219,17 @@ namespace ArTiX.FactoryGame.Buildings
         private Vector2Int FrontCell => Origin + Vector2Int.right.Rotate(transform.eulerAngles.y);
         private Vector2Int BackCell => Origin + Vector2Int.left.Rotate(transform.eulerAngles.y);
 
-        private Transform worldItem;
         private MasterTween.Tween tween;
+        private Transform worldItem;
         private Transform WorldItem
         {
             set
             {
+
                 worldItem = value;
                 tween?.Kill();
+                if (worldItem == null) return;
+
                 tween = MasterTween.Create();
                 worldItem.transform.TweenPosition(itemPos.position,
                     animParams: new MasterTween.AnimParams(
@@ -321,6 +364,16 @@ namespace ArTiX.FactoryGame.Buildings
             previousConveyor = nextConveyor;
             nextConveyor = previousConv;
             UpdateRotation();
+        }
+
+        public override void Destroy() 
+        {
+            if (worldItem != null) 
+                Destroy(worldItem.gameObject);
+            tween?.Kill();
+
+            belt.RemoveConveyor(this);
+            base.Destroy(); 
         }
 
         #endregion

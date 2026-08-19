@@ -10,8 +10,9 @@ namespace ArTiX.FactoryGame.Buildings
         private int tickCounter;
         private int ticksPerUpdate;
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
+            base.Awake ();
             ticksPerUpdate = (datas as ActiveBuildingSO).TicksPerUpdate;
         }
 
