@@ -7,6 +7,11 @@ namespace ArTiX.GridBuildingSystem
 {
     public class Ghost : MonoBehaviour
     {
+        public static Ghost Create(Ghost ghost)
+        {
+            return Instantiate(ghost);
+        }
+
         [SerializeField] private GhostSO datas;
 
         private MasterTween.Tween rotationTween;

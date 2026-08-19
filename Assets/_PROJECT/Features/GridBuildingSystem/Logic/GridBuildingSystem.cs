@@ -28,22 +28,18 @@ namespace ArTiX.GridBuildingSystem
         [SerializeField] private GridSO datas;
         private Grid<PlacedObject> grid;
 
-        private Vector2Int currentCell;
-
-        private Ghost ghost;
-        private BuildingSO currentBuildingDatas;
-        private float currentRotation;
-        /// <summary>
-        /// Because the Y axis goes UP and we want to rotate our building positively by looking FROM up, 
-        /// we need to invert the rotation.
-        /// </summary>
-        private float WorldRotation => -currentRotation;
-
-        private const float ROTATION_DELTA = 90f;
-        private const float MAX_ROTATION = 360;
-
-        private delegate void DoAction();
-        private DoAction doAction;
+        private BuildingState buildingState;
+        private GameState currentState;
+        private GameState CurrentState
+        {
+            get => currentState;
+            set
+            {
+                currentState?.ExitState();
+                currentState = value;
+                currentState?.EnterState();
+            }
+        }
 
         #endregion
 
@@ -58,11 +54,13 @@ namespace ArTiX.GridBuildingSystem
             instance = this;
 
             GenerateGrid();
+
+            buildingState = new BuildingState();
         }
 
         private void Update()
         {
-            doAction?.Invoke();
+            currentState?.Update();
         }
 
         public void GenerateGrid()
@@ -95,26 +93,30 @@ namespace ArTiX.GridBuildingSystem
             gridMat.SetFloat(GridSO.LINE_WIDTH, datas.LineWidth);
         }
 
-        public void CreateBuilding(PlacedObjectSO placedObjectDatas, Vector2Int origin)
+        public void CreateBuilding(PlacedObjectSO placedObjectDatas, Vector2Int origin, float rotation = 0)
         {
             if (CanBuild(placedObjectDatas, origin))
             {
                 PlacedObject building = Instantiate(
                     original: placedObjectDatas.Prefab,
-                    position: SnapPos(ConvertCellPosToWorldPos(origin)),
-                    rotation: Quaternion.Euler(x: 0, WorldRotation, z: 0)
+                    position: ConvertCellPosToWorldPos(origin),
+                    rotation: Quaternion.Euler(x: 0, -rotation, z: 0)
                 );
 
-                foreach (Vector2Int cell in placedObjectDatas.GetOccupiedCells(origin, currentRotation))
+                foreach (Vector2Int cell in placedObjectDatas.GetOccupiedCells(origin, rotation))
                     grid.SetCellValue(cell, building);
 
                 building.Initialize(origin);
             }
+            else
+            {
+                // Fail effects
+            }
         }
 
-        private bool CanBuild(in PlacedObjectSO placedObjectDatas, in Vector2Int origin)
+        public bool CanBuild(in PlacedObjectSO placedObjectDatas, in Vector2Int origin)
         {
-            foreach (Vector2Int cell in placedObjectDatas.GetOccupiedCells(origin, currentRotation))
+            foreach (Vector2Int cell in placedObjectDatas.GetOccupiedCells(origin, 0))
             {
                 if (grid.GetCellValue(cell) != null || !grid.IsCellWithinGrid(cell))
                     return false;
@@ -135,19 +137,16 @@ namespace ArTiX.GridBuildingSystem
             return new Vector2Int(Mathf.FloorToInt(worldPos.x), Mathf.FloorToInt(worldPos.z));
         }
 
-        private Vector3 ConvertCellPosToWorldPos(in Vector2Int cell)
+        public Vector3 ConvertCellPosToWorldPos(in Vector2Int cell)
         {
             Vector3 worldPos = new Vector3(
-                x: datas.CellSize * (cell.x + .5f - (datas.Width * .5f)), 
-                y: 0, 
+                x: datas.CellSize * (cell.x + .5f - (datas.Width * .5f)),
+                y: 0,
                 z: datas.CellSize * (cell.y + .5f - (datas.Width * .5f))
             );
 
             return worldPos;
         }
-
-        private Vector3 SnapPos(in Vector3 worldPos) 
-            => ConvertCellPosToWorldPos(ConvertWorldPosToCellPos(worldPos));
 
         private Vector3 RealWorldMousePosOnGrid()
         {
@@ -162,50 +161,7 @@ namespace ArTiX.GridBuildingSystem
                 z: (t * ray.direction.z) + camTrans.position.z);
         }
 
-        private Vector2Int GetMouseCellPos() => ConvertWorldPosToCellPos(RealWorldMousePosOnGrid());
-
-        #endregion
-
-        #region State Machine
-
-        private void InitBuildingState()
-        {
-            InputManager.Instance.OnSelect += CreateBuilding;
-            InputManager.Instance.OnCancel += ExitBuildingState;
-            InputManager.Instance.OnRotate += RotateBuilding;
-
-            currentRotation = 0;
-
-            doAction = BuildingState;
-        }
-
-        private void BuildingState()
-        {
-            // Snap to cell pos
-            Vector2Int cellPos = GetMouseCellPos();
-            if (currentCell == cellPos) return;
-            currentCell = cellPos;
-
-            ghost.SetPosition(ConvertCellPosToWorldPos(cellPos));
-            UpdateGhost();
-        }
-
-        private void ExitBuildingState()
-        {
-            doAction = null;
-            currentRotation = 0;
-            ghost.Kill();
-
-            InputManager.Instance.OnSelect -= CreateBuilding;
-            InputManager.Instance.OnCancel -= ExitBuildingState;
-            InputManager.Instance.OnRotate -= RotateBuilding;
-        }
-
-        private void DestroyState()
-        {
-            // Snap to cell pos
-            Vector2Int cellPos = GetMouseCellPos();
-        }
+        public Vector2Int GetMouseCellPos() => ConvertWorldPosToCellPos(RealWorldMousePosOnGrid());
 
         #endregion
 
@@ -213,57 +169,19 @@ namespace ArTiX.GridBuildingSystem
 
         public void SelectBuilding(BuildingSO buildingDatas)
         {
-            if (doAction == BuildingState) Destroy(ghost.gameObject);
-            else InitBuildingState();
-
-            ghost = Instantiate(buildingDatas.Ghost);
-            currentBuildingDatas = buildingDatas;
-        }
-
-        private void RotateBuilding(int rotateDirection)
-        {
-            currentRotation = (currentRotation + (ROTATION_DELTA * rotateDirection)) % MAX_ROTATION;
-            ghost.SetRotation(WorldRotation);
-            UpdateGhost();
-        }
-
-        private void UpdateGhost()
-        {
-            ghost.SetIsValid(CanBuild(currentCell));
-        }
-
-        private void CreateBuilding()
-        {
-            Vector2Int origin = GetMouseCellPos();
-            if (CanBuild(origin))
+            if (currentState != buildingState)
             {
-                PlacedObject building = Instantiate(
-                    original: currentBuildingDatas.Prefab,
-                    position: SnapPos(RealWorldMousePosOnGrid()),
-                    rotation: Quaternion.Euler(x: 0, WorldRotation, z: 0)
-                );
-
-                foreach (Vector2Int cell in currentBuildingDatas.GetOccupiedCells(origin, currentRotation))
-                    grid.SetCellValue(cell, building);
-
-                building.Initialize(origin);
-            }
-            else
-            {
-                // Fail effects
-            }
-        }
-
-        private bool CanBuild(in Vector2Int origin)
-        {
-            // Using the opposite of the rotation to
-            foreach (Vector2Int cell in currentBuildingDatas.GetOccupiedCells(origin, currentRotation))
-            {
-                if (grid.GetCellValue(cell) != null || !grid.IsCellWithinGrid(cell))
-                    return false;
+                CurrentState = buildingState;
+                InputManager.Instance.OnCancel += ExitBuildingState;
             }
 
-            return true;
+            buildingState.SetBuildingDatas(buildingDatas);
+        }
+
+        private void ExitBuildingState()
+        {
+            InputManager.Instance.OnCancel -= ExitBuildingState;
+            CurrentState = null;
         }
 
         public void DestroyBuilding(PlacedObject building)

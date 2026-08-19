@@ -676,6 +676,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1148625376251044622, guid: 5593dbf6b529ffc43a3632d1abae46f5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1744523407}
     - target: {fileID: 2090358572072654955, guid: 5593dbf6b529ffc43a3632d1abae46f5, type: 3}
       propertyPath: m_Name
       value: HUD
