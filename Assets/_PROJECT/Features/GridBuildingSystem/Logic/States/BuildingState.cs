@@ -24,6 +24,7 @@ namespace ArTiX.GridBuildingSystem
         public override void EnterState()
         {
             InputManager.Instance.OnSelect += CreateBuilding;
+            InputManager.Instance.OnCancel += ExitState;
             InputManager.Instance.OnRotate += RotateBuilding;
 
             currentRotation = 0;
@@ -36,8 +37,7 @@ namespace ArTiX.GridBuildingSystem
             if (currentCell == cellPos) return;
             currentCell = cellPos;
 
-            ghost.SetPosition(GridBuildingSystem.Instance.ConvertCellPosToWorldPos(cellPos));
-            UpdateGhost();
+            ghost.SetPosition(cellPos);
         }
 
         public override void ExitState()
@@ -47,7 +47,10 @@ namespace ArTiX.GridBuildingSystem
             ghost = null;
 
             InputManager.Instance.OnSelect -= CreateBuilding;
+            InputManager.Instance.OnCancel -= ExitState;
             InputManager.Instance.OnRotate -= RotateBuilding;
+
+            base.ExitState();
         }
 
         public void SetBuildingDatas(in BuildingSO buildingDatas)
@@ -66,12 +69,6 @@ namespace ArTiX.GridBuildingSystem
         {
             currentRotation = (currentRotation + (ROTATION_DELTA * rotateDirection)) % MAX_ROTATION;
             ghost.SetRotation(WorldRotation);
-            UpdateGhost();
-        }
-
-        private void UpdateGhost()
-        {
-            ghost.SetIsValid(GridBuildingSystem.Instance.CanBuild(currentBuildingDatas, currentCell));
         }
     }
 }

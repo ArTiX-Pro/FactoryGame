@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Ghost
   datas: {fileID: 11400000, guid: 38e7d0b8bd70254409c82e7db69f3d7d, type: 2}
+  buildingDatas: {fileID: 11400000, guid: 4ed2dda66af1fba40b3263685d1c8eb6, type: 2}
 --- !u!1 &1157481805578000786
 GameObject:
   m_ObjectHideFlags: 0

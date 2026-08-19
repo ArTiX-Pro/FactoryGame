@@ -1,6 +1,5 @@
 using ArTiX.GridBuildingSystem.Buildings;
 using ArTiX.GridBuildingSystem.Datas;
-using ArTiX.Input;
 using ArTiX.Utils;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -35,9 +34,22 @@ namespace ArTiX.GridBuildingSystem
             get => currentState;
             set
             {
-                currentState?.ExitState();
-                currentState = value;
-                currentState?.EnterState();
+                if (value != currentState)
+                {
+                    if (currentState != null)
+                    {
+                        currentState.OnExitState -= ExitCurrentState;
+                        currentState?.ExitState();
+                    }
+
+                    currentState = value;
+
+                    if (currentState != null)
+                    {
+                        currentState.EnterState();
+                        currentState.OnExitState += ExitCurrentState;
+                    }
+                }
             }
         }
 
@@ -93,39 +105,9 @@ namespace ArTiX.GridBuildingSystem
             gridMat.SetFloat(GridSO.LINE_WIDTH, datas.LineWidth);
         }
 
-        public void CreateBuilding(PlacedObjectSO placedObjectDatas, Vector2Int origin, float rotation = 0)
-        {
-            if (CanBuild(placedObjectDatas, origin))
-            {
-                PlacedObject building = Instantiate(
-                    original: placedObjectDatas.Prefab,
-                    position: ConvertCellPosToWorldPos(origin),
-                    rotation: Quaternion.Euler(x: 0, -rotation, z: 0)
-                );
-
-                foreach (Vector2Int cell in placedObjectDatas.GetOccupiedCells(origin, rotation))
-                    grid.SetCellValue(cell, building);
-
-                building.Initialize(origin);
-            }
-            else
-            {
-                // Fail effects
-            }
-        }
-
-        public bool CanBuild(in PlacedObjectSO placedObjectDatas, in Vector2Int origin)
-        {
-            foreach (Vector2Int cell in placedObjectDatas.GetOccupiedCells(origin, 0))
-            {
-                if (grid.GetCellValue(cell) != null || !grid.IsCellWithinGrid(cell))
-                    return false;
-            }
-
-            return true;
-        }
-
         public PlacedObject GetObjectOnCell(Vector2Int cell) => grid.GetCellValue(cell);
+
+        private void ExitCurrentState() => currentState = null;
 
         #region World pos, grid pos Conversion
 
@@ -169,19 +151,40 @@ namespace ArTiX.GridBuildingSystem
 
         public void SelectBuilding(BuildingSO buildingDatas)
         {
-            if (currentState != buildingState)
-            {
-                CurrentState = buildingState;
-                InputManager.Instance.OnCancel += ExitBuildingState;
-            }
-
+            CurrentState = buildingState;
             buildingState.SetBuildingDatas(buildingDatas);
         }
 
-        private void ExitBuildingState()
+        public void CreateBuilding(PlacedObjectSO placedObjectDatas, Vector2Int origin, float rotation = 0)
         {
-            InputManager.Instance.OnCancel -= ExitBuildingState;
-            CurrentState = null;
+            if (CanBuild(placedObjectDatas, origin))
+            {
+                PlacedObject building = Instantiate(
+                    original: placedObjectDatas.Prefab,
+                    position: ConvertCellPosToWorldPos(origin),
+                    rotation: Quaternion.Euler(x: 0, -rotation, z: 0)
+                );
+
+                foreach (Vector2Int cell in placedObjectDatas.GetOccupiedCells(origin, rotation))
+                    grid.SetCellValue(cell, building);
+
+                building.Initialize(origin);
+            }
+            else
+            {
+                // Fail effects
+            }
+        }
+
+        public bool CanBuild(in PlacedObjectSO placedObjectDatas, in Vector2Int origin, in float rotation = 0)
+        {
+            foreach (Vector2Int cell in placedObjectDatas.GetOccupiedCells(origin, rotation))
+            {
+                if (grid.GetCellValue(cell) != null || !grid.IsCellWithinGrid(cell))
+                    return false;
+            }
+
+            return true;
         }
 
         public void DestroyBuilding(PlacedObject building)
