@@ -30,29 +30,6 @@ namespace ArTiX.GridBuildingSystem
         private BuildingState buildingState;
         private DestroyState destroyState;
         private GameState currentState;
-        private GameState CurrentState
-        {
-            get => currentState;
-            set
-            {
-                if (value != currentState)
-                {
-                    if (currentState != null)
-                    {
-                        currentState.OnExitState -= ExitCurrentState;
-                        currentState?.ExitState();
-                    }
-
-                    currentState = value;
-
-                    if (currentState != null)
-                    {
-                        currentState.EnterState();
-                        currentState.OnExitState += ExitCurrentState;
-                    }
-                }
-            }
-        }
 
         #endregion
 
@@ -109,6 +86,26 @@ namespace ArTiX.GridBuildingSystem
 
         public PlacedObject GetObjectOnCell(Vector2Int cell) => grid.GetCellValue(cell);
 
+        private void SwitchState(in GameState newState)
+        {
+            if (newState != currentState)
+            {
+                if (currentState != null)
+                {
+                    currentState.OnExitState -= ExitCurrentState;
+                    currentState?.ExitState();
+                }
+
+                currentState = newState;
+
+                if (currentState != null)
+                {
+                    currentState.EnterState();
+                    currentState.OnExitState += ExitCurrentState;
+                }
+            }
+        }
+
         private void ExitCurrentState() => currentState = null;
 
         #region World pos, grid pos Conversion
@@ -153,13 +150,13 @@ namespace ArTiX.GridBuildingSystem
 
         public void SelectBuilding(BuildingSO buildingDatas)
         {
-            CurrentState = buildingState;
+            SwitchState(buildingState);
             buildingState.SetBuildingDatas(buildingDatas);
         }
 
         public void EnterDestructionState()
         {
-            CurrentState = destroyState;
+            SwitchState(destroyState);
         }
 
         public void CreateBuilding(PlacedObjectSO placedObjectDatas, Vector2Int origin, float rotation = 0)

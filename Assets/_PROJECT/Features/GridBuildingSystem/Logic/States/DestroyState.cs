@@ -12,9 +12,19 @@ namespace ArTiX.GridBuildingSystem
     public class DestroyState : GameState
     {
         private const string DESTROY_CURSOR_TEXTURE_PATH = "Assets/_PROJECT/Features/UI/tex_BulldozerCursor.png";
+        private const string DESTROY_BUILDING_MATERIAL_PATH = "Assets/_PROJECT/Features/GridBuildingSystem/Buildings/mat_Destruction.mat";
+
+        private readonly Texture2D textureDestroyCursor;
+        private readonly Material destroyMat;
+        private Material previousMaterial;
 
         private PlacedObject currentBuilding;
-        private Texture2D textureDestroyCursor;
+
+        public DestroyState()
+        {
+            textureDestroyCursor = AssetDatabase.LoadAssetAtPath<Texture2D>(DESTROY_CURSOR_TEXTURE_PATH);
+            destroyMat = AssetDatabase.LoadAssetAtPath<Material>(DESTROY_BUILDING_MATERIAL_PATH);
+        }
 
         public override void EnterState()
         {
@@ -23,7 +33,6 @@ namespace ArTiX.GridBuildingSystem
 
             Interactor.Instance.Disable();
 
-            textureDestroyCursor ??= AssetDatabase.LoadAssetAtPath<Texture2D>(DESTROY_CURSOR_TEXTURE_PATH);
             Cursor.SetCursor(textureDestroyCursor, Vector2.zero, CursorMode.ForceSoftware);
 
             TickSystem.Instance.OnTick += CheckForPlacedObject;
@@ -44,6 +53,14 @@ namespace ArTiX.GridBuildingSystem
             //Resets the cursor to the default  
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 
+            if (currentBuilding != null)
+            {
+                SetBuildingMaterial(previousMaterial);
+                previousMaterial = null;
+                currentBuilding = null;
+            }
+
+            TickSystem.Instance.OnTick -= CheckForPlacedObject;
             base.ExitState();
         }
 
@@ -52,10 +69,29 @@ namespace ArTiX.GridBuildingSystem
             Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
             if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue))
             {
-                if (hit.collider.TryGetComponent(out PlacedObject placedObject))
+                if (hit.collider.TryGetComponent(out PlacedObject placedObject) && currentBuilding != placedObject)
                 {
+                    if (currentBuilding != null)
+                        SetBuildingMaterial(previousMaterial);
+                    
                     currentBuilding = placedObject;
+                    previousMaterial = currentBuilding.GetComponentInChildren<Renderer>().material;
+                    SetBuildingMaterial(destroyMat);
                 }
+            }
+            else if (currentBuilding != null)
+            {
+                SetBuildingMaterial(previousMaterial);
+                previousMaterial = null;
+                currentBuilding = null;
+            }
+        }
+
+        private void SetBuildingMaterial(in Material material)
+        {
+            foreach (Renderer renderer in currentBuilding.GetComponentsInChildren<Renderer>())
+            {
+                renderer.material = material;
             }
         }
 
