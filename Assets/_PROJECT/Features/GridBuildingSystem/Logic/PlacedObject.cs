@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ArTiX.GridBuildingSystem.Buildings
 {
     [RequireComponent(typeof(BoxCollider))]
-    public abstract class PlacedObject : MonoBehaviour
+    public abstract class PlacedObject : MonoBehaviour, IMouseTooltip
     {
         [SerializeField] protected PlacedObjectSO datas;
         public PlacedObjectSO Datas => datas;
@@ -28,11 +28,14 @@ namespace ArTiX.GridBuildingSystem.Buildings
             }
         }
 
+        public virtual string Tooltip => name;
+
         public virtual void Initialize(Vector2Int origin) => Origin = origin;
 
         protected virtual void Awake()
         {
             GetComponent<BoxCollider>().isTrigger = true;
+            name = datas.Name;
         }
 
         public List<Vector2Int> GetOccupiedCells()

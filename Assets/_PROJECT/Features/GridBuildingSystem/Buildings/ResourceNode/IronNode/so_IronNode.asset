@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22843bb78a94968478ebaa0a158bfdfe, type: 3}
   m_Name: so_IronNode
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Datas.ResourceNodeSO
+  _name: IronNode
   prefab: {fileID: 4567791754389281199, guid: cf43ff6c75d31e54caf9637b6b9f70c7, type: 3}
   cellArray:
   - {x: 0, y: 0}

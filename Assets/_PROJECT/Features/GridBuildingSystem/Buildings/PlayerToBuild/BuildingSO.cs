@@ -11,7 +11,6 @@ namespace ArTiX.GridBuildingSystem.Datas
         [SerializeField] private Sprite icon;
         [SerializeField] private Ghost ghost;
 
-        public string Name => objName;
         public Sprite Icon => icon;
         public Ghost Ghost => ghost;
     }

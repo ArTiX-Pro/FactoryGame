@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 319c351fffe50424fb18ce9c6f804bde, type: 3}
   m_Name: so_Conveyor
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Datas.BuildingSO
+  _name: Conveyor
   prefab: {fileID: 6850006977810358145, guid: 6eb147125a3319f48827e3c2e9204f39, type: 3}
   cellArray:
   - {x: 0, y: 0}

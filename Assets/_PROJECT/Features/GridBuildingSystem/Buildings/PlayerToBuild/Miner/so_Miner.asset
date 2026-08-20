@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5df4fd37e36ffd459d4a8186267e026, type: 3}
   m_Name: so_Miner
   m_EditorClassIdentifier: Assembly-CSharp::ResourceCollectorSO
+  _name: Miner
   prefab: {fileID: 935323192725363434, guid: 2581dc11f60089e4ea2f2a4c102e14e6, type: 3}
   cellArray:
   - {x: 0, y: 0}

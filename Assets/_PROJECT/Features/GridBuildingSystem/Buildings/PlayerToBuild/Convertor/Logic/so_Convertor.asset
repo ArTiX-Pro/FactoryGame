@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 319c351fffe50424fb18ce9c6f804bde, type: 3}
   m_Name: so_Convertor
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Datas.BuildingSO
+  _name: Convertor
   prefab: {fileID: 1963761662857068457, guid: d65dbc1c287a64935b2472c66a27caf2, type: 3}
   cellArray:
   - {x: -1, y: -1}

@@ -13,6 +13,9 @@ namespace ArTiX.GridBuildingSystem.Datas
     public class PlacedObjectSO : ScriptableObject
     {
         [Title("Base datas")]
+        [SerializeField] private string _name;
+        public string Name => _name;
+
         [SerializeField] private PlacedObject prefab;
 
         [SerializeField] private Vector2Int[] cellArray;

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 319c351fffe50424fb18ce9c6f804bde, type: 3}
   m_Name: so_Warehouse
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Datas.BuildingSO
+  _name: Warehouse
   prefab: {fileID: 8891069033652704787, guid: f2adbd0143e24be4fb5ef92c3722ed66, type: 3}
   cellArray:
   - {x: -1, y: -1}
