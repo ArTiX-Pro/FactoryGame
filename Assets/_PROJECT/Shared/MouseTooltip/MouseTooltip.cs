@@ -1,5 +1,4 @@
 using ArTiX.FactoryGame.UI;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,7 +7,7 @@ using UnityEngine.UI;
 
 namespace ArTiX.Utils
 {
-    public class MouseTooltip : MonoBehaviour, IPointerMoveHandler
+    public class MouseTooltip : MonoBehaviour
     {
         [SerializeField] private RectTransform prefabTooltip;
         [SerializeField] private Font font;
@@ -35,15 +34,8 @@ namespace ArTiX.Utils
                     };
         }
 
-        public void OnPointerMove(PointerEventData eventData)
+        private void Update()
         {
-            List<RaycastResult> raycastResults = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(eventData, raycastResults);
-
-            Debug.Log(raycastResults.Count);
-            foreach (RaycastResult result in raycastResults)
-                Debug.Log(result.gameObject);
-
             if (EventSystem.current.IsPointerOverGameObject()) return;
 
             Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());

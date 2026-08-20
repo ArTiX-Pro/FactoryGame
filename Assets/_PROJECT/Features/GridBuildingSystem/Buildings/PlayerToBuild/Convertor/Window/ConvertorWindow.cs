@@ -1,6 +1,7 @@
 using ArTiX.FactoryGame.Buildings;
 using ArTiX.FactoryGame.Datas;
 using ArTiX.Utils;
+using ArTiX.Utils.Window;
 using System;
 using TMPro;
 using UnityEngine;
@@ -8,7 +9,7 @@ using UnityEngine.UI;
 
 namespace ArTiX.FactoryGame.UI
 {
-    public class ConvertorWindow : DragWindow
+    public class ConvertorWindow : ObjectWindow<Convertor>
     {
         [Header("References")]
         [SerializeField] private Transform buttonContainer;
@@ -19,14 +20,10 @@ namespace ArTiX.FactoryGame.UI
         [SerializeField] private RecipeButton prefabRecipeButton;
         [SerializeField] private Image prefabResourceNeeded;
 
-        private Convertor convertor;
-
         public event Action OnClosingWindow;
 
-        public void Initialize(in Convertor convertor, in RecipeSO currentRecipe)
+        protected override void Initialize()
         {
-            this.convertor = convertor;
-
             RecipeButton recipeButton;
             foreach (RecipeSO recipe in GameManager.Instance.AvailableRecipes)
             {
@@ -34,12 +31,12 @@ namespace ArTiX.FactoryGame.UI
                 recipeButton.Initialize(OnRecipeButtonClicked, recipe);
             }
 
-            UpdateWindow(currentRecipe);
+            UpdateWindow((owner as Convertor).CurrentRecipe);
         }
 
         private void OnRecipeButtonClicked(RecipeSO recipe)
         {
-            convertor.SetRecipe(recipe);
+            (owner as Convertor).SetRecipe(recipe);
             UpdateWindow(recipe);
         }
 

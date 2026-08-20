@@ -11,6 +11,7 @@ namespace ArTiX.FactoryGame.Buildings
     public class Convertor : PlacedObject, IInteractable
     {
         [SerializeField] private RecipeSO recipe;
+        public RecipeSO CurrentRecipe => recipe;
 
         private ConvertorWindow window;
         private MasterTimer.Timer conversionTimer;
@@ -39,15 +40,14 @@ namespace ArTiX.FactoryGame.Buildings
         {
             if (window == null)
             {
-                window = ConvertorWindow.Create(DragWindow.EWindowType.Convertor) as ConvertorWindow;
-                window.Initialize(this, recipe);
+                window = ConvertorWindow.Create(ConvertorWindow.EWindowType.Convertor, this) as ConvertorWindow;
                 window.OnClosingWindow += OnClosingWindow;
             }
         }
 
         private void OnClosingWindow() => window = null;
 
-        private void StartConversion()
+        private void StartConversion(Inventory.Inventory.ItemSlot itemSlot)
         {
             if (CanConvertResources() && !IsConverting)
             {

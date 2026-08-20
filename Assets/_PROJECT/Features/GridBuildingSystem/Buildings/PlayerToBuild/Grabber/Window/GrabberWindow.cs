@@ -1,21 +1,17 @@
 using ArTiX.FactoryGame.Buildings;
 using ArTiX.Inventory;
-using ArTiX.Utils;
+using ArTiX.Utils.Window;
 using UnityEngine;
 
 namespace ArTiX.FactoryGame.UI
 {
-    public class GrabberWindow : DragWindow
+    public class GrabberWindow : ObjectWindow<Grabber>
     {
         [SerializeField] private Transform buttonContainer;
         [SerializeField] private ItemButton prefabItemButton;
 
-        private Grabber grabber;
-
-        public void Initialize(in Grabber grabber)
+        protected override void Initialize()
         {
-            this.grabber = grabber;
-
             ItemButton itemButton;
             foreach (ItemSO resource in GameManager.Instance.AvailableResources)
             {
@@ -24,11 +20,11 @@ namespace ArTiX.FactoryGame.UI
             }
         }
 
-        public void SelectEveythingFilter() => grabber.SetFilter(Grabber.EFilter.Everything, null);
-        public void SelectNothingFilter() => grabber.SetFilter(Grabber.EFilter.Nothing, null);
+        public void SelectEveythingFilter() => owner.SetFilter(Grabber.EFilter.Everything, null);
+        public void SelectNothingFilter() => owner.SetFilter(Grabber.EFilter.Nothing, null);
         private void SelectResourceFilter(ItemSO item)
         {
-            grabber.SetFilter(Grabber.EFilter.ResourceBased, item);
+            owner.SetFilter(Grabber.EFilter.ResourceBased, item);
         }
     }
 }

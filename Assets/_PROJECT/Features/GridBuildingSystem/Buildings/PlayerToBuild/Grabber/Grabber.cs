@@ -48,8 +48,7 @@ namespace ArTiX.FactoryGame.Buildings
 
         public void Interact()
         {
-            GrabberWindow window = DragWindow.Create(DragWindow.EWindowType.Grabber) as GrabberWindow;
-            window.Initialize(this);
+            GrabberWindow window = GrabberWindow.Create(GrabberWindow.EWindowType.Grabber, this) as GrabberWindow;
         }
 
         /// <summary>

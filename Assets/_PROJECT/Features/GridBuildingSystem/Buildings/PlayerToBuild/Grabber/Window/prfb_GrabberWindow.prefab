@@ -182,7 +182,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3069241222230486108}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ArTiX.FactoryGame.UI.GrabberWindow, Assembly-CSharp
         m_MethodName: SelectEveythingFilter
         m_Mode: 1
@@ -314,7 +314,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3069241222230486108}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ArTiX.FactoryGame.UI.GrabberWindow, Assembly-CSharp
         m_MethodName: SelectNothingFilter
         m_Mode: 1
@@ -335,12 +335,32 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 247031967655856872, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 247031967655856872, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 247031967655856872, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 3069241222230486108}
+      objectReference: {fileID: 8329337557133099881}
+    - target: {fileID: 247031967655856872, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 247031967655856872, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CloseWindow
+      objectReference: {fileID: 0}
     - target: {fileID: 247031967655856872, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ArTiX.FactoryGame.UI.GrabberWindow, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 247031967655856872, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 1490522257407728927, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       propertyPath: m_text
@@ -439,45 +459,38 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 562991434997523870, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+    - {fileID: 7058136636871837195, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5700979399454131779, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2766409082479180866}
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 476708898137957482, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 4068111530025581882, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3069241222230486108}
+      addedObject: {fileID: 8329337557133099881}
   m_SourcePrefab: {fileID: 100100000, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
---- !u!1 &2572867832314519114 stripped
+--- !u!1 &2116094236070594330 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 476708898137957482, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4068111530025581882, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
   m_PrefabInstance: {fileID: 2677730410362124832}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3069241222230486108
+--- !u!114 &8329337557133099881
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2572867832314519114}
+  m_GameObject: {fileID: 2116094236070594330}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7f3f7fc4b2a9be44db08d2aeba88607c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GrabberWindow
-  draggedWindow: {fileID: 8825825819647100400}
-  canvas: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::ArTiX.FactoryGame.UI.GrabberWindow
   buttonContainer: {fileID: 2766409082479180866}
   prefabItemButton: {fileID: 1816920703261677007, guid: 9adc9989d8032d740bec1b6be9e38f37, type: 3}
 --- !u!224 &7652960546692381795 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5700979399454131779, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
-  m_PrefabInstance: {fileID: 2677730410362124832}
-  m_PrefabAsset: {fileID: 0}
---- !u!224 &8825825819647100400 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6868715438590427088, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
   m_PrefabInstance: {fileID: 2677730410362124832}
   m_PrefabAsset: {fileID: 0}

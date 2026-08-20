@@ -241,9 +241,21 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 247031967655856872, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 247031967655856872, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 247031967655856872, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 7079479237684085195}
+      objectReference: {fileID: 2089978002337667333}
+    - target: {fileID: 247031967655856872, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 247031967655856872, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: CloseWindow
@@ -251,6 +263,10 @@ PrefabInstance:
     - target: {fileID: 247031967655856872, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ArTiX.FactoryGame.UI.ConvertorWindow, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 247031967655856872, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 1490522257407728927, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       propertyPath: m_text
@@ -270,7 +286,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4068111530025581882, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       propertyPath: m_Name
-      value: ConvertorWindow
+      value: prfb_ConvertorWindow
       objectReference: {fileID: 0}
     - target: {fileID: 6868715438590427088, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       propertyPath: m_Pivot.x
@@ -353,7 +369,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 562991434997523870, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+    - {fileID: 7058136636871837195, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5700979399454131779, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
@@ -363,39 +379,32 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 3056395393380350623}
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 476708898137957482, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 4068111530025581882, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7079479237684085195}
+      addedObject: {fileID: 2089978002337667333}
   m_SourcePrefab: {fileID: 100100000, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
---- !u!1 &1385251051424200341 stripped
+--- !u!1 &3301190940630167493 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 476708898137957482, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4068111530025581882, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
   m_PrefabInstance: {fileID: 1559646568760988415}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7079479237684085195
+--- !u!114 &2089978002337667333
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1385251051424200341}
+  m_GameObject: {fileID: 3301190940630167493}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6ef8091113bf3924aa8119b9fcd39f77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.FactoryGame.UI.ConvertorWindow
-  draggedWindow: {fileID: 5401625778855849263}
-  canvas: {fileID: 0}
   buttonContainer: {fileID: 7328028919199338806}
   resourceNeededContainer: {fileID: 4254716414322816567}
   outputResourceImage: {fileID: 5994790651701389452}
   prefabRecipeButton: {fileID: 5056470378214730551, guid: 38a4243f0bf67554dbafb1a1fe2db924, type: 3}
   prefabResourceNeeded: {fileID: 4111349957748340394, guid: 25f659e03c5f6c74ca27586a3a183261, type: 3}
---- !u!224 &5401625778855849263 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6868715438590427088, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
-  m_PrefabInstance: {fileID: 1559646568760988415}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &6537265978226463932 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5700979399454131779, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}

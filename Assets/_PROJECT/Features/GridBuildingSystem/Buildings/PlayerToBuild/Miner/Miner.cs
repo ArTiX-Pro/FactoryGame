@@ -1,14 +1,20 @@
+using ArTiX.Interaction;
+using ArTiX.Inventory;
+using ArTiX.Utils.Window;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ArTiX.FactoryGame.Buildings
 {
     [RequireComponent(typeof(Inventory.Inventory))]
-    public class Miner : ActiveBuilding
+    public class Miner : ActiveBuilding, IInteractable
     {
         private Inventory.Inventory inventory;
 
         private readonly List<ResourceNode> adjacentResourceNodes = new List<ResourceNode>();
+
+        private InventoryWindow window;
+        public ObjectWindow<Inventory.Inventory> Window => window;
 
         protected override void Awake()
         {
@@ -85,5 +91,16 @@ namespace ArTiX.FactoryGame.Buildings
             else
                 Debug.Log("Inventory full");
         }
+
+        public void Interact()
+        {
+            if (window == null)
+            {
+                window = InventoryWindow.Create(InventoryWindow.EWindowType.Inventory, inventory)
+                    as InventoryWindow;
+            }
+        }
+
+        public void OnCloseWindow() => throw new System.NotImplementedException();
     }
 }
