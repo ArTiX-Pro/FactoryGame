@@ -11,7 +11,8 @@ namespace ArTiX.Utils
         public enum EWindowType
         {
             Default,
-            Convertor
+            Convertor,
+            Grabber
         }
 
         public static DragWindow Create(in EWindowType windowType)
@@ -23,8 +24,11 @@ namespace ArTiX.Utils
                 case EWindowType.Default:
                     windowPath = "Assets/_PROJECT/Shared/Window/Window.prefab";
                     break;
-                    case EWindowType.Convertor:
+                case EWindowType.Convertor:
                     windowPath = "Assets/_PROJECT/Features/GridBuildingSystem/Buildings/PlayerToBuild/Convertor/Window/ConvertorWindow.prefab";
+                    break;
+                case EWindowType.Grabber:
+                    windowPath = "Assets/_PROJECT/Features/GridBuildingSystem/Buildings/PlayerToBuild/Grabber/Window/prfb_GrabberWindow.prefab";
                     break;
             }
 

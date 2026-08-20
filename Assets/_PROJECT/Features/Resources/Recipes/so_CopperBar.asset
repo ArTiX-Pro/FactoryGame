@@ -16,6 +16,6 @@ MonoBehaviour:
   - resource: {fileID: 11400000, guid: 972527ec23e91eb4c8011a0078686665, type: 2}
     quantity: 4
   output:
-    resource: {fileID: 11400000, guid: 972527ec23e91eb4c8011a0078686665, type: 2}
+    resource: {fileID: 11400000, guid: 920fd5d0e0c1926448cb1db6f492e3fd, type: 2}
     quantity: 1
   conversionDuration: 5

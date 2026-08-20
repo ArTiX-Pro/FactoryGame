@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: so_SilverNugget
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.Inventory.ItemSO
   _name: Silver Nugget
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 0fef2b4fb6e70784b8dcbebffda69aee, type: 3}
   prefab: {fileID: 238722787413704817, guid: 1efe9207021df794cb243e9d9b93544c, type: 3}
   infiniteStack: 0
   maxStackSize: 50

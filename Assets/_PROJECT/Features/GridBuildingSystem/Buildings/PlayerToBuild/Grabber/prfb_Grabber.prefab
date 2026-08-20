@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 534449862541061291}
   - component: {fileID: 8151193748821526061}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4671071770226138484}
   - component: {fileID: 8828589652428420403}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Square (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 6178778943137756968}
   - component: {fileID: 4748232332494051937}
   - component: {fileID: 2283615433831818762}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 9025277665186750844}
   - component: {fileID: 7617558778844911003}
   - component: {fileID: 8059234526852225456}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: prfb_Grabber
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -212,12 +212,24 @@ namespace ArTiX.FactoryGame.Buildings
         private Conveyor previousConveyor;
         private Conveyor nextConveyor;
 
-        private bool IsLastConveyor => belt.LastConveyor == this;
-        private bool IsFirstConveyor => belt.FirstConveyor == this;
+        private bool IsLastConveyor
+        {
+            get
+            {
+                return belt != null && belt.LastConveyor == this;
+            }
+        }
+        private bool IsFirstConveyor
+        {
+            get
+            {
+                return belt != null && belt.FirstConveyor == this;
+            }
+        }
 
         // The base direction of the conveyor is right, so right is considered to be front.
-        private Vector2Int FrontCell => Origin + Vector2Int.right.Rotate(transform.eulerAngles.y);
-        private Vector2Int BackCell => Origin + Vector2Int.left.Rotate(transform.eulerAngles.y);
+        private Vector2Int FrontCell => Origin + Vector2Int.right.Rotate(-transform.eulerAngles.y);
+        private Vector2Int BackCell => Origin + Vector2Int.left.Rotate(-transform.eulerAngles.y);
 
         private MasterTween.Tween tween;
         private Transform worldItem;
@@ -242,6 +254,12 @@ namespace ArTiX.FactoryGame.Buildings
         public ItemSO Item => item;
 
         #endregion
+
+        protected override void Awake() 
+        {
+            base.Awake();
+            name = UnityEngine.Random.Range(0, 500).ToString();
+        }
 
         public override void Initialize(Vector2Int origin)
         {
@@ -298,7 +316,7 @@ namespace ArTiX.FactoryGame.Buildings
                     }
 
                     adjacentConveyor.belt.AddConveyor(this);
-                    adjacentBeltList.Remove(adjacentConveyor.belt);
+                    adjacentBeltList.Remove(belt);
 
                     // Call the merge func
                     adjacentConveyor = null;

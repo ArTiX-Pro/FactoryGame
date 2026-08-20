@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: so_CopperNugget
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.Inventory.ItemSO
   _name: Copper Nugget
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 87b3c9e5b4da4e046b3bfaefd1aa8425, type: 3}
   prefab: {fileID: 3592911958875105404, guid: 3f7917250b3608a40bd4e44d21a0c7f7, type: 3}
   infiniteStack: 0
   maxStackSize: 100

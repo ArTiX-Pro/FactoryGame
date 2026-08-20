@@ -10,6 +10,8 @@ namespace ArTiX.FactoryGame.Buildings
         private int tickCounter;
         private int ticksPerUpdate;
 
+        private bool active;
+
         protected override void Awake()
         {
             base.Awake ();
@@ -23,6 +25,10 @@ namespace ArTiX.FactoryGame.Buildings
 
         protected void Activate(in bool active)
         {
+            if (this.active == active) return;
+
+            this.active = active;
+
             if (active)
             {
                 switch ((datas as ActiveBuildingSO).TickType)
@@ -40,7 +46,6 @@ namespace ArTiX.FactoryGame.Buildings
             }
             else
             {
-
                 switch ((datas as ActiveBuildingSO).TickType)
                 {
                     case TickSystem.ETick.First:
@@ -66,6 +71,12 @@ namespace ArTiX.FactoryGame.Buildings
                 tickCounter = 0;
                 OnTickAction();
             }
+        }
+
+        public override void Destroy() 
+        {
+            Activate(false);
+            base.Destroy(); 
         }
     }
 }
