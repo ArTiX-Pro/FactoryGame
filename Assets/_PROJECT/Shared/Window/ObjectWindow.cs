@@ -29,6 +29,9 @@ namespace ArTiX.Utils.Window
                 case EWindowType.Grabber:
                     windowPath = "Assets/_PROJECT/Features/GridBuildingSystem/Buildings/PlayerToBuild/Grabber/Window/prfb_GrabberWindow.prefab";
                     break;
+                case EWindowType.Inventory:
+                    windowPath = "Assets/_PROJECT/Shared/Inventory/Window/prfb_InventoryWindow.prefab";
+                    break;
             }
 
             GameObject windowObj = AssetDatabase.LoadAssetAtPath<GameObject>(windowPath);

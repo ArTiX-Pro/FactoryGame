@@ -26,6 +26,7 @@ namespace ArTiX.Inventory
                 if (Quantity + quantity <= Item.MaxStackSize)
                 {
                     Quantity += quantity;
+                    quantity = 0;
                 }
                 else
                 {
@@ -43,6 +44,7 @@ namespace ArTiX.Inventory
                 if (Quantity >= quantity)
                 {
                     Quantity -= quantity;
+                    quantity = 0;
                 }
                 else
                 {

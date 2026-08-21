@@ -182,7 +182,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 8329337557133099881}
         m_TargetAssemblyTypeName: ArTiX.FactoryGame.UI.GrabberWindow, Assembly-CSharp
         m_MethodName: SelectEveythingFilter
         m_Mode: 1
@@ -314,7 +314,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 8329337557133099881}
         m_TargetAssemblyTypeName: ArTiX.FactoryGame.UI.GrabberWindow, Assembly-CSharp
         m_MethodName: SelectNothingFilter
         m_Mode: 1

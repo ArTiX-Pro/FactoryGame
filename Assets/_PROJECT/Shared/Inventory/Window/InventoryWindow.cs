@@ -15,11 +15,15 @@ namespace ArTiX.Inventory
 
         protected override void Initialize() 
         {
-            owner.OnAddItem += OnAddItemToInventory;
+            owner.OnAddItem += DisplayAddedItem;
             owner.OnRemoveItem += OnRemoveItemFromInventory;
+            foreach (KeyValuePair<ItemSO, int> slot in owner.GetInventory())
+            {
+                DisplayAddedItem(new Inventory.ItemSlot(slot.Key, slot.Value));
+            }
         }
 
-        private void OnAddItemToInventory(Inventory.ItemSlot itemSlot)
+        private void DisplayAddedItem(Inventory.ItemSlot itemSlot)
         {
             if (!resourceDisplayDictionary.ContainsKey(itemSlot.Item))
             {
@@ -49,8 +53,8 @@ namespace ArTiX.Inventory
 
         public override void CloseWindow()
         {
-            owner.OnAddItem -= OnAddItemToInventory;
-            owner.OnRemoveItem -= OnAddItemToInventory;
+            owner.OnAddItem -= DisplayAddedItem;
+            owner.OnRemoveItem -= OnRemoveItemFromInventory;
             base.CloseWindow(); 
         }
     }

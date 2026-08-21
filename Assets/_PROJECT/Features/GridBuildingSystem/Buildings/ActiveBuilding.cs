@@ -2,6 +2,7 @@ using ArTiX.FactoryGame.Datas;
 using ArTiX.GridBuildingSystem.Buildings;
 using ArTiX.Utils.TickSystem;
 using System;
+using UnityEngine;
 
 namespace ArTiX.FactoryGame.Buildings
 {
@@ -18,8 +19,9 @@ namespace ArTiX.FactoryGame.Buildings
             ticksPerUpdate = (datas as ActiveBuildingSO).TicksPerUpdate;
         }
 
-        private void Start()
+        public override void Initialize(Vector2Int origin) 
         {
+            base.Initialize(origin);
             Activate(true);
         }
 

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4103648626747783220}
   - component: {fileID: 3568853022211362011}
   - component: {fileID: 935323192725363434}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: prfb_Miner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 3010989979524690871}
   - component: {fileID: 3868010356029511361}
   - component: {fileID: 4249463618302944646}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
