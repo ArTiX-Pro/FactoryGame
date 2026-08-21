@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0eaf3e3bf82b3f845acdfa67333bfed8, type: 3}
   m_Name: so_IronNugget
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.Inventory.ItemSO
-  _name: Iron nugget
+  <Name>k__BackingField: Iron Nugget
   icon: {fileID: 21300000, guid: 98661df68990d634eb896fc2dd67262f, type: 3}
   prefab: {fileID: 1903863736920273683, guid: a0a11edee5322674e94d869ea5ee7276, type: 3}
   infiniteStack: 0

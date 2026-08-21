@@ -96,6 +96,18 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 1490522257407728927, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 2ae32f710feba224e80468f188f13d77, type: 2}
+    - target: {fileID: 1490522257407728927, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2273666054121009321, guid: 2ae32f710feba224e80468f188f13d77, type: 2}
+    - target: {fileID: 1490522257407728927, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4068111530025581882, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       propertyPath: m_Name
       value: prfb_InventoryWindow
@@ -192,6 +204,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 5113408899677341536}
   m_SourcePrefab: {fileID: 100100000, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+--- !u!114 &1652700578570745571 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1490522257407728927, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+  m_PrefabInstance: {fileID: 162398365291867132}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &4194014064315930310 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4068111530025581882, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
@@ -209,6 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f0a9b48a06cef940bbb8f1502fdf387, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.Inventory.InventoryWindow
+  title: {fileID: 1652700578570745571}
   resourceDisplayContainer: {fileID: 5452352844502625423}
   prefabResourceDisplay: {fileID: 4111349957748340394, guid: 25f659e03c5f6c74ca27586a3a183261, type: 3}
 --- !u!224 &5574619596966325695 stripped

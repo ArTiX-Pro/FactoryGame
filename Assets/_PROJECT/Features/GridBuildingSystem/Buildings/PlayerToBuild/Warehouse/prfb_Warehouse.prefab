@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4851473813910682344}
   - component: {fileID: 3012291950165089675}
   - component: {fileID: 5305128570584063920}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Hangar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 2323494607961716742}
   - component: {fileID: 1698259052873185187}
   - component: {fileID: 3491867328751600489}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -189,7 +189,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4133555135932531986}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -226,7 +226,7 @@ GameObject:
   - component: {fileID: 1925866349783527793}
   - component: {fileID: 971248559325835365}
   - component: {fileID: 8891069033652704787}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: prfb_Warehouse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -307,7 +307,7 @@ GameObject:
   - component: {fileID: 7035577675607816818}
   - component: {fileID: 1398008692577765805}
   - component: {fileID: 179953323379117472}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Roof
   m_TagString: Untagged
   m_Icon: {fileID: 0}

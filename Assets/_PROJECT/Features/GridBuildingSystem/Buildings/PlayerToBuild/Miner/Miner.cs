@@ -96,7 +96,7 @@ namespace ArTiX.FactoryGame.Buildings
         {
             if (window == null)
             {
-                window = InventoryWindow.Create(InventoryWindow.EWindowType.Inventory, inventory)
+                window = InventoryWindow.Create(InventoryWindow.EWindowType.Inventory, inventory, title: "Miner")
                     as InventoryWindow;
             }
         }

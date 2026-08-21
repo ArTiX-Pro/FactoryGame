@@ -6,8 +6,7 @@ namespace ArTiX.Inventory
     [CreateAssetMenu(fileName = "ItemSO", menuName = "Datas/Inventory/ItemSO")]
     public class ItemSO : ScriptableObject
     {
-        [SerializeField] private string _name;
-        public string Name => _name;
+        [field: SerializeField] public string Name { get; private set; }
 
         [SerializeField] private Sprite icon;
         public Sprite Icon => icon;

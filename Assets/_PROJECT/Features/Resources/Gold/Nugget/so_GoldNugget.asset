@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0eaf3e3bf82b3f845acdfa67333bfed8, type: 3}
   m_Name: so_GoldNugget
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.Inventory.ItemSO
-  _name: GoldNugget
+  <Name>k__BackingField: Gold Nugget
   icon: {fileID: 21300000, guid: 3bea5c3ade172ac47bef4262d8a1c0c7, type: 3}
   prefab: {fileID: 9063931624512402109, guid: 8e9e307b066e57d46bbe59be029a1acc, type: 3}
   infiniteStack: 0

@@ -1,4 +1,5 @@
 using ArTiX.FactoryGame.UI;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace ArTiX.Utils.Window
             Inventory
         }
 
-        public static ObjectWindow<T> Create(in EWindowType windowType, in T owner)
+        public static ObjectWindow<T> Create(in EWindowType windowType, in T owner, in string title = null)
         {
             string windowPath;
             switch (windowType)
@@ -39,8 +40,14 @@ namespace ArTiX.Utils.Window
             ObjectWindow<T> window = windowObj.GetComponent<ObjectWindow<T>>();
             window.owner = owner;
             window.Initialize();
+
+            if (title != null)
+                window.title.text = title;
+
             return window;
         }
+
+        [SerializeField] private TextMeshProUGUI title;
 
         protected T owner;
 

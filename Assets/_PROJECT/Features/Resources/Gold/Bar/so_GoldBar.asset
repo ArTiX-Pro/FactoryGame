@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0eaf3e3bf82b3f845acdfa67333bfed8, type: 3}
   m_Name: so_GoldBar
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.Inventory.ItemSO
-  _name: Gold Bar
+  <Name>k__BackingField: Gold Bar
   icon: {fileID: 21300000, guid: 453154624a2a1884586c169a3021da3a, type: 3}
   prefab: {fileID: 4549842566106417357, guid: 5417f49eaf7b7764cab5a2353ab7816c, type: 3}
   infiniteStack: 0

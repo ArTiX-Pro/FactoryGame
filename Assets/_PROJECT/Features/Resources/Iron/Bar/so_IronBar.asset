@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0eaf3e3bf82b3f845acdfa67333bfed8, type: 3}
   m_Name: so_IronBar
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.Inventory.ItemSO
-  _name: Iron Bar
+  <Name>k__BackingField: Iron Bar
   icon: {fileID: 21300000, guid: 7e082cc2cf2a4433d85e388c6bf94234, type: 3}
   prefab: {fileID: 1045039524951490176, guid: 4ef48c8c04fa941418808862def4f413, type: 3}
   infiniteStack: 0

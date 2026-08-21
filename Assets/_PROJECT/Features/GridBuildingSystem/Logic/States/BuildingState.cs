@@ -1,5 +1,6 @@
 using ArTiX.GridBuildingSystem.Datas;
 using ArTiX.Input;
+using ArTiX.Interaction;
 using ArTiX.Utils;
 using UnityEngine;
 
@@ -27,6 +28,7 @@ namespace ArTiX.GridBuildingSystem
             InputManager.Instance.OnCancel += ExitState;
             InputManager.Instance.OnRotate += RotateBuilding;
 
+            Interactor.Instance.Disable();
             currentRotation = 0;
         }
 
@@ -46,6 +48,7 @@ namespace ArTiX.GridBuildingSystem
             ghost.Kill();
             ghost = null;
 
+            Interactor.Instance.Enable();
             InputManager.Instance.OnSelect -= CreateBuilding;
             InputManager.Instance.OnCancel -= ExitState;
             InputManager.Instance.OnRotate -= RotateBuilding;

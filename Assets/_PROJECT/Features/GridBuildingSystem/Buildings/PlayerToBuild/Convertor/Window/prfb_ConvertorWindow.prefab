@@ -383,6 +383,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2089978002337667333}
   m_SourcePrefab: {fileID: 100100000, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+--- !u!114 &75325698687766496 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1490522257407728927, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+  m_PrefabInstance: {fileID: 1559646568760988415}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &3301190940630167493 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4068111530025581882, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
@@ -400,6 +411,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ef8091113bf3924aa8119b9fcd39f77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.FactoryGame.UI.ConvertorWindow
+  title: {fileID: 75325698687766496}
   buttonContainer: {fileID: 7328028919199338806}
   resourceNeededContainer: {fileID: 4254716414322816567}
   outputResourceImage: {fileID: 5994790651701389452}

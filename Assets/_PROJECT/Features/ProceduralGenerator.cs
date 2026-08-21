@@ -1,6 +1,5 @@
 using ArTiX.FactoryGame.Datas;
 using ArTiX.GridBuildingSystem.Datas;
-using ArTiX.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,21 +12,28 @@ namespace ArTiX.FactoryGame
 
         private void Start()
         {
+            Noise.FastNoise fastNoise = new Noise.FastNoise();
+            fastNoise.SetFrequency(5);
+
             List<Vector2Int> possibleCells = new List<Vector2Int>();
 
+            GridBuildingSystem.GridBuildingSystem grid = GridBuildingSystem.GridBuildingSystem.Instance;
+            float perlin;
             for (int x = 0; x < gridDatas.Width; x++)
             {
                 for (int y = 0; y < gridDatas.Height; y++)
-                    possibleCells.Add(new Vector2Int(x, y));
-            }
+                {
+                    // fastNoise.GetPerlin gives a value between [-1;1], we move it between [0;1]
+                    perlin = fastNoise.GetPerlin((float)x / gridDatas.Width, y / (float)gridDatas.Height);
+                    perlin += 1;
+                    perlin *= .5f;
 
-            Vector2Int selectedCell;
-            while (resourceNodes.Count > 0)
-            {
-                selectedCell = possibleCells.GetRandomElement();
-                possibleCells.Remove(selectedCell);
-                GridBuildingSystem.GridBuildingSystem.Instance.CreateBuilding(resourceNodes[0], selectedCell);
-                resourceNodes.RemoveAt(0);
+                    Debug.Log(perlin);
+                    if (Mathf.Abs(perlin - .5f) < 0.0000000001f)
+                    {
+                        grid.CreateBuilding(resourceNodes[0], new Vector2Int(x, y));
+                    }
+                }
             }
 
             Destroy(gameObject);

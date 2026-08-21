@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0eaf3e3bf82b3f845acdfa67333bfed8, type: 3}
   m_Name: so_SilverBar
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.Inventory.ItemSO
-  _name: Silver Bar
+  <Name>k__BackingField: Silver Bar
   icon: {fileID: 21300000, guid: 7e38d2a77ad88e3438be30c32efaab9e, type: 3}
   prefab: {fileID: 4958346031427387928, guid: f866ca7e405ce3f4696c88f2332c5672, type: 3}
   infiniteStack: 0
