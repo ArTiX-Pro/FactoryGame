@@ -464,23 +464,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.ProceduralGeneration
   gridDatas: {fileID: 11400000, guid: 9bfca7db0cc2c1b40a996fa026c6006a, type: 2}
-  resourceNodes:
-  - {fileID: 11400000, guid: 276777ea371c04b4caee330530ec345a, type: 2}
-  - {fileID: 11400000, guid: f10e424f84d0d6c4d8bf8e5d379210a1, type: 2}
-  - {fileID: 11400000, guid: 7e3813b0da7a75849a4ddc727a285756, type: 2}
-  - {fileID: 11400000, guid: 13b4219520b533d468f637988b709c88, type: 2}
-  - {fileID: 11400000, guid: 7e3813b0da7a75849a4ddc727a285756, type: 2}
-  - {fileID: 11400000, guid: 7e3813b0da7a75849a4ddc727a285756, type: 2}
-  - {fileID: 11400000, guid: 276777ea371c04b4caee330530ec345a, type: 2}
-  - {fileID: 11400000, guid: 13b4219520b533d468f637988b709c88, type: 2}
-  - {fileID: 11400000, guid: 7e3813b0da7a75849a4ddc727a285756, type: 2}
-  - {fileID: 11400000, guid: f10e424f84d0d6c4d8bf8e5d379210a1, type: 2}
-  - {fileID: 11400000, guid: 7e3813b0da7a75849a4ddc727a285756, type: 2}
-  - {fileID: 11400000, guid: 13b4219520b533d468f637988b709c88, type: 2}
-  - {fileID: 11400000, guid: 7e3813b0da7a75849a4ddc727a285756, type: 2}
-  - {fileID: 11400000, guid: 13b4219520b533d468f637988b709c88, type: 2}
-  - {fileID: 11400000, guid: 13b4219520b533d468f637988b709c88, type: 2}
-  - {fileID: 11400000, guid: 276777ea371c04b4caee330530ec345a, type: 2}
+  rarity: 0.1
+  noiseFrequency: 5
+  resourcesRarity:
+  - <ResourceNode>k__BackingField: {fileID: 11400000, guid: 276777ea371c04b4caee330530ec345a, type: 2}
+    <ValueOffset>k__BackingField: 0.1
+  - <ResourceNode>k__BackingField: {fileID: 11400000, guid: 7e3813b0da7a75849a4ddc727a285756, type: 2}
+    <ValueOffset>k__BackingField: 0.3
+  - <ResourceNode>k__BackingField: {fileID: 11400000, guid: f10e424f84d0d6c4d8bf8e5d379210a1, type: 2}
+    <ValueOffset>k__BackingField: 0.5
+  - <ResourceNode>k__BackingField: {fileID: 11400000, guid: 13b4219520b533d468f637988b709c88, type: 2}
+    <ValueOffset>k__BackingField: 0.7
 --- !u!1001 &1659295155
 PrefabInstance:
   m_ObjectHideFlags: 0
