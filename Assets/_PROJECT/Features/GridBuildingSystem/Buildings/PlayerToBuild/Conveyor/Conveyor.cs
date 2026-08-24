@@ -258,7 +258,6 @@ namespace ArTiX.FactoryGame.Buildings
         protected override void Awake() 
         {
             base.Awake();
-            name = UnityEngine.Random.Range(0, 500).ToString();
         }
 
         public override void Initialize(Vector2Int origin)

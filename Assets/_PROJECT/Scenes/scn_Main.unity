@@ -464,8 +464,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.ProceduralGeneration
   gridDatas: {fileID: 11400000, guid: 9bfca7db0cc2c1b40a996fa026c6006a, type: 2}
-  rarity: 0.1
-  noiseFrequency: 5
+  rarity: 0.001
+  noiseFrequency: 10
   resourcesRarity:
   - <ResourceNode>k__BackingField: {fileID: 11400000, guid: 276777ea371c04b4caee330530ec345a, type: 2}
     <ValueOffset>k__BackingField: 0.1
