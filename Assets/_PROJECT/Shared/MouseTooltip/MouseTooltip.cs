@@ -79,7 +79,7 @@ namespace ArTiX.Utils
                 tooltipObj.gameObject.SetActive(true);
                 tooltip = mouseTooltip;
 
-                // Update text
+                // Update text container size
                 TextMeshProUGUI textObj = tooltipObj.GetComponentInChildren<TextMeshProUGUI>();
                 textObj.text = tooltip.Tooltip;
                 textObj.rectTransform.sizeDelta = backgroundSizeOffset + new Vector2(
@@ -92,7 +92,7 @@ namespace ArTiX.Utils
             Vector2 screenSize = new Vector2(Screen.width, Screen.height);
             tooltipObj.anchorMax = tooltipObj.anchorMin = mouseScreenPos / screenSize;
             tooltipObj.anchoredPosition = tooltipObj.sizeDelta / 2;
-            tooltipObj.SetAsLastSibling();
+            tooltipObj.SetAsLastSibling(); // Otherwise, other objects would be in front
         }
     }
 }
