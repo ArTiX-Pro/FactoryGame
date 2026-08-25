@@ -1,6 +1,6 @@
 using ArTiX.GridBuildingSystem.Buildings;
 using ArTiX.Interaction;
-using ArTiX.Inventory;
+using ArTiX.Inventory.UI;
 using UnityEngine;
 
 namespace ArTiX.FactoryGame.Buildings

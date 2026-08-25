@@ -234,7 +234,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.Inventory.InventoryWindow
   title: {fileID: 1652700578570745571}
   resourceDisplayContainer: {fileID: 5452352844502625423}
-  prefabResourceDisplay: {fileID: 4111349957748340394, guid: 25f659e03c5f6c74ca27586a3a183261, type: 3}
+  prefabResourceDisplay: {fileID: 1181304331057734036, guid: 25f659e03c5f6c74ca27586a3a183261, type: 3}
 --- !u!224 &5574619596966325695 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5700979399454131779, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}

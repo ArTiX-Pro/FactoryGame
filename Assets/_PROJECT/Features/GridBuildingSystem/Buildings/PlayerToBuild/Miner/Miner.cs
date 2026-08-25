@@ -1,5 +1,5 @@
 using ArTiX.Interaction;
-using ArTiX.Inventory;
+using ArTiX.Inventory.UI;
 using ArTiX.Utils.Window;
 using System.Collections.Generic;
 using UnityEngine;

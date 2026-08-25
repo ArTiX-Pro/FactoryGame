@@ -1,17 +1,16 @@
 using ArTiX.Utils.Window;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace ArTiX.Inventory
+namespace ArTiX.Inventory.UI
 {
     public class InventoryWindow : ObjectWindow<Inventory>
     {
         [SerializeField] private Transform resourceDisplayContainer;
-        [SerializeField] private Image prefabResourceDisplay;
+        [SerializeField] private ItemSlotDisplay prefabResourceDisplay;
 
-        private readonly Dictionary<ItemSO, Image> resourceDisplayDictionary = new Dictionary<ItemSO, Image>();
+        private readonly Dictionary<ItemSO, ItemSlotDisplay> resourceDisplayDictionary = 
+            new Dictionary<ItemSO, ItemSlotDisplay>();
 
         protected override void Initialize() 
         {
@@ -30,11 +29,9 @@ namespace ArTiX.Inventory
                 resourceDisplayDictionary.Add(
                     key: itemSlot.Item, 
                     value: Instantiate(prefabResourceDisplay, resourceDisplayContainer));
-                resourceDisplayDictionary[itemSlot.Item].sprite = itemSlot.Item.Icon;
             }
 
-            resourceDisplayDictionary[itemSlot.Item].GetComponentInChildren<TextMeshProUGUI>().text =
-                itemSlot.Quantity.ToString();
+            resourceDisplayDictionary[itemSlot.Item].SetItemSlot(itemSlot);
         }
         
         private void OnRemoveItemFromInventory(Inventory.ItemSlot itemSlot)
@@ -45,10 +42,7 @@ namespace ArTiX.Inventory
                 resourceDisplayDictionary.Remove(itemSlot.Item);
             }
             else
-            {
-                resourceDisplayDictionary[itemSlot.Item].GetComponentInChildren<TextMeshProUGUI>().text =
-                    itemSlot.Quantity.ToString();
-            }
+                resourceDisplayDictionary[itemSlot.Item].SetItemSlot(itemSlot);
         }
 
         public override void CloseWindow()

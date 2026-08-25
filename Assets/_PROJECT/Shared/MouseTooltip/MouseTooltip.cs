@@ -1,4 +1,5 @@
 using ArTiX.FactoryGame.UI;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -16,6 +17,7 @@ namespace ArTiX.Utils
         private RectTransform tooltipObj;
 
         private readonly TextGenerator textGenerator = new TextGenerator();
+        private List<RaycastResult> uiRaycastResults;
         private TextGenerationSettings settings;
 
         private IMouseTooltip tooltip;
@@ -36,51 +38,62 @@ namespace ArTiX.Utils
 
         private void Update()
         {
-            void DisableTootlip()
+            Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
+            IMouseTooltip mouseTooltip = null;
+
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                // Check for UI tooltip
+                PointerEventData pointerData = new PointerEventData(EventSystem.current)
+                {
+                    position = mouseScreenPos
+                };
+
+                uiRaycastResults = new List<RaycastResult>();
+                EventSystem.current.RaycastAll(pointerData, uiRaycastResults);
+                foreach (RaycastResult result in uiRaycastResults)
+                {
+                    if (result.gameObject.transform.IsChildOf(tooltipObj)) continue;
+
+                    Debug.Log(result.gameObject);
+                    mouseTooltip = result.gameObject.GetComponentInParent<IMouseTooltip>();
+
+                    if (mouseTooltip != null) break;
+                }
+            }   
+            // Check for 3D object tootlip
+            else if (Physics.Raycast(Camera.main.ScreenPointToRay(mouseScreenPos), out RaycastHit hit, float.MaxValue))
+            {
+                hit.collider.TryGetComponent(out mouseTooltip);
+            }
+
+            if (mouseTooltip == null || mouseTooltip.Tooltip == "")
             {
                 if (tooltip == null) return;
                 tooltipObj.gameObject.SetActive(false);
                 tooltip = null;
-            }
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
-                DisableTootlip();
                 return;
             }
 
-            Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-            if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue) &&
-                hit.collider.TryGetComponent(out IMouseTooltip mouseTooltip))
+            if (mouseTooltip != tooltip)
             {
-                if (mouseTooltip != tooltip && mouseTooltip.Tooltip != "")
-                {
-                    tooltipObj.gameObject.SetActive(true);
-                    tooltip = mouseTooltip;
-                    UpdateText();
-                }
-            }
-            else
-            {
-                DisableTootlip();
-                return;
+                tooltipObj.gameObject.SetActive(true);
+                tooltip = mouseTooltip;
+
+                // Update text
+                TextMeshProUGUI textObj = tooltipObj.GetComponentInChildren<TextMeshProUGUI>();
+                textObj.text = tooltip.Tooltip;
+                textObj.rectTransform.sizeDelta = backgroundSizeOffset + new Vector2(
+                    x: textGenerator.GetPreferredWidth(tooltip.Tooltip, settings),
+                    y: textGenerator.GetPreferredHeight(tooltip.Tooltip, settings));
+
+                LayoutRebuilder.ForceRebuildLayoutImmediate(tooltipObj);
             }
 
-            Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
             Vector2 screenSize = new Vector2(Screen.width, Screen.height);
             tooltipObj.anchorMax = tooltipObj.anchorMin = mouseScreenPos / screenSize;
             tooltipObj.anchoredPosition = tooltipObj.sizeDelta / 2;
-        }
-
-        private void UpdateText()
-        {
-            float width = textGenerator.GetPreferredWidth(tooltip.Tooltip, settings);
-            float height = textGenerator.GetPreferredHeight(tooltip.Tooltip, settings);
-
-            TextMeshProUGUI textObj = tooltipObj.GetComponentInChildren<TextMeshProUGUI>();
-            textObj.text = tooltip.Tooltip;
-            textObj.rectTransform.sizeDelta = new Vector2(width, height) + backgroundSizeOffset;
-
-            LayoutRebuilder.ForceRebuildLayoutImmediate(tooltipObj);
+            tooltipObj.SetAsLastSibling();
         }
     }
 }
