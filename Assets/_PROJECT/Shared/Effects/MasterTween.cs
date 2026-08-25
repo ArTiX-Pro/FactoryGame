@@ -820,19 +820,8 @@ namespace ArTiX.Effects.Tween
 
                     for (int i = currentTweeners.Count - 1; i >= 0; i--)
                     {
-
-                        if (currentTweeners[i].UpdateTweener())
-                        {
-                            try
-                            {
-                                if (currentTweeners.Count > i)
-                                    currentTweeners.RemoveAt(i);
-                            }
-                            catch
-                            {
-                                Debug.LogError("Problem");
-                            }
-                        }
+                        if (currentTweeners[i].UpdateTweener() && currentTweeners.Count > i)
+                            currentTweeners.RemoveAt(i);
                     }
 
                     if (currentTweeners.Count == 0) tweenersLists.RemoveAt(0);

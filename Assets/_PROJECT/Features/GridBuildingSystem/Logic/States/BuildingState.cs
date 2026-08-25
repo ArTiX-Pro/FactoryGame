@@ -57,13 +57,9 @@ namespace ArTiX.GridBuildingSystem
             currentCell = cellPos;
 
             if (isDragging && cellChanged && GridBuildingSystem.Instance.CanBuild(currentBuildingDatas, cellPos))
-            {
                 UpdatePathPreview(cellPos);
-            }
             else if (ghost != null && cellChanged)
-            {
                 ghost.SetPosition(cellPos);
-            }
         }
 
         public override void ExitState()
