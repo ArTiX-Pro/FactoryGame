@@ -27,16 +27,26 @@ namespace ArTiX.Utils
 
             TextMeshProUGUI textObj = tooltipObj.GetComponentInChildren<TextMeshProUGUI>();
             settings = new TextGenerationSettings
-                    {
-                        fontSize = (int)textObj.fontSize,
-                        font = font,
-                        verticalOverflow = VerticalWrapMode.Overflow
-                    };
+            {
+                fontSize = (int)textObj.fontSize,
+                font = font,
+                verticalOverflow = VerticalWrapMode.Overflow
+            };
         }
 
         private void Update()
         {
-            if (EventSystem.current.IsPointerOverGameObject()) return;
+            void DisableTootlip()
+            {
+                if (tooltip == null) return;
+                tooltipObj.gameObject.SetActive(false);
+                tooltip = null;
+            }
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                DisableTootlip();
+                return;
+            }
 
             Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
             if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue) &&
@@ -51,8 +61,7 @@ namespace ArTiX.Utils
             }
             else
             {
-                tooltipObj.gameObject.SetActive(false);
-                tooltip = null;
+                DisableTootlip();
                 return;
             }
 

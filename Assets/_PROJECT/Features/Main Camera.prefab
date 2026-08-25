@@ -279,7 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09ddb88fb95dbec4c9ed0fa81beac71e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.Utils.SpectatorCamera
-  speed: 3
+  speed: 5
   sensitivity: 0.1
   holdToRotate: 1
   minZoom: 0.5

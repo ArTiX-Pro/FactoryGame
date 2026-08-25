@@ -1,6 +1,7 @@
 using ArTiX.Utils.TickSystem;
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace ArTiX.Interaction
@@ -53,6 +54,20 @@ namespace ArTiX.Interaction
 
         private void CheckForInteractable(object sender, EventArgs e)
         {
+            void DisableOutline()
+            {
+                if (outline == null) return;
+                outline.enabled = false;
+                interactable = null;
+                outline = null;
+            }
+
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                DisableOutline();
+                return; 
+            }
+
             Ray ray = interactionCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
             if (Physics.Raycast(ray, out RaycastHit hit, datas.InteractionDistance, datas.InteractionMask))
             {
@@ -79,11 +94,9 @@ namespace ArTiX.Interaction
                     outline.enabled = true;
                 }
             }
-            else if (interactable != null)
+            else
             {
-                interactable = null;
-                outline.enabled = false;
-                outline = null;
+                DisableOutline();
             }
         }
 
