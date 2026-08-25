@@ -15,6 +15,7 @@ namespace ArTiX.FactoryGame.UI
         [SerializeField] private Transform buttonContainer;
         [SerializeField] private Transform resourceNeededContainer;
         [SerializeField] private Image outputResourceImage;
+        [SerializeField] private Image conversionProgressImage;
 
         [Header("Prefab")]
         [SerializeField] private RecipeButton prefabRecipeButton;
@@ -31,12 +32,17 @@ namespace ArTiX.FactoryGame.UI
                 recipeButton.Initialize(OnRecipeButtonClicked, recipe);
             }
 
-            UpdateWindow((owner as Convertor).CurrentRecipe);
+            UpdateWindow(owner.CurrentRecipe);
+        }
+
+        private void Update()
+        {
+            conversionProgressImage.fillAmount = owner.ConversionProgress;
         }
 
         private void OnRecipeButtonClicked(RecipeSO recipe)
         {
-            (owner as Convertor).SetRecipe(recipe);
+            owner.SetRecipe(recipe);
             UpdateWindow(recipe);
         }
 

@@ -19,6 +19,7 @@ namespace ArTiX.FactoryGame.Buildings
         private Inventory.Inventory inventory;
 
         private bool IsConverting => conversionTimer.IsActive;
+        public float ConversionProgress => IsConverting ? conversionTimer.ElapsedTimeAsPercentage : 0f;
 
         protected override void Awake()
         {
