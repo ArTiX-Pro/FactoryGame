@@ -820,8 +820,19 @@ namespace ArTiX.Effects.Tween
 
                     for (int i = currentTweeners.Count - 1; i >= 0; i--)
                     {
+
                         if (currentTweeners[i].UpdateTweener())
-                            currentTweeners.RemoveAt(i);
+                        {
+                            try
+                            {
+                                if (currentTweeners.Count > i)
+                                    currentTweeners.RemoveAt(i);
+                            }
+                            catch
+                            {
+                                Debug.LogError("Problem");
+                            }
+                        }
                     }
 
                     if (currentTweeners.Count == 0) tweenersLists.RemoveAt(0);
@@ -985,6 +996,7 @@ namespace ArTiX.Effects.Tween
 
             OnFinishedEvent = null;
             tweenersLists.Clear();
+            IsActive = false;
             pool.MoveIn(this);
         }
 

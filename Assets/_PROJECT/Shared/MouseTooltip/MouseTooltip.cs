@@ -55,7 +55,6 @@ namespace ArTiX.Utils
                 {
                     if (result.gameObject.transform.IsChildOf(tooltipObj)) continue;
 
-                    Debug.Log(result.gameObject);
                     mouseTooltip = result.gameObject.GetComponentInParent<IMouseTooltip>();
 
                     if (mouseTooltip != null) break;

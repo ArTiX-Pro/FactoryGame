@@ -56,7 +56,7 @@ namespace ArTiX.GridBuildingSystem
 
             currentCell = cellPos;
 
-            if (isDragging && cellChanged)
+            if (isDragging && cellChanged && GridBuildingSystem.Instance.CanBuild(currentBuildingDatas, cellPos))
             {
                 UpdatePathPreview(cellPos);
             }
