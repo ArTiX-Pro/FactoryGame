@@ -2,6 +2,7 @@ using ArTiX.GridBuildingSystem.Datas;
 using ArTiX.Input;
 using ArTiX.Interaction;
 using ArTiX.Utils;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ArTiX.GridBuildingSystem
@@ -12,19 +13,25 @@ namespace ArTiX.GridBuildingSystem
         private const float MAX_ROTATION = 360;
         private float currentRotation;
         /// <summary>
-        /// Because the Y axis goes UP and we want to rotate our building positively by looking FROM up, 
+        /// Because the Y axis goes UP and we want to rotate our building positively by looking FROM up,
         /// we need to invert the rotation.
         /// </summary>
         private float WorldRotation => -currentRotation;
 
         private BuildingSO currentBuildingDatas;
-        private Ghost ghost; 
-        
+        private Ghost ghost;
+
         private Vector2Int currentCell;
+
+        private bool isDragging;
+        private Vector2Int dragStartCell;
+        private List<Vector2Int> currentPath = new List<Vector2Int>();
+        private readonly List<Ghost> pathGhosts = new List<Ghost>();
 
         public override void EnterState()
         {
-            InputManager.Instance.OnSelect += CreateBuilding;
+            InputManager.Instance.OnStartCreatingBuilding += StartCreating;
+            InputManager.Instance.OnFinishCreating += FinishCreating;
             InputManager.Instance.OnCancel += ExitState;
             InputManager.Instance.OnRotate += RotateBuilding;
 
@@ -34,22 +41,38 @@ namespace ArTiX.GridBuildingSystem
 
         public override void Update()
         {
-            // Snap to cell pos
             Vector2Int cellPos = GridBuildingSystem.Instance.GetMouseCellPos();
-            if (currentCell == cellPos) return;
+            bool cellChanged = currentCell != cellPos;
+
+            if (!currentBuildingDatas.AllowDragPlacement)
+            {
+                // Snap to cell pos
+                if (!cellChanged) return;
+                currentCell = cellPos;
+
+                ghost.SetPosition(cellPos);
+                return;
+            }
+
             currentCell = cellPos;
 
-            ghost.SetPosition(cellPos);
+            if (isDragging && cellChanged)
+            {
+                UpdatePathPreview(cellPos);
+            }
         }
 
         public override void ExitState()
         {
             currentRotation = 0;
-            ghost.Kill();
+            isDragging = false;
+            ghost?.Kill();
             ghost = null;
+            ClearPathGhosts();
 
             Interactor.Instance.Enable();
-            InputManager.Instance.OnSelect -= CreateBuilding;
+            InputManager.Instance.OnStartCreatingBuilding -= StartCreating;
+            InputManager.Instance.OnFinishCreating -= FinishCreating;
             InputManager.Instance.OnCancel -= ExitState;
             InputManager.Instance.OnRotate -= RotateBuilding;
 
@@ -59,19 +82,74 @@ namespace ArTiX.GridBuildingSystem
         public void SetBuildingDatas(in BuildingSO buildingDatas)
         {
             currentBuildingDatas = buildingDatas;
+            isDragging = false;
             ghost?.Kill();
-            ghost = Ghost.Create(buildingDatas.Ghost);
+            ghost = null;
+            ClearPathGhosts();
+
+            if (!buildingDatas.AllowDragPlacement)
+                ghost = Ghost.Create(buildingDatas.Ghost);
         }
 
-        private void CreateBuilding()
+        private void StartCreating()
         {
-            GridBuildingSystem.Instance.CreateBuilding(currentBuildingDatas, currentCell, currentRotation);
+            if (currentBuildingDatas.AllowDragPlacement)
+            {
+                isDragging = true;
+                dragStartCell = GridBuildingSystem.Instance.GetMouseCellPos();
+                UpdatePathPreview(dragStartCell);
+            }
+        }
+
+        private void FinishCreating()
+        {
+            if (currentBuildingDatas.AllowDragPlacement)
+            {  
+                foreach (Vector2Int cell in currentPath)
+                {
+                    GridBuildingSystem.Instance.CreateBuilding(currentBuildingDatas, cell, currentRotation);
+                }
+                isDragging = false;
+                ClearPathGhosts();
+            }
+            else
+                GridBuildingSystem.Instance.CreateBuilding(currentBuildingDatas, currentCell, currentRotation);
         }
 
         private void RotateBuilding(int rotateDirection)
         {
             currentRotation = (currentRotation + (ROTATION_DELTA * rotateDirection)) % MAX_ROTATION;
-            ghost.SetRotation(WorldRotation);
+            ghost?.SetRotation(WorldRotation);
+        }
+
+        private void UpdatePathPreview(in Vector2Int end)
+        {
+            List<Vector2Int> path = GridBuildingSystem.Instance.FindPath(dragStartCell, end, currentBuildingDatas);
+
+            currentPath.Clear();
+            if (path != null) currentPath = path;
+
+            while (pathGhosts.Count < currentPath.Count)
+                pathGhosts.Add(Ghost.Create(currentBuildingDatas.Ghost));
+
+            while (pathGhosts.Count > currentPath.Count)
+            {
+                int lastIndex = pathGhosts.Count - 1;
+                pathGhosts[lastIndex].Kill();
+                pathGhosts.RemoveAt(lastIndex);
+            }
+
+            for (int i = 0; i < currentPath.Count; i++)
+                pathGhosts[i].SetPosition(path[i]);
+        }
+
+        private void ClearPathGhosts()
+        {
+            foreach (Ghost pathGhost in pathGhosts)
+                pathGhost.Kill();
+
+            pathGhosts.Clear();
+            currentPath.Clear();
         }
     }
 }

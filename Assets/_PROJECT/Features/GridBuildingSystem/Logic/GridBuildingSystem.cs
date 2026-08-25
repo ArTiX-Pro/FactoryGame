@@ -1,6 +1,7 @@
 using ArTiX.GridBuildingSystem.Buildings;
 using ArTiX.GridBuildingSystem.Datas;
 using ArTiX.Utils;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -26,6 +27,7 @@ namespace ArTiX.GridBuildingSystem
 
         [SerializeField] private GridSO datas;
         private Grid<PlacedObject> grid;
+        private Pathfinding pathfinding;
 
         private BuildingState buildingState;
         private DestroyState destroyState;
@@ -72,6 +74,7 @@ namespace ArTiX.GridBuildingSystem
             }
 
             grid = new Grid<PlacedObject>(datas.Width, datas.Height);
+            pathfinding = new Pathfinding(datas.Width, datas.Height, allowDiagonal: false);
 
             GameObject gridVisual = Instantiate(datas.PrfbGridVisual, datas.Origin, Quaternion.identity);
             // Dividing by 10 because using a plane and a plane base size is 10 units in width and height
@@ -159,6 +162,20 @@ namespace ArTiX.GridBuildingSystem
             SwitchState(destroyState);
         }
 
+        public List<Vector2Int> FindPath(in Vector2Int start, in Vector2Int end, in PlacedObjectSO placedObjectDatas)
+        {
+            if (!grid.IsCellWithinGrid(start) || !grid.IsCellWithinGrid(end)) return null;
+
+            List<Pathfinding.PathNode> nodePath = pathfinding.FindPath(start.x, start.y, end.x, end.y);
+            if (nodePath == null) return null;
+
+            List<Vector2Int> path = new List<Vector2Int>();
+            foreach (Pathfinding.PathNode node in nodePath)
+                path.Add(new Vector2Int(node.X, node.Y));
+
+            return path;
+        }
+
         public void CreateBuilding(PlacedObjectSO placedObjectDatas, Vector2Int origin, float rotation = 0)
         {
             if (CanBuild(placedObjectDatas, origin))
@@ -170,7 +187,10 @@ namespace ArTiX.GridBuildingSystem
                 );
 
                 foreach (Vector2Int cell in placedObjectDatas.GetOccupiedCells(origin, rotation))
+                {
                     grid.SetCellValue(cell, building);
+                    pathfinding.SetIsWalkable(cell.x, cell.y, false);
+                }
 
                 building.Initialize(origin);
             }
@@ -196,6 +216,7 @@ namespace ArTiX.GridBuildingSystem
             foreach (Vector2Int cell in building.GetOccupiedCells())
             {
                 grid.SetCellValue(cell, null);
+                pathfinding.SetIsWalkable(cell.x, cell.y, true);
             }
 
             building.Destroy();

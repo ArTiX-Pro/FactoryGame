@@ -18,7 +18,7 @@ namespace ArTiX.Utils
             /// Cost to the end node
             /// </summary>
             public int HCost { get; private set; }
-            public int FCost => gCost + gCost;
+            public int FCost => gCost + HCost;
 
             public bool isWalkable = true;
 
@@ -186,7 +186,7 @@ namespace ArTiX.Utils
         public List<PathNode> FindPath(int startX, int startY, int endX, int endY)
         {
             PathNode startNode = grid.GetCellValue(startX, startY);
-            PathNode endNode = grid.GetCellValue(endX, endX);
+            PathNode endNode = grid.GetCellValue(endX, endY);
 
             openList = new List<PathNode>()
             {

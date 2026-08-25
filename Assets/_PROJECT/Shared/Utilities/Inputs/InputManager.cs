@@ -19,6 +19,8 @@ namespace ArTiX.Input
 
         // Actions
         public event Action OnSelect;
+        public event Action OnStartCreatingBuilding;
+        public event Action OnFinishCreating;
         public event Action OnCancel;
         public event Action OnToggleBuildingPanel;
         public event Action<int> OnRotate;
@@ -29,9 +31,11 @@ namespace ArTiX.Input
             else Destroy(gameObject);
         }
 
-        public void Select(InputAction.CallbackContext ctxt)
+        public void LeftMouseButton(InputAction.CallbackContext ctxt)
         {
+            if (ctxt.started) OnStartCreatingBuilding?.Invoke();
             if (ctxt.performed) OnSelect?.Invoke();
+            if (ctxt.canceled) OnFinishCreating?.Invoke();
         }
 
         public void Cancel(InputAction.CallbackContext ctxt)

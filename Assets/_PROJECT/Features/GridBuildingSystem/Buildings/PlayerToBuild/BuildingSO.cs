@@ -10,8 +10,10 @@ namespace ArTiX.GridBuildingSystem.Datas
         [SerializeField] private string objName;
         [SerializeField] private Sprite icon;
         [SerializeField] private Ghost ghost;
+        [SerializeField] private bool allowDragPlacement;
 
         public Sprite Icon => icon;
         public Ghost Ghost => ghost;
+        public bool AllowDragPlacement => allowDragPlacement;
     }
 }

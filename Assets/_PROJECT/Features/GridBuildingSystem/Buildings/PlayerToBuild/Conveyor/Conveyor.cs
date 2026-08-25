@@ -39,7 +39,7 @@ namespace ArTiX.FactoryGame.Buildings
             public void AddConveyor(Conveyor newConveyor)
             {
                 if (LastConveyor.IsAdjacent(newConveyor.Origin) &&
-                    newConveyor.FrontCell != FirstConveyor.Origin)
+                    newConveyor.Origin != FirstConveyor.BackCell)
                 {
                     newConveyor.previousConveyor = LastConveyor;
                     LastConveyor.nextConveyor = newConveyor;
