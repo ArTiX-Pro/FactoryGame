@@ -32,12 +32,15 @@ namespace ArTiX.FactoryGame.UI
                 recipeButton.Initialize(OnRecipeButtonClicked, recipe);
             }
 
+            owner.OnConverting += UpdateConversionImage;
+            if (!owner.IsConverting) conversionProgressImage.fillAmount = 0;
+
             UpdateWindow(owner.CurrentRecipe);
         }
 
-        private void Update()
+        private void UpdateConversionImage(float conversionProgress)
         {
-            conversionProgressImage.fillAmount = owner.ConversionProgress;
+            conversionProgressImage.fillAmount = conversionProgress;
         }
 
         private void OnRecipeButtonClicked(RecipeSO recipe)
@@ -70,8 +73,9 @@ namespace ArTiX.FactoryGame.UI
             }
         }
 
-        public override void CloseWindow() 
+        public override void CloseWindow()
         {
+            owner.OnConverting -= UpdateConversionImage;
             OnClosingWindow?.Invoke();
             base.CloseWindow(); 
         }

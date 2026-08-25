@@ -3,6 +3,7 @@ using ArTiX.FactoryGame.UI;
 using ArTiX.GridBuildingSystem.Buildings;
 using ArTiX.Interaction;
 using ArTiX.Utils;
+using System;
 using UnityEngine;
 
 namespace ArTiX.FactoryGame.Buildings
@@ -18,15 +19,20 @@ namespace ArTiX.FactoryGame.Buildings
 
         private Inventory.Inventory inventory;
 
-        private bool IsConverting => conversionTimer.IsActive;
-        public float ConversionProgress => IsConverting ? conversionTimer.ElapsedTimeAsPercentage : 0f;
+        public bool IsConverting => conversionTimer.IsActive;
+
+        /// <summary>
+        /// The parameter is the progress.
+        /// </summary>
+        public event Action<float> OnConverting;
 
         protected override void Awake()
         {
             base.Awake();
 
             GetComponent<BoxCollider>().isTrigger = true;
-            conversionTimer = MasterTimer.Create(this, 0, onFinishedEvent: Convert, name: "ConversionTimer");
+            conversionTimer = MasterTimer.Create(this, 0, onTimerActiveEvent: UpdateConversionProgress, 
+                onFinishedEvent: FinishConverting, name: "ConversionTimer");
 
             inventory = GetComponent<Inventory.Inventory>();
             inventory.OnAddItem += StartConversion;
@@ -35,6 +41,16 @@ namespace ArTiX.FactoryGame.Buildings
         public void SetRecipe(in RecipeSO recipe) 
         {
             this.recipe = recipe;
+            if (IsConverting)
+            {
+                conversionTimer.Stop();
+                if (!CanConvertResources())
+                {
+                    OnConverting?.Invoke(0);
+                    inventory.OnAddItem += StartConversion;
+                }
+                else StartConversion(this, null);
+            }
         }
 
         public void Interact()
@@ -46,9 +62,12 @@ namespace ArTiX.FactoryGame.Buildings
             }
         }
 
-        private void OnClosingWindow() => window = null;
+        private void UpdateConversionProgress()
+        {
+            OnConverting?.Invoke(conversionTimer.ElapsedTimeAsPercentage);
+        }
 
-        private void StartConversion(Inventory.Inventory.ItemSlot itemSlot)
+        private void StartConversion(object sender, Inventory.Inventory.ItemSlot itemSlot)
         {
             if (CanConvertResources() && !IsConverting)
             {
@@ -71,7 +90,7 @@ namespace ArTiX.FactoryGame.Buildings
             return true;
         }
 
-        private void Convert()
+        private void FinishConverting()
         {
             foreach (RecipeSO.SResources resourcesRequired in recipe.ResourcesRequiered)
             {
@@ -82,5 +101,7 @@ namespace ArTiX.FactoryGame.Buildings
             
             if (CanConvertResources()) conversionTimer.Start();
         }
+
+        private void OnClosingWindow() => window = null;
     }
 }

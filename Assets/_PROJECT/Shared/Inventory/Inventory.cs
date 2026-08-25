@@ -58,8 +58,8 @@ namespace ArTiX.Inventory
 
         private readonly List<ItemSlot> inventory = new List<ItemSlot>();
 
-        public event Action<ItemSlot> OnAddItem;
-        public event Action<ItemSlot> OnRemoveItem;
+        public event EventHandler<ItemSlot> OnAddItem;
+        public event EventHandler<ItemSlot> OnRemoveItem;
 
         public ItemSO Item
         {
@@ -105,7 +105,7 @@ namespace ArTiX.Inventory
                 inventory.Remove(slot);
             }
 
-            OnRemoveItem?.Invoke(slot);
+            OnRemoveItem?.Invoke(this, slot);
             return item;
         }
 
@@ -133,14 +133,14 @@ namespace ArTiX.Inventory
 
                     int quantity = 1;
                     inventory[i].AddItem(ref quantity);
-                    OnAddItem?.Invoke(inventory[i]);
+                    OnAddItem?.Invoke(this, inventory[i]);
                     return;
                 }
             }
 
             inventory.Add(new ItemSlot(item, 1));
 
-            OnAddItem?.Invoke(inventory[inventory.Count - 1]);
+            OnAddItem?.Invoke(this, inventory[inventory.Count - 1]);
         }
 
         public Dictionary<ItemSO, int> GetInventory()

@@ -18,11 +18,11 @@ namespace ArTiX.Inventory.UI
             owner.OnRemoveItem += OnRemoveItemFromInventory;
             foreach (KeyValuePair<ItemSO, int> slot in owner.GetInventory())
             {
-                DisplayAddedItem(new Inventory.ItemSlot(slot.Key, slot.Value));
+                DisplayAddedItem(this, new Inventory.ItemSlot(slot.Key, slot.Value));
             }
         }
 
-        private void DisplayAddedItem(Inventory.ItemSlot itemSlot)
+        private void DisplayAddedItem(object sender, Inventory.ItemSlot itemSlot)
         {
             if (!resourceDisplayDictionary.ContainsKey(itemSlot.Item))
             {
@@ -34,7 +34,7 @@ namespace ArTiX.Inventory.UI
             resourceDisplayDictionary[itemSlot.Item].SetItemSlot(itemSlot);
         }
         
-        private void OnRemoveItemFromInventory(Inventory.ItemSlot itemSlot)
+        private void OnRemoveItemFromInventory(object sender, Inventory.ItemSlot itemSlot)
         {
             if (itemSlot.Quantity <= 0)
             {
