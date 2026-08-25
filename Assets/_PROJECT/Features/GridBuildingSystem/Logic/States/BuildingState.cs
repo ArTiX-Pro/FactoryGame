@@ -60,6 +60,10 @@ namespace ArTiX.GridBuildingSystem
             {
                 UpdatePathPreview(cellPos);
             }
+            else if (ghost != null && cellChanged)
+            {
+                ghost.SetPosition(cellPos);
+            }
         }
 
         public override void ExitState()
@@ -87,8 +91,7 @@ namespace ArTiX.GridBuildingSystem
             ghost = null;
             ClearPathGhosts();
 
-            if (!buildingDatas.AllowDragPlacement)
-                ghost = Ghost.Create(buildingDatas.Ghost);
+            ghost = Ghost.Create(buildingDatas.Ghost);
         }
 
         private void StartCreating()
@@ -98,6 +101,8 @@ namespace ArTiX.GridBuildingSystem
                 isDragging = true;
                 dragStartCell = GridBuildingSystem.Instance.GetMouseCellPos();
                 UpdatePathPreview(dragStartCell);
+                ghost.Kill();
+                ghost = null;
             }
         }
 
