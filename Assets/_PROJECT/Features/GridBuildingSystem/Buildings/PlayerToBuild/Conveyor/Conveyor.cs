@@ -38,7 +38,8 @@ namespace ArTiX.FactoryGame.Buildings
 
             public void AddConveyor(Conveyor newConveyor)
             {
-                if (LastConveyor.IsAdjacent(newConveyor.Origin))
+                if (LastConveyor.IsAdjacent(newConveyor.Origin) &&
+                    newConveyor.FrontCell != FirstConveyor.Origin)
                 {
                     newConveyor.previousConveyor = LastConveyor;
                     LastConveyor.nextConveyor = newConveyor;
@@ -49,7 +50,7 @@ namespace ArTiX.FactoryGame.Buildings
                     LastConveyor = newConveyor;
                     newConveyor.belt = this;
                 }
-                if (FirstConveyor.IsAdjacent(newConveyor.Origin) && NbConveyor > 1)
+                if (FirstConveyor.IsAdjacent(newConveyor.Origin) && (newConveyor.belt == null || NbConveyor >= 3))
                 {
                     newConveyor.nextConveyor = FirstConveyor;
                     FirstConveyor.previousConveyor = newConveyor;
@@ -58,7 +59,8 @@ namespace ArTiX.FactoryGame.Buildings
                     newConveyor.UpdateRotation();
                     newConveyor.belt = this;
 
-                    if (!newConveyor.IsLastConveyor) FirstConveyor = newConveyor;
+                    if (!newConveyor.IsLastConveyor) 
+                        FirstConveyor = newConveyor;
                 }
                 
                 if (newConveyor.belt == this) NbConveyor++;
@@ -254,11 +256,6 @@ namespace ArTiX.FactoryGame.Buildings
         public ItemSO Item => item;
 
         #endregion
-
-        protected override void Awake() 
-        {
-            base.Awake();
-        }
 
         public override void Initialize(Vector2Int origin)
         {
