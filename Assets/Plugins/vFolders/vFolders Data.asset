@@ -32,6 +32,7 @@ MonoBehaviour:
     - 2e97318f38c0fca4d8387bfcb6b760c0
     - d33ac35b6d939ad41bbeac906578dbf3
     - 635ea6ac0a7d2154f89b3978303feba3
+    - e1e6e6c5e4e87894184c75434e1ebae7
     values:
     - iconNameOrGuid: Prefab Icon
       colorIndex: 1
@@ -102,6 +103,10 @@ MonoBehaviour:
       isIconRecursive: 1
       isColorRecursive: 0
     - iconNameOrGuid: Font Icon
+      colorIndex: 0
+      isIconRecursive: 1
+      isColorRecursive: 0
+    - iconNameOrGuid: ParticleSystem Icon
       colorIndex: 0
       isIconRecursive: 1
       isColorRecursive: 0

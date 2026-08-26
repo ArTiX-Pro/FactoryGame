@@ -88,7 +88,7 @@ namespace ArTiX.GridBuildingSystem
 
             gridVisual = Instantiate(datas.PrfbGridVisual, datas.Origin, Quaternion.identity);
             // Dividing by 10 because using a plane and a plane base size is 10 units in width and height
-            gridVisual.transform.localScale = new Vector3(datas.Width / 10, 0, datas.Height / 10);
+            gridVisual.transform.localScale = new Vector3(datas.Width / 10, 1, datas.Height / 10);
             // Rotating 180° because of the occupancy map.
             gridVisual.transform.rotation = Quaternion.Euler(0, 180,0);
 
@@ -232,6 +232,8 @@ namespace ArTiX.GridBuildingSystem
                     position: ConvertCellPosToWorldPos(origin),
                     rotation: Quaternion.Euler(x: 0, -rotation, z: 0)
                 );
+
+                Instantiate(datas.PrefabSpawnSmoke, ConvertCellPosToWorldPos(origin), Quaternion.identity);
 
                 foreach (Vector2Int cell in placedObjectDatas.GetOccupiedCells(origin, rotation))
                 {

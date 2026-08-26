@@ -34,7 +34,6 @@ namespace ArTiX.GridBuildingSystem.Datas
         [SerializeField] private GameObject prfbGridVisual;
         public GameObject PrfbGridVisual => prfbGridVisual;
 
-        [field: SerializeField] public Color FreeCellColor {  get; private set; }
-        [field: SerializeField] public Color OccupiedCellColor {  get; private set; }
+        [field: SerializeField] public ParticleSystem PrefabSpawnSmoke { get; private set; }
     }
 }
