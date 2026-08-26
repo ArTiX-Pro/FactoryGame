@@ -112,6 +112,7 @@ namespace ArTiX.GridBuildingSystem
                 }
                 isDragging = false;
                 ClearPathGhosts();
+                ghost = Ghost.Create(currentBuildingDatas.Ghost);
             }
             else
                 GridBuildingSystem.Instance.CreateBuilding(currentBuildingDatas, currentCell, currentRotation);

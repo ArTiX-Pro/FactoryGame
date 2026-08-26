@@ -34,6 +34,7 @@ namespace ArTiX.FactoryGame.Buildings
                 TickSystem.Instance.OnTick += IncrementTickCounter;
                 FirstConveyor = LastConveyor = conveyor;
                 NbConveyor++;
+                //MasterTimer.Timer timer = MasterTimer.Create(this, , infinite: true)
             }
 
             public void AddConveyor(Conveyor newConveyor)
