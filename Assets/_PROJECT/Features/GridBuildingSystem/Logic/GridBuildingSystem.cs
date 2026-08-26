@@ -28,6 +28,7 @@ namespace ArTiX.GridBuildingSystem
         [SerializeField] private GridSO datas;
         private Grid<PlacedObject> grid;
         private Pathfinding pathfinding;
+        private GameObject gridVisual;
 
         private BuildingState buildingState;
         private DestroyState destroyState;
@@ -47,6 +48,7 @@ namespace ArTiX.GridBuildingSystem
 
             GenerateGrid();
 
+            buildingState = new BuildingState();
             destroyState = new DestroyState();
         }
 
@@ -75,7 +77,7 @@ namespace ArTiX.GridBuildingSystem
             grid = new Grid<PlacedObject>(datas.Width, datas.Height);
             pathfinding = new Pathfinding(datas.Width, datas.Height, allowDiagonal: false);
 
-            GameObject gridVisual = Instantiate(datas.PrfbGridVisual, datas.Origin, Quaternion.identity);
+            gridVisual = Instantiate(datas.PrfbGridVisual, datas.Origin, Quaternion.identity);
             // Dividing by 10 because using a plane and a plane base size is 10 units in width and height
             gridVisual.transform.localScale = new Vector3(datas.Width / 10, 0, datas.Height / 10);
 
@@ -85,8 +87,12 @@ namespace ArTiX.GridBuildingSystem
             gridMat.SetFloat(GridSO.CELL_SIZE, datas.CellSize);
             gridMat.SetFloat(GridSO.LINE_WIDTH, datas.LineWidth);
 
-            gridVisual.SetActive(false);
-            buildingState = new BuildingState(gridVisual);
+            ToggleGridVisual(false);
+        }
+
+        public void ToggleGridVisual(in bool isVisible)
+        {
+            gridVisual.SetActive(isVisible);
         }
 
         public PlacedObject GetObjectOnCell(Vector2Int cell) => grid.GetCellValue(cell);

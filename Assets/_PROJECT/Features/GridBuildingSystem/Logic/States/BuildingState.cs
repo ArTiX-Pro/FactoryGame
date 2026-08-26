@@ -18,7 +18,6 @@ namespace ArTiX.GridBuildingSystem
         /// </summary>
         private float WorldRotation => -currentRotation;
 
-        private GameObject gridVisual;
         private BuildingSO currentBuildingDatas;
         private Ghost ghost;
 
@@ -29,11 +28,6 @@ namespace ArTiX.GridBuildingSystem
         private List<Vector2Int> currentPath = new List<Vector2Int>();
         private readonly List<Ghost> pathGhosts = new List<Ghost>();
 
-        public BuildingState(in GameObject gridVisual)
-        {
-            this.gridVisual = gridVisual;
-        }
-
         public override void EnterState()
         {
             InputManager.Instance.OnStartCreatingBuilding += StartCreating;
@@ -43,7 +37,7 @@ namespace ArTiX.GridBuildingSystem
 
             Interactor.Instance.Disable();
             currentRotation = 0;
-            gridVisual.SetActive(true);
+            GridBuildingSystem.Instance.ToggleGridVisual(true);
         }
 
         public override void Update()
@@ -76,7 +70,7 @@ namespace ArTiX.GridBuildingSystem
             ghost?.Kill();
             ghost = null;
             ClearPathGhosts();
-            gridVisual.SetActive(false);
+            GridBuildingSystem.Instance.ToggleGridVisual(false);
 
             Interactor.Instance.Enable();
             InputManager.Instance.OnStartCreatingBuilding -= StartCreating;

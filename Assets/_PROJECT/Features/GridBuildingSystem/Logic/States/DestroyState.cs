@@ -32,6 +32,7 @@ namespace ArTiX.GridBuildingSystem
             InputManager.Instance.OnCancel += ExitState;
 
             Interactor.Instance.Disable();
+            GridBuildingSystem.Instance.ToggleGridVisual(true);
 
             Cursor.SetCursor(textureDestroyCursor, Vector2.zero, CursorMode.ForceSoftware);
 
@@ -49,6 +50,7 @@ namespace ArTiX.GridBuildingSystem
             InputManager.Instance.OnCancel -= ExitState;
 
             Interactor.Instance.Enable();
+            GridBuildingSystem.Instance.ToggleGridVisual(false);
 
             //Resets the cursor to the default  
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
