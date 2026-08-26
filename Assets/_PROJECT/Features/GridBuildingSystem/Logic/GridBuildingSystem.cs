@@ -47,7 +47,6 @@ namespace ArTiX.GridBuildingSystem
 
             GenerateGrid();
 
-            buildingState = new BuildingState();
             destroyState = new DestroyState();
         }
 
@@ -85,6 +84,9 @@ namespace ArTiX.GridBuildingSystem
             gridMat.SetFloat(GridSO.HEIGHT, datas.Height);
             gridMat.SetFloat(GridSO.CELL_SIZE, datas.CellSize);
             gridMat.SetFloat(GridSO.LINE_WIDTH, datas.LineWidth);
+
+            gridVisual.SetActive(false);
+            buildingState = new BuildingState(gridVisual);
         }
 
         public PlacedObject GetObjectOnCell(Vector2Int cell) => grid.GetCellValue(cell);

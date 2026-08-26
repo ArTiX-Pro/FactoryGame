@@ -62,7 +62,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6917196745786270162}
         m_TargetAssemblyTypeName: ArTiX.Input.InputManager, Assembly-CSharp
-        m_MethodName: Select
+        m_MethodName: LeftMouseButton
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
