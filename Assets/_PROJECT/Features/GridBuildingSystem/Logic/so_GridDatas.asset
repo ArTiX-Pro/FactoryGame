@@ -19,3 +19,5 @@ MonoBehaviour:
   color: {r: 1, g: 1, b: 1, a: 1}
   origin: {x: 0, y: 0.1, z: 0}
   prfbGridVisual: {fileID: 7488025045110592918, guid: cb78e3ab320ba8340a4a9ca0a3ed7669, type: 3}
+  <FreeCellColor>k__BackingField: {r: 0.012507131, g: 0.20410106, b: 0.8436657, a: 0.39215687}
+  <OccupiedCellColor>k__BackingField: {r: 0.84905654, g: 0.09039813, b: 0.09039813, a: 0.39215687}

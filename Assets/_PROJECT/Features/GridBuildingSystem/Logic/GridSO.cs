@@ -10,6 +10,7 @@ namespace ArTiX.GridBuildingSystem.Datas
         public const string HEIGHT = "_Height";
         public const string CELL_SIZE = "_CellSize";
         public const string LINE_WIDTH = "_LineWidth";
+        public const string OCCUPANCY_MAP = "_OccupancyMap";
 
         [Title("Grid")]
         [SerializeField, Min(0)] private int width = 10;
@@ -32,5 +33,8 @@ namespace ArTiX.GridBuildingSystem.Datas
 
         [SerializeField] private GameObject prfbGridVisual;
         public GameObject PrfbGridVisual => prfbGridVisual;
+
+        [field: SerializeField] public Color FreeCellColor {  get; private set; }
+        [field: SerializeField] public Color OccupiedCellColor {  get; private set; }
     }
 }

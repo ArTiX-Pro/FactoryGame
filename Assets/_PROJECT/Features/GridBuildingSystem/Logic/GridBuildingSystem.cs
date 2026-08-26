@@ -29,6 +29,14 @@ namespace ArTiX.GridBuildingSystem
         private Grid<PlacedObject> grid;
         private Pathfinding pathfinding;
         private GameObject gridVisual;
+        /// <summary>
+        /// One pixel per cell: white when the cell holds a building, black when it is free.
+        /// Fed to the grid shader so it can tell occupied cells apart.
+        /// </summary>
+        private Texture2D occupancyTexture;
+
+        private static readonly Color OCCUPIED_CELL_COLOR = Color.white;
+        private static readonly Color FREE_CELL_COLOR = Color.black;
 
         private BuildingState buildingState;
         private DestroyState destroyState;
@@ -71,6 +79,7 @@ namespace ArTiX.GridBuildingSystem
                 }
 
                 grid.Clear();
+                ClearOccupancy();
                 return;
             }
 
@@ -80,15 +89,45 @@ namespace ArTiX.GridBuildingSystem
             gridVisual = Instantiate(datas.PrfbGridVisual, datas.Origin, Quaternion.identity);
             // Dividing by 10 because using a plane and a plane base size is 10 units in width and height
             gridVisual.transform.localScale = new Vector3(datas.Width / 10, 0, datas.Height / 10);
+            // Rotating 180° because of the occupancy map.
+            gridVisual.transform.rotation = Quaternion.Euler(0, 180,0);
+
+            occupancyTexture = new Texture2D(datas.Width, datas.Height, TextureFormat.RGBA32, mipChain: false)
+            {
+                name = "GridOccupancy",
+                filterMode = FilterMode.Point,
+                wrapMode = TextureWrapMode.Clamp
+            };
 
             Material gridMat = gridVisual.GetComponent<Renderer>().material;
             gridMat.SetFloat(GridSO.WIDTH, datas.Width);
             gridMat.SetFloat(GridSO.HEIGHT, datas.Height);
             gridMat.SetFloat(GridSO.CELL_SIZE, datas.CellSize);
             gridMat.SetFloat(GridSO.LINE_WIDTH, datas.LineWidth);
+            gridMat.SetTexture(GridSO.OCCUPANCY_MAP, occupancyTexture);
 
+            ClearOccupancy();
             ToggleGridVisual(false);
         }
+
+        #region Occupancy Texture
+
+        private void ClearOccupancy()
+        {
+            Color[] pixels = new Color[occupancyTexture.width * occupancyTexture.height];
+            for (int i = 0; i < pixels.Length; i++)
+                pixels[i] = FREE_CELL_COLOR;
+
+            occupancyTexture.SetPixels(pixels);
+            occupancyTexture.Apply(updateMipmaps: false);
+        }
+
+        private void SetCellOccupancy(in Vector2Int cell, in bool isOccupied)
+        {
+            occupancyTexture.SetPixel(cell.x, cell.y, isOccupied ? OCCUPIED_CELL_COLOR : FREE_CELL_COLOR);
+        }
+
+        #endregion
 
         public void ToggleGridVisual(in bool isVisible)
         {
@@ -198,7 +237,9 @@ namespace ArTiX.GridBuildingSystem
                 {
                     grid.SetCellValue(cell, building);
                     pathfinding.SetIsWalkable(cell.x, cell.y, false);
+                    SetCellOccupancy(cell, isOccupied: true);
                 }
+                occupancyTexture.Apply(updateMipmaps: false);
 
                 building.Initialize(origin);
             }
@@ -225,7 +266,9 @@ namespace ArTiX.GridBuildingSystem
             {
                 grid.SetCellValue(cell, null);
                 pathfinding.SetIsWalkable(cell.x, cell.y, true);
+                SetCellOccupancy(cell, isOccupied: false);
             }
+            occupancyTexture.Apply(updateMipmaps: false);
 
             building.Destroy();
         }
