@@ -26,7 +26,6 @@ namespace ArTiX.FactoryGame
 
             List<Vector2Int> possibleCells = new List<Vector2Int>();
 
-            GridBuildingSystem.GridBuildingSystem grid = GridBuildingSystem.GridBuildingSystem.Instance;
             int width = gridDatas.Width;
             int height = gridDatas.Height;
 
@@ -58,6 +57,7 @@ namespace ArTiX.FactoryGame
             for (int rank = 0; rank < count; rank++)
                 equalizedNoise[sortedIndices[rank]] = rank / (float)(count - 1);
 
+            GridBuildingSystem.GridBuildingSystem grid = GridBuildingSystem.GridBuildingSystem.Instance;
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
