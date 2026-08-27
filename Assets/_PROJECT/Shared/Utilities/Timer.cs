@@ -1,20 +1,24 @@
+using ArTiX.Utils.Pool;
 using System;
 using UnityEngine;
 
 namespace ArTiX.Utils
 {
-    public class Timer : MonoBehaviour
+    public class Timer : MonoBehaviour, IPooledObject<Timer>
     {
         private static readonly Pool<Timer> pool;
+        private const int DEFAULT_POOL_SIZE = 10;
 
         static Timer()
         {
-            pool = new Pool<Timer>(CreateTimer, 5);
+            pool = new Pool<Timer>(CreateTimer, DEFAULT_POOL_SIZE);
         }
         // Only used to populate the pool.
         private static Timer CreateTimer()
         {
-            return new GameObject(nameof(Timer), typeof(Timer)).GetComponent<Timer>();
+            Timer timer = new GameObject(nameof(Timer), typeof(Timer)).GetComponent<Timer>();
+            timer.Pool = pool;
+            return timer;
         }
 
         /// <summary>
@@ -53,6 +57,8 @@ namespace ArTiX.Utils
         public float ElapsedTime { get; private set; }
         public float ElapsedTimeAsPercentage => ElapsedTime / duration;
         public float RemainingTime => duration - ElapsedTime;
+
+        public Pool<Timer> Pool { get; set; }
 
         public float duration;
 
@@ -120,7 +126,12 @@ namespace ArTiX.Utils
         public void Kill()
         {
             Stop();
-            pool.ReturnToPool(this);
+            Release();
+        }
+
+        public void Release()
+        {
+            Pool.ReturnToPool(this);
         }
     }
 }

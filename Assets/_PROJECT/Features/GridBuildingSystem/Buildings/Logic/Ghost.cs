@@ -18,10 +18,10 @@ namespace ArTiX.GridBuildingSystem
         private Vector2Int cellPos;
         private float targetRotation;
 
-        private MasterTween.Tween rotationTween;
-        private MasterTween.Tween positionTween;
+        private Tween rotationTween;
+        private Tween positionTween;
 
-        private MasterTween.Tween colorTween;
+        private Tween colorTween;
 
         private void Start()
         {

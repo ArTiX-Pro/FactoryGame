@@ -1,4 +1,3 @@
-using ArTiX.Effects.Tween;
 using ArTiX.Utils;
 using Noise;
 using System.Collections.Generic;
@@ -26,9 +25,9 @@ namespace ArTiX.Effects
         [SerializeField] private bool timeScaled = true;
 
         [Header("Anim")]
-        [SerializeField, Tooltip("Anim to reach max intensity.")] private Tween.MasterTween.AnimParams attackParams;
+        [SerializeField, Tooltip("Anim to reach max intensity.")] private Tween.Tween.AnimParams attackParams;
         [SerializeField, Tooltip("How much time the shake will be active at full intensity.")] private float holdDuration;
-        [SerializeField, Tooltip("Anim to reach 0 intensity.")] private Tween.MasterTween.AnimParams releaseParams;
+        [SerializeField, Tooltip("Anim to reach 0 intensity.")] private Tween.Tween.AnimParams releaseParams;
 
         private readonly List<TargetData> targetsDatas = new List<TargetData>();
 
@@ -40,8 +39,8 @@ namespace ArTiX.Effects
         private float Angle => maxAngle * intensity * intensityCoef;
         public bool IsPlaying => intensity > 0;
 
-        private MasterTween.Tween intensityTween;
-        private MasterTween.Tween intensityCoefTween;
+        private Tween.Tween intensityTween;
+        private Tween.Tween intensityCoefTween;
 
         private Vector2 currentOffset = Vector2.zero;
 
@@ -111,7 +110,7 @@ namespace ArTiX.Effects
 
             intensityTween?.Kill();
 
-            intensityTween = Tween.MasterTween.Create("Intensity Tween");
+            intensityTween = Tween.Tween.Create("Intensity Tween");
             intensityTween.TweenEvent(
                 startValue: 0, 
                 targetValue: 1,
@@ -165,9 +164,9 @@ namespace ArTiX.Effects
         {
             if (duration <= 0) return;
 
-            MasterTween.Tween tween = MasterTween.Create();
-            tween.TweenEvent(Vector2.zero, offset, TweenOffset, animParams: new MasterTween.AnimParams
-            (duration, MasterTween.ETransition.SmoothStopArch3));
+            Tween.Tween tween = Tween.Tween.Create();
+            tween.TweenEvent(Vector2.zero, offset, TweenOffset, animParams: new Tween.Tween.AnimParams
+            (duration, Tween.Tween.ETransition.SmoothStopArch3));
         }
 
         private void TweenOffset(Vector2 offset) => currentOffset = offset;
@@ -175,18 +174,18 @@ namespace ArTiX.Effects
         private void TweenIntensity(float newIntensity) => intensity = newIntensity;
 
         public void ChangeIntensityCoef(float targetValue, 
-            float duration = 0, MasterTween.ETransition transition = MasterTween.ETransition.Linear)
+            float duration = 0, Tween.Tween.ETransition transition = Tween.Tween.ETransition.Linear)
         {
             if (duration <= 0) return;
             if (duration == 0) intensityCoef = targetValue;
 
             intensityCoefTween?.Kill();
-            intensityCoefTween = MasterTween.Create("IntensityCoef Tween");
+            intensityCoefTween = Tween.Tween.Create("IntensityCoef Tween");
             intensityCoefTween.TweenEvent(
                 startValue: intensityCoef,
                 targetValue: targetValue,
                 tweenEvent: TweenIntensityCoef,
-                new MasterTween.AnimParams(duration, transition)
+                new Tween.Tween.AnimParams(duration, transition)
             );
         }
 

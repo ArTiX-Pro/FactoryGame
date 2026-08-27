@@ -234,7 +234,7 @@ namespace ArTiX.FactoryGame.Buildings
         private Vector2Int FrontCell => Origin + Vector2Int.right.Rotate(-transform.eulerAngles.y);
         private Vector2Int BackCell => Origin + Vector2Int.left.Rotate(-transform.eulerAngles.y);
 
-        private MasterTween.Tween tween;
+        private Tween tween;
         private Transform worldItem;
         private Transform WorldItem
         {
@@ -245,11 +245,11 @@ namespace ArTiX.FactoryGame.Buildings
                 tween?.Kill();
                 if (worldItem == null) return;
 
-                tween = MasterTween.Create();
+                tween = Tween.Create();
                 worldItem.transform.TweenPosition(itemPos.position,
-                    animParams: new MasterTween.AnimParams(
+                    animParams: new Tween.AnimParams(
                         duration: 0.5f,
-                        transition: MasterTween.ETransition.SmoothStop5),
+                        transition: Tween.ETransition.SmoothStop5),
                     tween: tween);
             }
         }

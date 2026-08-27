@@ -21,7 +21,7 @@ namespace ArTiX.FactoryGame.UI
             }
         }
 
-        [SerializeField] private MasterTween.AnimParams toggleBuildingAnim;
+        [SerializeField] private Tween.AnimParams toggleBuildingAnim;
 
         [SerializeField] private Transform buildingPanel;
         [SerializeField] private float buildingPanelActiveHeight, buildingPanelInactiveHeight;
@@ -31,7 +31,7 @@ namespace ArTiX.FactoryGame.UI
 
         private bool isBuildingPanelActive;
 
-        private MasterTween.Tween tween;
+        private Tween tween;
 
         private void Awake()
         {
@@ -64,7 +64,7 @@ namespace ArTiX.FactoryGame.UI
             isBuildingPanelActive = !isBuildingPanelActive;
 
             tween?.Kill();
-            tween = MasterTween.Create();
+            tween = Tween.Create();
             buildingPanel.TweenPosition(
                 targetPos: new Vector3(
                     x: buildingPanel.position.x, 
