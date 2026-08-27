@@ -1,4 +1,4 @@
-using ArTiX.Utils.Pool;
+﻿using ArTiX.Utils.Pool;
 using System;
 using UnityEngine;
 
@@ -6,21 +6,6 @@ namespace ArTiX.Utils
 {
     public class Timer : MonoBehaviour, IPooledObject<Timer>
     {
-        private static readonly Pool<Timer> pool;
-        private const int DEFAULT_POOL_SIZE = 10;
-
-        static Timer()
-        {
-            pool = new Pool<Timer>(CreateTimer, DEFAULT_POOL_SIZE);
-        }
-        // Only used to populate the pool.
-        private static Timer CreateTimer()
-        {
-            Timer timer = new GameObject(nameof(Timer), typeof(Timer)).GetComponent<Timer>();
-            timer.Pool = pool;
-            return timer;
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -35,10 +20,11 @@ namespace ArTiX.Utils
         /// <returns></returns>
         public static Timer Create(MonoBehaviour target, float duration, bool startOnCreate = false, bool autodestroy = false, bool scaled = true, int repetitionNumber = 0, in bool infinite = false, Action onTimerActiveEvent = null, Action onFinishedEvent = null, string name = "Timer")
         {
-            Timer timer = pool.GetPooledObject();
+            Timer timer = TimerPool.Instance.Pool.GetPooledObject();
 
             if (timer == null) timer = new GameObject().AddComponent(typeof(Timer)) as Timer;
 
+            timer.Pool = TimerPool.Instance.Pool;
             timer.gameObject.name = name;
             timer.duration = duration;
             timer.scaled = scaled;

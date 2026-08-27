@@ -9,8 +9,7 @@ namespace ArTiX.Effects.Tween
         [SerializeField] private Tween prefabTween;
 
         public Pool<Tween> Pool { get; private set; }
-
-        private static int DEFAULT_POOL_SIZE = 30;
+        private const int DEFAULT_POOL_SIZE = 30;
 
         protected override void Awake()
         {
