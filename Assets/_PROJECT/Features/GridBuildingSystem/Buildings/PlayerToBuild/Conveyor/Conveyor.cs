@@ -246,7 +246,7 @@ namespace ArTiX.FactoryGame.Buildings
                 if (worldItem == null) return;
 
                 tween = Tween.Create();
-                worldItem.transform.TweenPosition(itemPos.position,
+                worldItem.transform.TweenPosition(this, itemPos.position,
                     animParams: new Tween.AnimParams(
                         duration: 0.5f,
                         transition: Tween.ETransition.SmoothStop5),

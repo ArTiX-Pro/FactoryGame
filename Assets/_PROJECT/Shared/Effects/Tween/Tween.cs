@@ -330,12 +330,14 @@ namespace ArTiX.Effects.Tween
 
         #region Variables
 
-        private readonly List<List<Tweener>> tweenersLists = new List<List<Tweener>>();
+        private readonly Queue<List<Tweener>> queueTweenerList = new Queue<List<Tweener>>();
 
         public event Action OnFinishedEvent;
 
         public bool IsActive { get; private set; }
         public Pool<Tween> Pool { get; set; }
+
+        private List<Tweener> lastTweenerList;
 
         #endregion
 
@@ -343,9 +345,9 @@ namespace ArTiX.Effects.Tween
         {
             if (IsActive)
             {
-                if (tweenersLists.Count > 0)
+                if (queueTweenerList.Count > 0)
                 {
-                    List<Tweener> currentTweeners = tweenersLists[0];
+                    List<Tweener> currentTweeners = queueTweenerList.Peek();
 
                     for (int i = currentTweeners.Count - 1; i >= 0; i--)
                     {
@@ -353,7 +355,7 @@ namespace ArTiX.Effects.Tween
                             currentTweeners.RemoveAt(i);
                     }
 
-                    if (currentTweeners.Count == 0) tweenersLists.RemoveAt(0);
+                    if (currentTweeners.Count == 0) queueTweenerList.Dequeue();
                 }
                 else
                 {
@@ -367,38 +369,38 @@ namespace ArTiX.Effects.Tween
 
         #region Add Property
 
-        public void TweenProperty(Transform transform, ETransformProperty property, Vector3 startValue, Vector3 targetValue, AnimParams animParams,
+        public void TweenProperty(MonoBehaviour target, Transform transform, ETransformProperty property, Vector3 startValue, Vector3 targetValue, AnimParams animParams,
             float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
         {
             SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
-            tweenerList.Add(new Vector3Tweener(this, transform, property, startValue, targetValue, animParams, delay, timeScaled, onFinishedStepEvent));
+            tweenerList.Add(new Vector3Tweener(target, this, transform, property, startValue, targetValue, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
-        public void TweenProperty(Transform transform, Quaternion startRota, Quaternion targetRota, AnimParams animParams,
+        public void TweenProperty(MonoBehaviour target, Transform transform, Quaternion startRota, Quaternion targetRota, AnimParams animParams,
             float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
         {
             SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
-            tweenerList.Add(new QuaternionTweener(this, transform, startRota, targetRota, animParams, delay, timeScaled, onFinishedStepEvent));
+            tweenerList.Add(new QuaternionTweener(target, this, transform, startRota, targetRota, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
-        public void TweenProperty(Material material, in string property, float startValue, float targetValue, AnimParams animParams,
+        public void TweenProperty(MonoBehaviour target, Material material, in string property, float startValue, float targetValue, AnimParams animParams,
             float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
         {
             SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
-            tweenerList.Add(new FloatTweener(this, material, property, startValue, targetValue, animParams, delay, timeScaled, onFinishedStepEvent));
+            tweenerList.Add(new FloatTweener(target, this, material, property, startValue, targetValue, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
-        public void TweenProperty(Material material, in string property, Color startColor, Color targetColor, AnimParams animParams,
+        public void TweenProperty(MonoBehaviour target, Material material, in string property, Color startColor, Color targetColor, AnimParams animParams,
             float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
         {
             SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
-            tweenerList.Add(new ColorTweener(this, material, property, startColor, targetColor, animParams, delay, timeScaled, onFinishedStepEvent));
+            tweenerList.Add(new ColorTweener(target, this, material, property, startColor, targetColor, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
-        public void TweenProperty(CanvasGroup group, float startValue, float targetValue, AnimParams animParams, float delay, bool parrallel, bool timeScaled, Action onFinishedStepEvent)
+        public void TweenProperty(MonoBehaviour target, CanvasGroup group, float startValue, float targetValue, AnimParams animParams, float delay, bool parrallel, bool timeScaled, Action onFinishedStepEvent)
         {
             SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
-            tweenerList.Add(new FloatTweener(this, group, startValue, targetValue, animParams, delay, timeScaled, onFinishedStepEvent));
+            tweenerList.Add(new FloatTweener(target, this, group, startValue, targetValue, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
         #endregion
@@ -416,11 +418,11 @@ namespace ArTiX.Effects.Tween
         /// <param name="parrallel"></param>
         /// <param name="timeScaled"></param>
         /// <param name="onFinishedStepEvent"></param>
-        public void TweenEvent(float startValue, float targetValue, Action<float> tweenEvent, AnimParams animParams,
+        public void TweenEvent(MonoBehaviour target, float startValue, float targetValue, Action<float> tweenEvent, AnimParams animParams,
             float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
         {
             SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
-            tweenerList.Add(new FloatTweener(this, startValue, targetValue, tweenEvent, animParams, delay, timeScaled, onFinishedStepEvent));
+            tweenerList.Add(new FloatTweener(target, this, startValue, targetValue, tweenEvent, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
         /// <summary>
@@ -434,11 +436,11 @@ namespace ArTiX.Effects.Tween
         /// <param name="parrallel"></param>
         /// <param name="timeScaled"></param>
         /// <param name="onFinishedStepEvent"></param>
-        public void TweenEvent(Vector2 startValue, Vector2 targetValue, Action<Vector2> tweenEvent, AnimParams animParams,
+        public void TweenEvent(MonoBehaviour target, Vector2 startValue, Vector2 targetValue, Action<Vector2> tweenEvent, AnimParams animParams,
             float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
         {
             SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
-            tweenerList.Add(new Vector2Tweener(this, startValue, targetValue, tweenEvent, animParams, delay, timeScaled, onFinishedStepEvent));
+            tweenerList.Add(new Vector2Tweener(target, this, startValue, targetValue, tweenEvent, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
         /// <summary>
@@ -452,11 +454,11 @@ namespace ArTiX.Effects.Tween
         /// <param name="parrallel"></param>
         /// <param name="timeScaled"></param>
         /// <param name="onFinishedStepEvent"></param>
-        public void TweenEvent(Vector3 startValue, Vector3 targetValue, Action<Vector3> tweenEvent, AnimParams animParams,
+        public void TweenEvent(MonoBehaviour target, Vector3 startValue, Vector3 targetValue, Action<Vector3> tweenEvent, AnimParams animParams,
             float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
         {
             SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
-            tweenerList.Add(new Vector3Tweener(this, startValue, targetValue, tweenEvent, animParams, delay, timeScaled, onFinishedStepEvent));
+            tweenerList.Add(new Vector3Tweener(target, this, startValue, targetValue, tweenEvent, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
         /// <summary>
@@ -470,24 +472,25 @@ namespace ArTiX.Effects.Tween
         /// <param name="parrallel"></param>
         /// <param name="timeScaled"></param>
         /// <param name="onFinishedStepEvent"></param>
-        public void TweenEvent(Quaternion startValue, Quaternion targetValue, Action<Quaternion> tweenEvent, AnimParams animParams,
+        public void TweenEvent(MonoBehaviour target, Quaternion startValue, Quaternion targetValue, Action<Quaternion> tweenEvent, AnimParams animParams,
             float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
         {
             SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
-            tweenerList.Add(new QuaternionTweener(this, startValue, targetValue, tweenEvent, animParams, delay, timeScaled, onFinishedStepEvent));
+            tweenerList.Add(new QuaternionTweener(target, this, startValue, targetValue, tweenEvent, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
         private void SetupTweener(out List<Tweener> tweenerList, ref float delay, bool parrallel = false)
         {
             IsActive = true;
 
-            if (!parrallel || tweenersLists.Count == 0)
+            if (!parrallel || queueTweenerList.Count == 0)
             {
                 tweenerList = new List<Tweener>();
-                tweenersLists.Add(tweenerList);
+                queueTweenerList.Enqueue(tweenerList);
+                lastTweenerList = tweenerList;
             }
             else
-                tweenerList = tweenersLists[tweenersLists.Count - 1];
+                tweenerList = lastTweenerList;
 
             if (parrallel && tweenerList.Count >= 1)
                 delay += tweenerList[0].Delay;
@@ -495,25 +498,25 @@ namespace ArTiX.Effects.Tween
 
         #endregion
 
-        public void Remove(Tweener tweener)
-        {
-            int nbTweenerList = tweenersLists.Count;
-            for (int i = 0; i < nbTweenerList; i++)
-            {
-                if (tweenersLists[i].Contains(tweener))
-                {
-                    tweenersLists[i].Remove(tweener);
-                    return;
-                }
-            }
-        }
+        //public void Remove(Tweener tweener)
+        //{
+        //    int nbTweenerList = tweenersLists.Count;
+        //    for (int i = 0; i < nbTweenerList; i++)
+        //    {
+        //        if (tweenersLists[i].Contains(tweener))
+        //        {
+        //            tweenersLists[i].Remove(tweener);
+        //            return;
+        //        }
+        //    }
+        //}
 
         public void Kill()
         {
             if (!IsActive) return;
 
             OnFinishedEvent = null;
-            tweenersLists.Clear();
+            queueTweenerList.Clear();
             IsActive = false;
             Release();
         }

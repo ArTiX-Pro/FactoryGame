@@ -77,7 +77,7 @@ namespace ArTiX.Effects
             if (duration <= 0) return;
 
             Tween.Tween tween = Tween.Tween.Create();
-            tween.TweenEvent(camOffset, offset, SetCamOffset, 
+            tween.TweenEvent(this, camOffset, offset, SetCamOffset, 
                 animParams: new Tween.Tween.AnimParams(
                     duration, 
                     Tween.Tween.ETransition.SmoothStopArch3)

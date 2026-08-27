@@ -32,7 +32,7 @@ namespace ArTiX.GridBuildingSystem
         {
             positionTween?.Kill();
             this.cellPos = cellPos;
-            transform.TweenPosition(
+            transform.TweenPosition(this,
                 targetPos: GridBuildingSystem.Instance.ConvertCellPosToWorldPos(cellPos),
                 animParams: datas.PositionAnim,
                 tween: positionTween);
@@ -44,7 +44,7 @@ namespace ArTiX.GridBuildingSystem
         {
             rotationTween?.Kill();
             targetRotation = rotation;
-            transform.TweenRotation(
+            transform.TweenRotation(this,
                 targetRota: Quaternion.Euler(x: 0, rotation, z: 0),
                 animParams: datas.RotationAnim,
                 tween: rotationTween);
@@ -59,7 +59,7 @@ namespace ArTiX.GridBuildingSystem
             colorTween?.Kill();
             foreach (Renderer renderer in transform.GetComponentsInChildren<Renderer>())
             {
-                renderer.material.TweenColorProperty(
+                renderer.material.TweenColorProperty(this,
                     property: Utilities.COLOR,
                     targetColor: isValid ? datas.ValidColor : datas.UnvalidColor,
                     animParams: datas.ColorChangeAnim,

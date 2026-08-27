@@ -111,12 +111,12 @@ namespace ArTiX.Effects
             intensityTween?.Kill();
 
             intensityTween = Tween.Tween.Create("Intensity Tween");
-            intensityTween.TweenEvent(
+            intensityTween.TweenEvent(this,
                 startValue: 0, 
                 targetValue: 1,
                 tweenEvent: TweenIntensity, 
                 animParams: attackParams);
-            intensityTween.TweenEvent(
+            intensityTween.TweenEvent(this,
                 startValue: 1,
                 targetValue: 0, 
                 tweenEvent: TweenIntensity, 
@@ -165,7 +165,7 @@ namespace ArTiX.Effects
             if (duration <= 0) return;
 
             Tween.Tween tween = Tween.Tween.Create();
-            tween.TweenEvent(Vector2.zero, offset, TweenOffset, animParams: new Tween.Tween.AnimParams
+            tween.TweenEvent(this, Vector2.zero, offset, TweenOffset, animParams: new Tween.Tween.AnimParams
             (duration, Tween.Tween.ETransition.SmoothStopArch3));
         }
 
@@ -181,7 +181,7 @@ namespace ArTiX.Effects
 
             intensityCoefTween?.Kill();
             intensityCoefTween = Tween.Tween.Create("IntensityCoef Tween");
-            intensityCoefTween.TweenEvent(
+            intensityCoefTween.TweenEvent(this,
                 startValue: intensityCoef,
                 targetValue: targetValue,
                 tweenEvent: TweenIntensityCoef,

@@ -65,7 +65,7 @@ namespace ArTiX.FactoryGame.UI
 
             tween?.Kill();
             tween = Tween.Create();
-            buildingPanel.TweenPosition(
+            buildingPanel.TweenPosition(this,
                 targetPos: new Vector3(
                     x: buildingPanel.position.x, 
                     y: isBuildingPanelActive ? buildingPanelActiveHeight : buildingPanelInactiveHeight),

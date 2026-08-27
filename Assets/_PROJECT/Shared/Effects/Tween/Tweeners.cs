@@ -13,9 +13,11 @@ namespace ArTiX.Effects.Tween
         public float Delay { get; private set; }
         protected float timer;
 
-        public readonly Action OnFinishedStepEvent;
+        public event Action OnFinishedStepEvent;
 
-        protected Tweener(AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent)
+        private MonoBehaviour target;
+
+        protected Tweener(in MonoBehaviour target, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent)
         {
             this.animParams = animParams;
             this.scaled = scaled;
@@ -23,6 +25,7 @@ namespace ArTiX.Effects.Tween
             OnFinishedStepEvent = onFinishedStepEvent;
 
             timer = 0;
+            this.target = target;
         }
 
         /// <summary>
@@ -31,6 +34,12 @@ namespace ArTiX.Effects.Tween
         /// <returns>True when finished, false otherwise.</returns>
         public bool UpdateTweener()
         {
+            if (target == null) 
+            {
+                OnFinishedStepEvent = null;
+                return true; 
+            }
+
             if (Delay > 0)
             {
                 Delay -= scaled ? Time.deltaTime : Time.deltaTime / Time.timeScale;
@@ -62,8 +71,8 @@ namespace ArTiX.Effects.Tween
 
         private Tween masterTween;
 
-        protected EventTweener(Tween masterTween, T startValue, T targetValue, Action<T> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
-            base(animParams, delay, scaled, onFinishedStepEvent)
+        protected EventTweener(MonoBehaviour target, Tween masterTween, T startValue, T targetValue, Action<T> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+            base(target, animParams, delay, scaled, onFinishedStepEvent)
         {
             this.startValue = startValue;
             this.targetValue = targetValue;
@@ -71,8 +80,8 @@ namespace ArTiX.Effects.Tween
             this.masterTween = masterTween;
         }
 
-        protected EventTweener(Tween masterTween, TweeningParams<T> tweenParams, Action<T> tweenEvent) :
-            base(tweenParams.animParams, tweenParams.delay, tweenParams.timeScaled, tweenParams.onFinishedStepEvent)
+        protected EventTweener(MonoBehaviour target, Tween masterTween, TweeningParams<T> tweenParams, Action<T> tweenEvent) :
+            base(target, tweenParams.animParams, tweenParams.delay, tweenParams.timeScaled, tweenParams.onFinishedStepEvent)
         {
             startValue = tweenParams.startValue;
             targetValue = tweenParams.targetValue;
@@ -82,12 +91,6 @@ namespace ArTiX.Effects.Tween
 
         protected override void InvokeEvent()
         {
-            if (tweenEvent == null)
-            {
-                masterTween.Remove(this);
-                return;
-            }
-
             tweenEvent.Invoke(InterpolateValue());
         }
 
@@ -101,20 +104,20 @@ namespace ArTiX.Effects.Tween
         private CanvasGroup group;
         private string property;
 
-        public FloatTweener(Tween masterTween, float startValue, float targetValue, Action<float> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
-            base(masterTween, startValue, targetValue, tweenEvent, animParams, delay, scaled, onFinishedStepEvent)
+        public FloatTweener(MonoBehaviour target, Tween masterTween, float startValue, float targetValue, Action<float> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+            base(target, masterTween, startValue, targetValue, tweenEvent, animParams, delay, scaled, onFinishedStepEvent)
         {
         }
 
-        public FloatTweener(Tween masterTween, Material material, in string property, float startValue, float targetValue, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
-            base(masterTween, startValue, targetValue, null, animParams, delay, scaled, onFinishedStepEvent)
+        public FloatTweener(MonoBehaviour target, Tween masterTween, Material material, in string property, float startValue, float targetValue, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+            base(target, masterTween, startValue, targetValue, null, animParams, delay, scaled, onFinishedStepEvent)
         {
             mat = material;
             this.property = property;
         }
 
-        public FloatTweener(Tween masterTween, CanvasGroup group, float startValue, float targetValue, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
-            base(masterTween, startValue, targetValue, tweenEvent: null, animParams, delay, scaled, onFinishedStepEvent)
+        public FloatTweener(MonoBehaviour target, Tween masterTween, CanvasGroup group, float startValue, float targetValue, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+            base(target, masterTween, startValue, targetValue, tweenEvent: null, animParams, delay, scaled, onFinishedStepEvent)
         {
             this.group = group;
         }
@@ -137,8 +140,8 @@ namespace ArTiX.Effects.Tween
 
     public class Vector2Tweener : EventTweener<Vector2>
     {
-        public Vector2Tweener(Tween masterTween, Vector2 startValue, Vector2 targetValue, Action<Vector2> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
-            base(masterTween, startValue, targetValue, tweenEvent, animParams, delay, scaled, onFinishedStepEvent)
+        public Vector2Tweener(MonoBehaviour target, Tween masterTween, Vector2 startValue, Vector2 targetValue, Action<Vector2> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+            base(target, masterTween, startValue, targetValue, tweenEvent, animParams, delay, scaled, onFinishedStepEvent)
         {
         }
 
@@ -153,13 +156,13 @@ namespace ArTiX.Effects.Tween
         private Transform tweenedTransform;
         private ETransformProperty property;
 
-        public Vector3Tweener(Tween masterTween, Vector3 startValue, Vector3 targetValue, Action<Vector3> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
-            base(masterTween, startValue, targetValue, tweenEvent, animParams, delay, scaled, onFinishedStepEvent)
+        public Vector3Tweener(MonoBehaviour target, Tween masterTween, Vector3 startValue, Vector3 targetValue, Action<Vector3> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+            base(target, masterTween, startValue, targetValue, tweenEvent, animParams, delay, scaled, onFinishedStepEvent)
         {
         }
 
-        public Vector3Tweener(Tween masterTween, Transform transform, ETransformProperty property, Vector3 startValue, Vector3 targetValue, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
-            base(masterTween, startValue, targetValue, null, animParams, delay, scaled, onFinishedStepEvent)
+        public Vector3Tweener(MonoBehaviour target, Tween masterTween, Transform transform, ETransformProperty property, Vector3 startValue, Vector3 targetValue, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+            base(target, masterTween, startValue, targetValue, null, animParams, delay, scaled, onFinishedStepEvent)
         {
             tweenedTransform = transform;
             this.property = property;
@@ -193,13 +196,13 @@ namespace ArTiX.Effects.Tween
     {
         private Transform tweenedTransform;
 
-        public QuaternionTweener(Tween masterTween, Quaternion startValue, Quaternion targetValue, Action<Quaternion> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
-            base(masterTween, startValue, targetValue, tweenEvent, animParams, delay, scaled, onFinishedStepEvent)
+        public QuaternionTweener(MonoBehaviour target, Tween masterTween, Quaternion startValue, Quaternion targetValue, Action<Quaternion> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+            base(target, masterTween, startValue, targetValue, tweenEvent, animParams, delay, scaled, onFinishedStepEvent)
         {
         }
 
-        public QuaternionTweener(Tween masterTween, Transform transform, Quaternion startValue, Quaternion targetValue, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
-            base(masterTween, startValue, targetValue, null, animParams, delay, scaled, onFinishedStepEvent)
+        public QuaternionTweener(MonoBehaviour target, Tween masterTween, Transform transform, Quaternion startValue, Quaternion targetValue, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+            base(target, masterTween, startValue, targetValue, null, animParams, delay, scaled, onFinishedStepEvent)
         {
             tweenedTransform = transform;
         }
@@ -221,13 +224,13 @@ namespace ArTiX.Effects.Tween
         private Material mat;
         private string property;
 
-        public ColorTweener(Tween masterTween, Color startValue, Color targetValue, Action<Color> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
-            base(masterTween, startValue, targetValue, tweenEvent, animParams, delay, scaled, onFinishedStepEvent)
+        public ColorTweener(MonoBehaviour target, Tween masterTween, Color startValue, Color targetValue, Action<Color> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+            base(target, masterTween, startValue, targetValue, tweenEvent, animParams, delay, scaled, onFinishedStepEvent)
         {
         }
 
-        public ColorTweener(Tween masterTween, Material material, in string property, Color startValue, Color targetValue, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
-            base(masterTween, startValue, targetValue, null, animParams, delay, scaled, onFinishedStepEvent)
+        public ColorTweener(MonoBehaviour target, Tween masterTween, Material material, in string property, Color startValue, Color targetValue, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+            base(target, masterTween, startValue, targetValue, null, animParams, delay, scaled, onFinishedStepEvent)
         {
             mat = material;
             this.property = property;
