@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0de09dcb24361fa4dba8db1355106870, type: 3}
-  m_Name: so_CopperBar
+  m_Name: so_CopperBarRecipe
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.FactoryGame.Datas.RecipeSO
   resourcesRequiered:
   - resource: {fileID: 11400000, guid: 972527ec23e91eb4c8011a0078686665, type: 2}

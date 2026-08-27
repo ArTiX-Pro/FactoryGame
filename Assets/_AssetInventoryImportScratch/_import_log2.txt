@@ -1,0 +1,10 @@
+--- import run started 27/08/2026 14:41:29 ---
+[41979] Metal_01.wav -> Assets/_PROJECT/Shared/Audio/SFXs/FREE SOUND PACK_TM(355)/Footsteps(15)/Metal_01.wav
+[42136] Metal_02.wav -> Assets/_PROJECT/Shared/Audio/SFXs/FREE SOUND PACK_TM(355)/Footsteps(15)/Metal_02.wav
+[42061] Metal_03.wav -> Assets/_PROJECT/Shared/Audio/SFXs/FREE SOUND PACK_TM(355)/Footsteps(15)/Metal_03.wav
+[41983] Metal_Hit-013.wav -> Assets/_PROJECT/Shared/Audio/SFXs/FREE SOUND PACK_TM(355)/Misc(58)/Metal_Hit-013.wav
+[42051] Metal_Hit-014.wav -> Assets/_PROJECT/Shared/Audio/SFXs/FREE SOUND PACK_TM(355)/Misc(58)/Metal_Hit-014.wav
+[42018] Metallic_Weapon_Hit-011.wav -> Assets/_PROJECT/Shared/Audio/SFXs/FREE SOUND PACK_TM(355)/Weapons(25)/Metallic_Weapon_Hit-011.wav
+[19192] Close Latch 1.wav -> Assets/_PROJECT/Shared/Audio/SFXs/Door, Cabinet and Locker Sound Pack (Free)/FREE VERSION/Close Latch 1.wav
+[19187] Call Elevator Button Lift Big Large Mechanical Noise 1.wav -> Assets/_PROJECT/Shared/Audio/SFXs/Door, Cabinet and Locker Sound Pack (Free)/FREE VERSION/Call Elevator Button Lift Big Large Mechanical Noise 1.wav
+DONE

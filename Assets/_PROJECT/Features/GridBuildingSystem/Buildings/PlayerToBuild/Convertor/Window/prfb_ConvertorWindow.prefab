@@ -351,11 +351,11 @@ PrefabInstance:
     - target: {fileID: 1490522257407728927, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 2ae32f710feba224e80468f188f13d77, type: 2}
+      objectReference: {fileID: 11400000, guid: 6871bee76be4e584b98a94dcf28b81cf, type: 2}
     - target: {fileID: 1490522257407728927, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2273666054121009321, guid: 2ae32f710feba224e80468f188f13d77, type: 2}
+      objectReference: {fileID: 8452472858135938399, guid: 6871bee76be4e584b98a94dcf28b81cf, type: 2}
     - target: {fileID: 1490522257407728927, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0
@@ -492,7 +492,7 @@ MonoBehaviour:
   resourceNeededContainer: {fileID: 4254716414322816567}
   outputResourceImage: {fileID: 5994790651701389452}
   conversionProgressImage: {fileID: 3801133646702840216}
-  prefabRecipeButton: {fileID: 5056470378214730551, guid: 38a4243f0bf67554dbafb1a1fe2db924, type: 3}
+  prefabRecipeButton: {fileID: 651811680874193814, guid: 38a4243f0bf67554dbafb1a1fe2db924, type: 3}
   prefabResourceNeeded: {fileID: 4111349957748340394, guid: 25f659e03c5f6c74ca27586a3a183261, type: 3}
 --- !u!224 &6537265978226463932 stripped
 RectTransform:

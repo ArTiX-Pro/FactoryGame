@@ -15,7 +15,7 @@ namespace ArTiX.FactoryGame.Buildings
         public RecipeSO CurrentRecipe => recipe;
 
         private ConvertorWindow window;
-        private MasterTimer.Timer conversionTimer;
+        private Timer conversionTimer;
 
         private Inventory.Inventory inventory;
 
@@ -31,7 +31,7 @@ namespace ArTiX.FactoryGame.Buildings
             base.Awake();
 
             GetComponent<BoxCollider>().isTrigger = true;
-            conversionTimer = MasterTimer.Create(this, 0, onTimerActiveEvent: UpdateConversionProgress, 
+            conversionTimer = Timer.Create(this, 0, onTimerActiveEvent: UpdateConversionProgress, 
                 onFinishedEvent: FinishConverting, name: "ConversionTimer");
 
             inventory = GetComponent<Inventory.Inventory>();
@@ -72,8 +72,8 @@ namespace ArTiX.FactoryGame.Buildings
             if (CanConvertResources() && !IsConverting)
             {
                 Debug.Log("start conversion");
-                conversionTimer.Duration = recipe.ConversionDuration;
-                conversionTimer.Start();
+                conversionTimer.duration = recipe.ConversionDuration;
+                conversionTimer.Play();
                 inventory.OnAddItem -= StartConversion;
             }
         }
@@ -99,7 +99,7 @@ namespace ArTiX.FactoryGame.Buildings
             Debug.Log($"{recipe.ResourceOutput.resource} crafted !");
             inventory.TakeItem(recipe.ResourceOutput.resource);
             
-            if (CanConvertResources()) conversionTimer.Start();
+            if (CanConvertResources()) conversionTimer.Play();
         }
 
         private void OnClosingWindow() => window = null;

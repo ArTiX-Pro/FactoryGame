@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0de09dcb24361fa4dba8db1355106870, type: 3}
-  m_Name: so_IronBar
-  m_EditorClassIdentifier: Assembly-CSharp::ArTiX.FactoryGame.Datas.RecipeSO
+  m_Name: so_GoldBarRecipe
+  m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Datas.RecipeSO
   resourcesRequiered:
-  - resource: {fileID: 11400000, guid: dbfa098d6acd59d499fdad35b7a5d983, type: 2}
+  - resource: {fileID: 11400000, guid: 5ba0368a2d3861c4aa9d5e4b26307efc, type: 2}
     quantity: 4
   output:
-    resource: {fileID: 11400000, guid: ef1fe509b59855e48acb4bb3756a898c, type: 2}
+    resource: {fileID: 11400000, guid: 883f58969df0cdc49947e742fd725d0e, type: 2}
     quantity: 1
   conversionDuration: 5

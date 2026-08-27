@@ -566,7 +566,7 @@ namespace ArTiX.Effects.Tween
         /// <returns></returns>
         public static Tween Create(in string name = "Tween")
         {
-            pool.Take(out MasterTween tween);
+            pool.GetPooledObject(out MasterTween tween);
             if (tween == null) tween = new GameObject().AddComponent(typeof(MasterTween)) as MasterTween;
             tween.name = name;
 
@@ -986,17 +986,12 @@ namespace ArTiX.Effects.Tween
             OnFinishedEvent = null;
             tweenersLists.Clear();
             IsActive = false;
-            pool.MoveIn(this);
+            pool.ReturnToPool(this);
         }
 
         private void OnDisable()
         {
             IsActive = false;
-        }
-
-        private void OnDestroy()
-        {
-            pool.Remove(this);
         }
 
         #endregion
