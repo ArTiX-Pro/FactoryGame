@@ -69,7 +69,8 @@ namespace ArTiX.FactoryGame.UI
                 targetPos: new Vector3(
                     x: buildingPanel.position.x, 
                     y: isBuildingPanelActive ? buildingPanelActiveHeight : buildingPanelInactiveHeight),
-                animParams: toggleBuildingAnim
+                animParams: toggleBuildingAnim,
+                tween: ref tween
             );
         }
 

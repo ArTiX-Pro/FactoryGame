@@ -250,7 +250,7 @@ namespace ArTiX.FactoryGame.Buildings
                     animParams: new Tween.AnimParams(
                         duration: 0.5f,
                         transition: Tween.ETransition.SmoothStop5),
-                    tween: tween);
+                    tween: ref tween);
             }
         }
         private ItemSO item;

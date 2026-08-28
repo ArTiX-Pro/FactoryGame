@@ -30,13 +30,15 @@ namespace ArTiX.GridBuildingSystem
 
         public void SetPosition(in Vector2Int cellPos)
         {
-            if (positionTween != null) positionTween.Kill();
+            if (positionTween != null) 
+                positionTween.Kill();
+            positionTween = null;
 
             this.cellPos = cellPos;
             transform.TweenPosition(this,
                 targetPos: GridBuildingSystem.Instance.ConvertCellPosToWorldPos(cellPos),
                 animParams: datas.PositionAnim,
-                tween: positionTween);
+                tween: ref positionTween);
 
             UpdateColor();
         }
@@ -44,12 +46,13 @@ namespace ArTiX.GridBuildingSystem
         public void SetRotation(in float rotation)
         {
             if (rotationTween != null) rotationTween.Kill();
+            rotationTween = null;
 
             targetRotation = rotation;
             transform.TweenRotation(this,
                 targetRota: Quaternion.Euler(x: 0, rotation, z: 0),
                 animParams: datas.RotationAnim,
-                tween: rotationTween);
+                tween: ref rotationTween);
 
             UpdateColor();
         }
@@ -59,6 +62,7 @@ namespace ArTiX.GridBuildingSystem
             bool isValid = GridBuildingSystem.Instance.CanBuild(buildingDatas, cellPos, targetRotation);
 
             if (colorTween != null) colorTween.Kill();
+            colorTween = null;
 
             foreach (Renderer renderer in transform.GetComponentsInChildren<Renderer>())
             {
@@ -66,7 +70,7 @@ namespace ArTiX.GridBuildingSystem
                     property: Utilities.COLOR,
                     targetColor: isValid ? datas.ValidColor : datas.UnvalidColor,
                     animParams: datas.ColorChangeAnim,
-                    tween: colorTween
+                    tween: ref colorTween
                 );
             }
         }
