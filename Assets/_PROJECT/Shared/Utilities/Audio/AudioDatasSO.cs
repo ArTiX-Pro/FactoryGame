@@ -19,11 +19,8 @@ namespace ArTiX.Utils.Audio
         [SerializeField, Min(0)] private float minDistance = 1f;
         [SerializeField, Min(0)] private float maxDistance = 25f;
         [SerializeField] private AudioRolloffMode volumeRollof;
-        [SerializeField] private float cooldown = 0.05f;
-        [SerializeField] private int maxConcurrent = 4;
+        [field: SerializeField, Tooltip("Max number of AudioSources playing this sound at the same time.")] public int MaxConcurrent { get; private set; } = 4;
 
-        public float Cooldown => cooldown;
-        public int MaxConcurrent => maxConcurrent;
 
         public void ApplyTo(AudioSource source)
         {

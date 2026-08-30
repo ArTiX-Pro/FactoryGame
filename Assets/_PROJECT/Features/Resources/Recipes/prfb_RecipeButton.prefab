@@ -148,7 +148,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6424711048398278398}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 651811680874193814}
+        m_TargetAssemblyTypeName: ArTiX.FactoryGame.UI.RecipeButton, Assembly-CSharp
+        m_MethodName: PlayClickSound
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 2e14c8a784262124693a61cfda8f8e3a, type: 2}
+          m_ObjectArgumentAssemblyTypeName: ArTiX.Utils.Audio.AudioDatasSO, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1658042762783200329
 GameObject:
   m_ObjectHideFlags: 0

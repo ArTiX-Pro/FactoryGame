@@ -1,3 +1,4 @@
+using ArTiX.Utils.Audio;
 using System;
 using UnityEngine.UI;
 
@@ -19,6 +20,8 @@ namespace ArTiX.Utils
             OnClickEvent += onClickEvent;
             this.parameter = parameter;
         }
+
+        public void PlayClickSound(AudioDatasSO datas) => AudioManager.Instance.Play(datas);
 
         private void OnClick() => OnClickEvent?.Invoke(parameter);
     }

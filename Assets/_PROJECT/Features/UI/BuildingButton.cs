@@ -11,7 +11,7 @@ namespace ArTiX.GridBuildingSystem.UI
     {
         public string Tooltip => parameter.Name;
 
-        public override void Initialize(Action<BuildingSO> onClickEvent, in BuildingSO parameter) 
+        public override void Initialize(Action<BuildingSO> onClickEvent, in BuildingSO parameter)
         {
             base.Initialize(onClickEvent, parameter);
 
