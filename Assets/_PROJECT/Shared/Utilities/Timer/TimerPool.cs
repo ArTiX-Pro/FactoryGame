@@ -9,18 +9,18 @@ namespace ArTiX.Utils
 
         public Pool<Timer> Pool { get; private set; }
         private const int DEFAULT_POOL_SIZE = 10;
+        private const int MAX_POOL_SIZE = DEFAULT_POOL_SIZE * 2;
 
         protected override void Awake()
         {
             SetInstance(this);
-            Pool = new Pool<Timer>(CreateTimer, DEFAULT_POOL_SIZE);
+            Pool = new Pool<Timer>(CreateTimer, DEFAULT_POOL_SIZE, MAX_POOL_SIZE);
         }
 
         // Only used to populate the pool.
         private Timer CreateTimer()
         {
             Timer timer = Instantiate(prefabTimer);
-            timer.Pool = Pool;
             timer.gameObject.SetActive(false);
             return timer;
         }

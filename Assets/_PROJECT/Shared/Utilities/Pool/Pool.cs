@@ -7,23 +7,35 @@ namespace ArTiX.Utils.Pool
     public class Pool<T> where T : Component
     {
         private readonly Stack<T> pool = new Stack<T>();
+        private readonly int maxSize;
 
-        public Pool(Func<T> populateMethod, int size)
+        private readonly Func<T> populateMethod;
+
+        public Pool(Func<T> populateMethod, int initialSize, int maxSize)
         {
-            for (int i = 0; i < size; i++)
+            this.populateMethod = populateMethod;
+
+            T instance;
+            for (int i = 0; i < initialSize; i++)
             {
-                pool.Push(populateMethod());
+                instance = populateMethod();
+                instance.GetComponent<IPooledObject<T>>().Pool = this;
+                pool.Push(instance);
             }
+
+            this.maxSize = maxSize;
         }
 
         public T GetPooledObject()
         {
-            if (pool.TryPop(out T objectTaken))
+            if (pool.TryPop(out T objectTaken)) objectTaken.gameObject.SetActive(true);
+            else if (pool.Count < maxSize)
             {
-                objectTaken.gameObject.SetActive(true);
-                return objectTaken;
+                objectTaken = populateMethod();
+                objectTaken.GetComponent<IPooledObject<T>>().Pool = this;
             }
-            return null;
+
+            return objectTaken;
         }
 
         public void ReturnToPool(in T obj)

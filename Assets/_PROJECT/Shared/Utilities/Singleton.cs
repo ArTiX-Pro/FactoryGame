@@ -4,7 +4,7 @@ namespace ArTiX.Utils
 {
     public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
-        private static T s_instance;
+        protected static T s_instance;
         public static T Instance
         {
             get
