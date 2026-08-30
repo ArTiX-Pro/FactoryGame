@@ -1,4 +1,5 @@
 using ArTiX.Utils.Pool;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ArTiX.Utils.Audio
@@ -10,7 +11,9 @@ namespace ArTiX.Utils.Audio
 
         [SerializeField] private AudioSourceExtension sourcePrefab;
 
-        private Pool<AudioSource> pool;
+        private Pool<AudioSourceExtension> pool;
+
+        private readonly Dictionary<AudioDatasSO, int> playbackNb = new Dictionary<AudioDatasSO, int>();
 
         protected override void Awake()
         {
@@ -22,19 +25,46 @@ namespace ArTiX.Utils.Audio
                 return;
             }
 
-            pool = new Pool<AudioSource>(CreateSource, INITIAL_POOL_SIZE, MAX_POOL_SIZE);
+            pool = new Pool<AudioSourceExtension>(CreateSource, INITIAL_POOL_SIZE, MAX_POOL_SIZE);
         }
 
-        private AudioSource CreateSource()
+        private AudioSourceExtension CreateSource()
         {
             AudioSourceExtension pooled = Instantiate(sourcePrefab, transform);
             pooled.gameObject.SetActive(false);
-            return pooled.GetComponent<AudioSource>();
+
+            return pooled;
         }
 
-        private void OnDestroy()
+        public AudioSourceExtension Play(in AudioDatasSO datas) => Play(datas, transform.position, null);
+        public AudioSourceExtension Play(in AudioDatasSO datas, in Vector3 position) => Play(datas, position, null);
+        public AudioSourceExtension Play(in AudioDatasSO datas, in Transform follow) => Play(datas, follow.position, follow);
+
+        private AudioSourceExtension Play(in AudioDatasSO datas, in Vector3 position, in Transform follow)
         {
-            s_instance = null;
+            if (playbackNb.ContainsKey(datas) && playbackNb[datas] == datas.MaxConcurrent) return null;
+
+            AudioSourceExtension source = pool.GetPooledObject();
+            if (source == null) return null;
+
+            source.transform.SetParent(follow == null ? transform : follow);
+            source.transform.position = position;
+
+            if (!playbackNb.ContainsKey(datas)) playbackNb.Add(datas, 1);
+            else playbackNb[datas]++;
+
+            source.OnFinishPlayingEvent += OnSourceFinishedPlayingEvent;
+
+            source.Play(datas);
+
+            return source;
+        }
+
+        private void OnSourceFinishedPlayingEvent(object sender, System.EventArgs args)
+        {
+            AudioSourceExtension source = (sender as AudioSourceExtension);
+            playbackNb[source.Datas]--;
+            source.OnFinishPlayingEvent -= OnSourceFinishedPlayingEvent;
         }
     }
 }

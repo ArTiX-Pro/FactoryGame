@@ -22,10 +22,8 @@ namespace ArTiX.Utils.Audio
         [SerializeField] private float cooldown = 0.05f;
         [SerializeField] private int maxConcurrent = 4;
 
-        public bool Loop => loop;
         public float Cooldown => cooldown;
         public int MaxConcurrent => maxConcurrent;
-        public bool IsValid => clips != null && clips.Length > 0;
 
         public void ApplyTo(AudioSource source)
         {

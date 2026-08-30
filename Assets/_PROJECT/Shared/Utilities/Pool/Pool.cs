@@ -11,16 +11,15 @@ namespace ArTiX.Utils.Pool
 
         private readonly Func<T> populateMethod;
 
+        private int totalCount;
+
         public Pool(Func<T> populateMethod, int initialSize, int maxSize)
         {
             this.populateMethod = populateMethod;
 
-            T instance;
             for (int i = 0; i < initialSize; i++)
             {
-                instance = populateMethod();
-                instance.GetComponent<IPooledObject<T>>().Pool = this;
-                pool.Push(instance);
+                pool.Push(Create());
             }
 
             this.maxSize = maxSize;
@@ -28,12 +27,15 @@ namespace ArTiX.Utils.Pool
 
         public T GetPooledObject()
         {
-            if (pool.TryPop(out T objectTaken)) objectTaken.gameObject.SetActive(true);
-            else if (pool.Count < maxSize)
+            if (pool.TryPop(out T objectTaken))
             {
-                objectTaken = populateMethod();
-                objectTaken.GetComponent<IPooledObject<T>>().Pool = this;
+                objectTaken.gameObject.SetActive(true);
+                return objectTaken;
             }
+
+            if (totalCount >= maxSize) return null;
+
+            objectTaken = Create();
 
             return objectTaken;
         }
@@ -44,6 +46,15 @@ namespace ArTiX.Utils.Pool
 
             obj.gameObject.SetActive(false);
             pool.Push(obj);
+        }
+
+        private T Create()
+        {
+            T instance = populateMethod();
+            instance.GetComponent<IPooledObject<T>>().Pool = this;
+            totalCount++;
+
+            return instance;
         }
     }
 }
