@@ -12,18 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cf83238e094950468ced68a11df8c2f, type: 3}
   m_Name: so_ClicSound
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.Utils.Audio.AudioDatasSO
-  clips: []
+  clips:
+  - {fileID: 8300000, guid: 40727ea9f64e60f43808cd0162bd653a, type: 3}
   mixerGroup: {fileID: 0}
   loop: 0
   minVolume: 1
   maxVolume: 1
   minPitch: 1
   maxPitch: 1
-  spatialBlend: 1
+  spatialBlend: 0
   dopplerLevel: 1
   spread: 0
   minDistance: 1
   maxDistance: 25
   volumeRollof: 0
-  cooldown: 0.05
-  maxConcurrent: 4
+  <MaxConcurrent>k__BackingField: 4
