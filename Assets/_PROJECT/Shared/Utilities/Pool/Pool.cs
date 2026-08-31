@@ -23,6 +23,8 @@ namespace ArTiX.Utils.Pool
             }
 
             this.maxSize = maxSize;
+
+            Application.quitting += EmptyPool;
         }
 
         public T GetPooledObject()
@@ -52,9 +54,16 @@ namespace ArTiX.Utils.Pool
         {
             T instance = populateMethod();
             instance.GetComponent<IPooledObject<T>>().Pool = this;
+            instance.gameObject.SetActive(false);
             totalCount++;
 
             return instance;
+        }
+
+        private void EmptyPool()
+        {
+            pool.Clear();
+            totalCount = 0;
         }
     }
 }

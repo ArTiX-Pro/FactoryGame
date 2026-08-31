@@ -10,14 +10,8 @@ namespace ArTiX.Utils
         [SerializeField] private float sensitivity = 0.1f;
         [SerializeField] private bool holdToRotate;
 
-        [SerializeField] private float minZoom;
-        [SerializeField] private float maxZoom;
-        [SerializeField] private float zoomSpeed;
-
         private Vector3 moveDirection;
         private float upDown;
-        private float zoomLevel = 1;
-        private float baseFOV;
 
         private Camera cam;
         private InputAction rotateAction;
@@ -30,12 +24,11 @@ namespace ArTiX.Utils
             rotateAction.Disable();
 
             cam = GetComponent<Camera>();
-            baseFOV = cam.fieldOfView;
         }
 
         private void Update()
         {
-            transform.position += speed * Time.deltaTime * 
+            transform.position += speed * Time.deltaTime *
                 ((transform.rotation * moveDirection) + (Vector3.up * upDown));
         }
 
@@ -51,18 +44,12 @@ namespace ArTiX.Utils
             upDown = ctxt.ReadValue<float>();
         }
 
-        public void OnZoom(InputAction.CallbackContext ctxt)
-        {
-            zoomLevel = Mathf.Clamp(zoomLevel - (ctxt.ReadValue<float>() * zoomSpeed), minZoom, maxZoom);
-            cam.fieldOfView = baseFOV * zoomLevel;
-        }
-
         public void OnRotate(InputAction.CallbackContext ctxt)
         {
             Vector2 rotateInput = ctxt.ReadValue<Vector2>();
             transform.Rotate(
-                xAngle: -rotateInput.y * sensitivity, 
-                yAngle:  rotateInput.x * sensitivity, 
+                xAngle: -rotateInput.y * sensitivity,
+                yAngle: rotateInput.x * sensitivity,
                 zAngle: 0
             );
 

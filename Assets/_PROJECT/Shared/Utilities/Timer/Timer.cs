@@ -1,11 +1,22 @@
 ﻿using ArTiX.Utils.Pool;
 using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace ArTiX.Utils
 {
     public class Timer : MonoBehaviour, IPooledObject<Timer>
     {
+        private static Pool<Timer> pool;
+        private const int DEFAULT_POOL_SIZE = 10;
+        private const int MAX_POOL_SIZE = DEFAULT_POOL_SIZE * 2;
+        private const string PATH_TIMER_PREFAB = "Assets/_PROJECT/Shared/Utilities/Timer/prfb_Timer.prefab";
+
+        static Timer()
+        {
+            Application.quitting += KillPool;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -20,11 +31,9 @@ namespace ArTiX.Utils
         /// <returns></returns>
         public static Timer Create(MonoBehaviour target, float duration, bool startOnCreate = false, bool autodestroy = false, bool scaled = true, int repetitionNumber = 0, in bool infinite = false, Action onTimerActiveEvent = null, Action onFinishedEvent = null, string name = "Timer")
         {
-            Timer timer = TimerPool.Instance.Pool.GetPooledObject();
+            pool ??= new Pool<Timer>(Create, DEFAULT_POOL_SIZE, MAX_POOL_SIZE);
+            Timer timer = pool.GetPooledObject();
 
-            if (timer == null) timer = new GameObject().AddComponent(typeof(Timer)) as Timer;
-
-            timer.Pool = TimerPool.Instance.Pool;
             timer.gameObject.name = name;
             timer.duration = duration;
             timer.scaled = scaled;
@@ -38,6 +47,13 @@ namespace ArTiX.Utils
 
             return timer;
         }
+
+        private static Timer Create()
+        {
+            return Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(PATH_TIMER_PREFAB)).GetComponent<Timer>();
+        }
+
+        private static void KillPool() => pool = null;
 
         public bool IsActive { get; private set; }
         public float ElapsedTime { get; private set; }
@@ -67,7 +83,7 @@ namespace ArTiX.Utils
 
         private void Update()
         {
-            if (target == null) 
+            if (target == null)
             {
                 Kill();
                 return;
@@ -76,7 +92,7 @@ namespace ArTiX.Utils
             if (IsActive && currentRepetitionNumber >= 0)
             {
                 ElapsedTime += scaled ? Time.deltaTime : Time.unscaledDeltaTime;
-                
+
                 OnActiveEvent?.Invoke();
 
                 if (ElapsedTime > duration)

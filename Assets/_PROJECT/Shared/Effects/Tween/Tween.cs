@@ -1,6 +1,7 @@
 using ArTiX.Utils.Pool;
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace ArTiX.Effects.Tween
@@ -27,7 +28,7 @@ namespace ArTiX.Effects.Tween
             public bool timeScaled;
             public Action onFinishedStepEvent;
 
-            public TweeningParams(T startValue, T targetValue, AnimParams animParams, 
+            public TweeningParams(T startValue, T targetValue, AnimParams animParams,
                 float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
             {
                 this.startValue = startValue;
@@ -97,21 +98,292 @@ namespace ArTiX.Effects.Tween
 
         #endregion
 
+        #region Tweeners
+
+        private abstract class Tweener
+        {
+            protected readonly AnimParams animParams;
+            private readonly bool scaled;
+
+            public float Delay { get; private set; }
+            protected float timer;
+
+            public event Action OnFinishedStepEvent;
+
+            private UnityEngine.Object target;
+
+            protected Tweener(in UnityEngine.Object target, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent)
+            {
+                this.animParams = animParams;
+                this.scaled = scaled;
+                Delay = delay;
+                OnFinishedStepEvent = onFinishedStepEvent;
+
+                timer = 0;
+                this.target = target;
+            }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <returns>True when finished, false otherwise.</returns>
+            public bool UpdateTweener()
+            {
+                if (target == null)
+                {
+                    OnFinishedStepEvent = null;
+                    return true;
+                }
+
+                if (Delay > 0)
+                {
+                    Delay -= scaled ? Time.deltaTime : Time.deltaTime / Time.timeScale;
+                    return false;
+                }
+
+                timer += scaled ? Time.deltaTime : Time.deltaTime / Time.timeScale;
+
+                InvokeEvent();
+
+                if (timer >= animParams.Duration)
+                {
+                    OnFinishedStepEvent?.Invoke();
+                    return true;
+                }
+
+                return false;
+            }
+
+            protected abstract void InvokeEvent();
+        }
+
+        private abstract class EventTweener<T> : Tweener
+        {
+            protected readonly T startValue;
+            protected readonly T targetValue;
+
+            private event Action<T> tweenEvent;
+
+            private Tween masterTween;
+
+            protected EventTweener(UnityEngine.Object target, Tween masterTween, T startValue, T targetValue, Action<T> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+                base(target, animParams, delay, scaled, onFinishedStepEvent)
+            {
+                this.startValue = startValue;
+                this.targetValue = targetValue;
+                this.tweenEvent = tweenEvent;
+                this.masterTween = masterTween;
+            }
+
+            protected EventTweener(UnityEngine.Object target, Tween masterTween, TweeningParams<T> tweenParams, Action<T> tweenEvent) :
+                base(target, tweenParams.animParams, tweenParams.delay, tweenParams.timeScaled, tweenParams.onFinishedStepEvent)
+            {
+                startValue = tweenParams.startValue;
+                targetValue = tweenParams.targetValue;
+                this.tweenEvent = tweenEvent;
+                this.masterTween = masterTween;
+            }
+
+            protected override void InvokeEvent()
+            {
+                tweenEvent.Invoke(InterpolateValue());
+            }
+
+            protected abstract T InterpolateValue();
+        }
+
+        // INSTANTIABLE
+        private class FloatTweener : EventTweener<float>
+        {
+            private Material mat;
+            private CanvasGroup group;
+            private string property;
+
+            public FloatTweener(UnityEngine.Object target, Tween masterTween, float startValue, float targetValue, Action<float> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+                base(target, masterTween, startValue, targetValue, tweenEvent, animParams, delay, scaled, onFinishedStepEvent)
+            {
+            }
+
+            public FloatTweener(UnityEngine.Object target, Tween masterTween, Material material, in string property, float startValue, float targetValue, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+                base(target, masterTween, startValue, targetValue, null, animParams, delay, scaled, onFinishedStepEvent)
+            {
+                mat = material;
+                this.property = property;
+            }
+
+            public FloatTweener(UnityEngine.Object target, Tween masterTween, CanvasGroup group, float startValue, float targetValue, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+                base(target, masterTween, startValue, targetValue, tweenEvent: null, animParams, delay, scaled, onFinishedStepEvent)
+            {
+                this.group = group;
+            }
+
+            protected override void InvokeEvent()
+            {
+                if (mat != null)
+                    mat.SetFloat(property, InterpolateValue());
+                else if (group != null)
+                    group.alpha = InterpolateValue();
+                else
+                    base.InvokeEvent();
+            }
+
+            protected override float InterpolateValue()
+            {
+                return Tween.InterpolateValue(startValue, targetValue, timer, animParams);
+            }
+        }
+
+        private class Vector2Tweener : EventTweener<Vector2>
+        {
+            public Vector2Tweener(UnityEngine.Object target, Tween masterTween, Vector2 startValue, Vector2 targetValue, Action<Vector2> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+                base(target, masterTween, startValue, targetValue, tweenEvent, animParams, delay, scaled, onFinishedStepEvent)
+            {
+            }
+
+            protected override Vector2 InterpolateValue()
+            {
+                return Tween.InterpolateValue(startValue, targetValue, timer, animParams);
+            }
+        }
+
+        private class Vector3Tweener : EventTweener<Vector3>
+        {
+            private Transform tweenedTransform;
+            private ETransformProperty property;
+
+            public Vector3Tweener(UnityEngine.Object target, Tween masterTween, Vector3 startValue, Vector3 targetValue, Action<Vector3> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+                base(target, masterTween, startValue, targetValue, tweenEvent, animParams, delay, scaled, onFinishedStepEvent)
+            {
+            }
+
+            public Vector3Tweener(UnityEngine.Object target, Tween masterTween, Transform transform, ETransformProperty property, Vector3 startValue, Vector3 targetValue, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+                base(target, masterTween, startValue, targetValue, null, animParams, delay, scaled, onFinishedStepEvent)
+            {
+                tweenedTransform = transform;
+                this.property = property;
+            }
+
+            protected override void InvokeEvent()
+            {
+                if (tweenedTransform != null)
+                {
+                    switch (property)
+                    {
+                        case ETransformProperty.Position:
+                            tweenedTransform.position = InterpolateValue();
+                            break;
+                        case ETransformProperty.Scale:
+                            tweenedTransform.localScale = InterpolateValue();
+                            break;
+                    }
+                }
+                else
+                    base.InvokeEvent();
+            }
+
+            protected override Vector3 InterpolateValue()
+            {
+                return Tween.InterpolateValue(startValue, targetValue, timer, animParams);
+            }
+        }
+
+        private class QuaternionTweener : EventTweener<Quaternion>
+        {
+            private Transform tweenedTransform;
+
+            public QuaternionTweener(UnityEngine.Object target, Tween masterTween, Quaternion startValue, Quaternion targetValue, Action<Quaternion> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+                base(target, masterTween, startValue, targetValue, tweenEvent, animParams, delay, scaled, onFinishedStepEvent)
+            {
+            }
+
+            public QuaternionTweener(UnityEngine.Object target, Tween masterTween, Transform transform, Quaternion startValue, Quaternion targetValue, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+                base(target, masterTween, startValue, targetValue, null, animParams, delay, scaled, onFinishedStepEvent)
+            {
+                tweenedTransform = transform;
+            }
+
+            protected override void InvokeEvent()
+            {
+                if (tweenedTransform != null) tweenedTransform.rotation = InterpolateValue();
+                else base.InvokeEvent();
+            }
+
+            protected override Quaternion InterpolateValue()
+            {
+                return Tween.InterpolateValue(startValue, targetValue, timer, animParams);
+            }
+        }
+
+        private class ColorTweener : EventTweener<Color>
+        {
+            private Material mat;
+            private string property;
+
+            public ColorTweener(UnityEngine.Object target, Tween masterTween, Color startValue, Color targetValue, Action<Color> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+                base(target, masterTween, startValue, targetValue, tweenEvent, animParams, delay, scaled, onFinishedStepEvent)
+            {
+            }
+
+            public ColorTweener(UnityEngine.Object target, Tween masterTween, Material material, in string property, Color startValue, Color targetValue, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
+                base(target, masterTween, startValue, targetValue, null, animParams, delay, scaled, onFinishedStepEvent)
+            {
+                mat = material;
+                this.property = property;
+            }
+
+            protected override void InvokeEvent()
+            {
+                if (mat != null)
+                {
+                    mat.SetColor(property, InterpolateValue());
+                }
+                else
+                    base.InvokeEvent();
+            }
+
+            protected override Color InterpolateValue()
+            {
+                return Tween.InterpolateValue(startValue, targetValue, timer, animParams);
+            }
+        }
+
+        #endregion
+
         #region Static
+
+        private static Pool<Tween> pool;
+        private const int DEFAULT_POOL_SIZE = 30;
+        private const int MAX_POOL_SIZE = DEFAULT_POOL_SIZE * 2;
+        private const string PATH_TWEEN_PREFAB = "Assets/_PROJECT/Shared/Effects/Tween/prfb_Tween.prefab";
+
+        static Tween()
+        {
+            Application.quitting += KillPool;
+        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tween Create(in string name = "Tween")
+        public static Tween Create(in MonoBehaviour owner, in string name = "Tween")
         {
-            Tween tween = TweenPool.Instance.Pool.GetPooledObject();
-            if (tween == null) tween = new GameObject().AddComponent(typeof(Tween)) as Tween;
+            pool ??= new Pool<Tween>(CreateTween, DEFAULT_POOL_SIZE, MAX_POOL_SIZE);
+
+            Tween tween = pool.GetPooledObject();
+            if (tween == null) return null;
             tween.name = name;
+            tween.owner = owner;
 
             return tween;
         }
+
+        private static Tween CreateTween()
+        {
+            return Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(PATH_TWEEN_PREFAB)).GetComponent<Tween>();
+        }
+
+        private static void KillPool() => pool = null;
 
         #region Interpolation Methods
 
@@ -339,6 +611,8 @@ namespace ArTiX.Effects.Tween
 
         private List<Tweener> lastTweenerList;
 
+        private MonoBehaviour owner;
+
         #endregion
 
         private void Update()
@@ -369,37 +643,37 @@ namespace ArTiX.Effects.Tween
 
         #region Add Property
 
-        public void TweenProperty(MonoBehaviour target, Transform transform, ETransformProperty property, Vector3 startValue, Vector3 targetValue, AnimParams animParams,
+        public void TweenProperty(UnityEngine.Object target, Transform transform, ETransformProperty property, Vector3 startValue, Vector3 targetValue, AnimParams animParams,
             float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
         {
-            SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
+            GetTweenerList(out List<Tweener> tweenerList, ref delay, parrallel);
             tweenerList.Add(new Vector3Tweener(target, this, transform, property, startValue, targetValue, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
-        public void TweenProperty(MonoBehaviour target, Transform transform, Quaternion startRota, Quaternion targetRota, AnimParams animParams,
+        public void TweenProperty(UnityEngine.Object target, Transform transform, Quaternion startRota, Quaternion targetRota, AnimParams animParams,
             float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
         {
-            SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
+            GetTweenerList(out List<Tweener> tweenerList, ref delay, parrallel);
             tweenerList.Add(new QuaternionTweener(target, this, transform, startRota, targetRota, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
-        public void TweenProperty(MonoBehaviour target, Material material, in string property, float startValue, float targetValue, AnimParams animParams,
+        public void TweenProperty(UnityEngine.Object target, Material material, in string property, float startValue, float targetValue, AnimParams animParams,
             float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
         {
-            SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
+            GetTweenerList(out List<Tweener> tweenerList, ref delay, parrallel);
             tweenerList.Add(new FloatTweener(target, this, material, property, startValue, targetValue, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
-        public void TweenProperty(MonoBehaviour target, Material material, in string property, Color startColor, Color targetColor, AnimParams animParams,
+        public void TweenProperty(UnityEngine.Object target, Material material, in string property, Color startColor, Color targetColor, AnimParams animParams,
             float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
         {
-            SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
+            GetTweenerList(out List<Tweener> tweenerList, ref delay, parrallel);
             tweenerList.Add(new ColorTweener(target, this, material, property, startColor, targetColor, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
-        public void TweenProperty(MonoBehaviour target, CanvasGroup group, float startValue, float targetValue, AnimParams animParams, float delay, bool parrallel, bool timeScaled, Action onFinishedStepEvent)
+        public void TweenProperty(UnityEngine.Object target, CanvasGroup group, float startValue, float targetValue, AnimParams animParams, float delay, bool parrallel, bool timeScaled, Action onFinishedStepEvent)
         {
-            SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
+            GetTweenerList(out List<Tweener> tweenerList, ref delay, parrallel);
             tweenerList.Add(new FloatTweener(target, this, group, startValue, targetValue, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
@@ -418,10 +692,10 @@ namespace ArTiX.Effects.Tween
         /// <param name="parrallel"></param>
         /// <param name="timeScaled"></param>
         /// <param name="onFinishedStepEvent"></param>
-        public void TweenEvent(MonoBehaviour target, float startValue, float targetValue, Action<float> tweenEvent, AnimParams animParams,
+        public void TweenEvent(UnityEngine.Object target, float startValue, float targetValue, Action<float> tweenEvent, AnimParams animParams,
             float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
         {
-            SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
+            GetTweenerList(out List<Tweener> tweenerList, ref delay, parrallel);
             tweenerList.Add(new FloatTweener(target, this, startValue, targetValue, tweenEvent, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
@@ -436,10 +710,10 @@ namespace ArTiX.Effects.Tween
         /// <param name="parrallel"></param>
         /// <param name="timeScaled"></param>
         /// <param name="onFinishedStepEvent"></param>
-        public void TweenEvent(MonoBehaviour target, Vector2 startValue, Vector2 targetValue, Action<Vector2> tweenEvent, AnimParams animParams,
+        public void TweenEvent(UnityEngine.Object target, Vector2 startValue, Vector2 targetValue, Action<Vector2> tweenEvent, AnimParams animParams,
             float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
         {
-            SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
+            GetTweenerList(out List<Tweener> tweenerList, ref delay, parrallel);
             tweenerList.Add(new Vector2Tweener(target, this, startValue, targetValue, tweenEvent, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
@@ -454,10 +728,10 @@ namespace ArTiX.Effects.Tween
         /// <param name="parrallel"></param>
         /// <param name="timeScaled"></param>
         /// <param name="onFinishedStepEvent"></param>
-        public void TweenEvent(MonoBehaviour target, Vector3 startValue, Vector3 targetValue, Action<Vector3> tweenEvent, AnimParams animParams,
+        public void TweenEvent(UnityEngine.Object target, Vector3 startValue, Vector3 targetValue, Action<Vector3> tweenEvent, AnimParams animParams,
             float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
         {
-            SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
+            GetTweenerList(out List<Tweener> tweenerList, ref delay, parrallel);
             tweenerList.Add(new Vector3Tweener(target, this, startValue, targetValue, tweenEvent, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
@@ -472,14 +746,14 @@ namespace ArTiX.Effects.Tween
         /// <param name="parrallel"></param>
         /// <param name="timeScaled"></param>
         /// <param name="onFinishedStepEvent"></param>
-        public void TweenEvent(MonoBehaviour target, Quaternion startValue, Quaternion targetValue, Action<Quaternion> tweenEvent, AnimParams animParams,
+        public void TweenEvent(UnityEngine.Object target, Quaternion startValue, Quaternion targetValue, Action<Quaternion> tweenEvent, AnimParams animParams,
             float delay = 0, bool parrallel = false, bool timeScaled = false, Action onFinishedStepEvent = null)
         {
-            SetupTweener(out List<Tweener> tweenerList, ref delay, parrallel);
+            GetTweenerList(out List<Tweener> tweenerList, ref delay, parrallel);
             tweenerList.Add(new QuaternionTweener(target, this, startValue, targetValue, tweenEvent, animParams, delay, timeScaled, onFinishedStepEvent));
         }
 
-        private void SetupTweener(out List<Tweener> tweenerList, ref float delay, bool parrallel = false)
+        private void GetTweenerList(out List<Tweener> tweenerList, ref float delay, bool parrallel = false)
         {
             IsActive = true;
 
@@ -498,23 +772,19 @@ namespace ArTiX.Effects.Tween
 
         #endregion
 
-        //public void Remove(Tweener tweener)
-        //{
-        //    int nbTweenerList = tweenersLists.Count;
-        //    for (int i = 0; i < nbTweenerList; i++)
-        //    {
-        //        if (tweenersLists[i].Contains(tweener))
-        //        {
-        //            tweenersLists[i].Remove(tweener);
-        //            return;
-        //        }
-        //    }
-        //}
-
-        public void Kill()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="owner">Just put a reference to the UnityEngine.Object that created this tween.</param>
+        public void Kill(in MonoBehaviour owner)
         {
-            if (!IsActive) return;
+            if (!IsActive || owner != this.owner) return;
+            Kill();
+        }
 
+        private void Kill()
+        {
+            lastTweenerList = null;
             OnFinishedEvent = null;
             queueTweenerList.Clear();
             IsActive = false;
@@ -526,7 +796,7 @@ namespace ArTiX.Effects.Tween
             IsActive = false;
         }
 
-        public void Release() => TweenPool.Instance.Pool.ReturnToPool(this);
+        public void Release() => Pool.ReturnToPool(this);
 
         #endregion
     }

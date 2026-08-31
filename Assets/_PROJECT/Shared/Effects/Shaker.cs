@@ -108,19 +108,19 @@ namespace ArTiX.Effects
             targetsDatas.Clear();
             intensity = 0f;
 
-            intensityTween?.Kill();
+            if (intensityTween != null) intensityTween.Kill(this);
 
-            intensityTween = Tween.Tween.Create("Intensity Tween");
+            intensityTween = Tween.Tween.Create(this, "Intensity Tween");
             intensityTween.TweenEvent(this,
-                startValue: 0, 
+                startValue: 0,
                 targetValue: 1,
-                tweenEvent: TweenIntensity, 
+                tweenEvent: TweenIntensity,
                 animParams: attackParams);
             intensityTween.TweenEvent(this,
                 startValue: 1,
-                targetValue: 0, 
-                tweenEvent: TweenIntensity, 
-                animParams: releaseParams, 
+                targetValue: 0,
+                tweenEvent: TweenIntensity,
+                animParams: releaseParams,
                 delay: holdDuration);
 
             for (int i = targets.Count - 1; i >= 0; i--)
@@ -156,7 +156,7 @@ namespace ArTiX.Effects
                     localRotation: Quaternion.Euler(0, 0, targetsDatas[i].originAngle));
             }
 
-            intensityTween?.Kill();
+            if (intensityTween != null) intensityTween.Kill(this);
             intensityTween = null;
         }
 
@@ -164,7 +164,7 @@ namespace ArTiX.Effects
         {
             if (duration <= 0) return;
 
-            Tween.Tween tween = Tween.Tween.Create();
+            Tween.Tween tween = Tween.Tween.Create(this);
             tween.TweenEvent(this, Vector2.zero, offset, TweenOffset, animParams: new Tween.Tween.AnimParams
             (duration, Tween.Tween.ETransition.SmoothStopArch3));
         }
@@ -173,14 +173,14 @@ namespace ArTiX.Effects
 
         private void TweenIntensity(float newIntensity) => intensity = newIntensity;
 
-        public void ChangeIntensityCoef(float targetValue, 
+        public void ChangeIntensityCoef(float targetValue,
             float duration = 0, Tween.Tween.ETransition transition = Tween.Tween.ETransition.Linear)
         {
             if (duration <= 0) return;
             if (duration == 0) intensityCoef = targetValue;
 
-            intensityCoefTween?.Kill();
-            intensityCoefTween = Tween.Tween.Create("IntensityCoef Tween");
+            if (intensityCoefTween != null) intensityCoefTween.Kill(this);
+            intensityCoefTween = Tween.Tween.Create(this, "IntensityCoef Tween");
             intensityCoefTween.TweenEvent(this,
                 startValue: intensityCoef,
                 targetValue: targetValue,

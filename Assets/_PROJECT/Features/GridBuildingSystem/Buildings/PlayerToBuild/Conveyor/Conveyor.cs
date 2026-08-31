@@ -34,7 +34,6 @@ namespace ArTiX.FactoryGame.Buildings
                 TickSystem.Instance.OnTick += IncrementTickCounter;
                 FirstConveyor = LastConveyor = conveyor;
                 NbConveyor++;
-                //MasterTimer.Timer timer = MasterTimer.Create(this, , infinite: true)
             }
 
             public void AddConveyor(Conveyor newConveyor)
@@ -51,6 +50,7 @@ namespace ArTiX.FactoryGame.Buildings
                     LastConveyor = newConveyor;
                     newConveyor.belt = this;
                 }
+
                 if (FirstConveyor.IsAdjacent(newConveyor.Origin) && (newConveyor.belt == null || NbConveyor >= 3))
                 {
                     newConveyor.nextConveyor = FirstConveyor;
@@ -60,10 +60,10 @@ namespace ArTiX.FactoryGame.Buildings
                     newConveyor.UpdateRotation();
                     newConveyor.belt = this;
 
-                    if (!newConveyor.IsLastConveyor) 
+                    if (!newConveyor.IsLastConveyor)
                         FirstConveyor = newConveyor;
                 }
-                
+
                 if (newConveyor.belt == this) NbConveyor++;
             }
 
@@ -98,14 +98,14 @@ namespace ArTiX.FactoryGame.Buildings
                     }
                 }
 
-                if (LastConveyor.IsAdjacent(mergedBelt.FirstConveyor.Origin)) 
+                if (LastConveyor.IsAdjacent(mergedBelt.FirstConveyor.Origin))
                     MergeFromLast(mergedBelt);
                 else if (LastConveyor.IsAdjacent(mergedBelt.LastConveyor.Origin))
                 {
-                    mergedBelt.Reverse(); 
+                    mergedBelt.Reverse();
                     MergeFromLast(mergedBelt);
                 }
-                else if (FirstConveyor.IsAdjacent(mergedBelt.LastConveyor.Origin)) 
+                else if (FirstConveyor.IsAdjacent(mergedBelt.LastConveyor.Origin))
                     MergeFromFirst(mergedBelt);
                 else if (FirstConveyor.IsAdjacent(mergedBelt.FirstConveyor.Origin))
                 {
@@ -120,7 +120,7 @@ namespace ArTiX.FactoryGame.Buildings
             {
                 NbConveyor--;
 
-                if (NbConveyor == 0) 
+                if (NbConveyor == 0)
                 {
                     FirstConveyor = LastConveyor = null;
                     TickSystem.Instance.OnTick -= IncrementTickCounter;
@@ -240,12 +240,13 @@ namespace ArTiX.FactoryGame.Buildings
         {
             set
             {
+                if (tween != null)
+                    tween.Kill(this);
 
                 worldItem = value;
-                tween?.Kill();
                 if (worldItem == null) return;
 
-                tween = Tween.Create();
+                tween = Tween.Create(this);
                 worldItem.transform.TweenPosition(this, itemPos.position,
                     animParams: new Tween.AnimParams(
                         duration: 0.5f,
@@ -381,14 +382,14 @@ namespace ArTiX.FactoryGame.Buildings
             UpdateRotation();
         }
 
-        public override void Destroy() 
+        public override void Destroy()
         {
-            if (worldItem != null) 
+            if (worldItem != null)
                 Destroy(worldItem.gameObject);
-            tween?.Kill();
+            if (tween != null) tween.Kill(this);
 
             belt.RemoveConveyor(this);
-            base.Destroy(); 
+            base.Destroy();
         }
 
         #endregion
@@ -400,17 +401,18 @@ namespace ArTiX.FactoryGame.Buildings
             item = this.item;
             this.item = null;
             Destroy(worldItem.gameObject);
-            tween?.Kill();
+            if (tween != null) tween.Kill(this);
+
             return item;
         }
-        public bool CanGiveItem(ItemSO item = null, int quantity = 1) 
+        public bool CanGiveItem(ItemSO item = null, int quantity = 1)
         {
             if (item != null) return item == this.item;
 
             return this.item != null;
         }
 
-        public void TakeItem(ItemSO item) 
+        public void TakeItem(ItemSO item)
         {
             this.item = item;
             worldItem = Instantiate(item.Prefab, itemPos.position, Quaternion.identity);

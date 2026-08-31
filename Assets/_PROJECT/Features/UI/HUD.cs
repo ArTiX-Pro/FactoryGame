@@ -16,7 +16,7 @@ namespace ArTiX.FactoryGame.UI
             {
                 if (instance == null)
                     instance = new GameObject(nameof(HUD), components: typeof(HUD)).GetComponent<HUD>();
-                
+
                 return instance;
             }
         }
@@ -63,11 +63,11 @@ namespace ArTiX.FactoryGame.UI
         {
             isBuildingPanelActive = !isBuildingPanelActive;
 
-            tween?.Kill();
-            tween = Tween.Create();
+            if (tween != null) tween.Kill(this);
+            tween = Tween.Create(this);
             buildingPanel.TweenPosition(this,
                 targetPos: new Vector3(
-                    x: buildingPanel.position.x, 
+                    x: buildingPanel.position.x,
                     y: isBuildingPanelActive ? buildingPanelActiveHeight : buildingPanelInactiveHeight),
                 animParams: toggleBuildingAnim,
                 tween: ref tween

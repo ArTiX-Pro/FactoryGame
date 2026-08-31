@@ -30,8 +30,8 @@ namespace ArTiX.GridBuildingSystem
 
         public void SetPosition(in Vector2Int cellPos)
         {
-            if (positionTween != null) 
-                positionTween.Kill();
+            if (positionTween != null)
+                positionTween.Kill(this);
             positionTween = null;
 
             this.cellPos = cellPos;
@@ -45,7 +45,7 @@ namespace ArTiX.GridBuildingSystem
 
         public void SetRotation(in float rotation)
         {
-            if (rotationTween != null) rotationTween.Kill();
+            if (rotationTween != null) rotationTween.Kill(this);
             rotationTween = null;
 
             targetRotation = rotation;
@@ -61,12 +61,12 @@ namespace ArTiX.GridBuildingSystem
         {
             bool isValid = GridBuildingSystem.Instance.CanBuild(buildingDatas, cellPos, targetRotation);
 
-            if (colorTween != null) colorTween.Kill();
+            if (colorTween != null) colorTween.Kill(this);
             colorTween = null;
 
             foreach (Renderer renderer in transform.GetComponentsInChildren<Renderer>())
             {
-                renderer.material.TweenColorProperty(this,
+                renderer.material.TweenColorProperty(this, this,
                     property: Utilities.COLOR,
                     targetColor: isValid ? datas.ValidColor : datas.UnvalidColor,
                     animParams: datas.ColorChangeAnim,
@@ -77,9 +77,9 @@ namespace ArTiX.GridBuildingSystem
 
         public void Kill()
         {
-            if (positionTween != null) positionTween.Kill();
-            if (rotationTween != null) rotationTween.Kill();
-            if (colorTween != null) colorTween.Kill();
+            if (positionTween != null) positionTween.Kill(this);
+            if (rotationTween != null) rotationTween.Kill(this);
+            if (colorTween != null) colorTween.Kill(this);
 
             Destroy(gameObject);
         }
