@@ -763,6 +763,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 96883426227660269, guid: 5593dbf6b529ffc43a3632d1abae46f5, type: 3}
+      propertyPath: m_Transition
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 96883426227660269, guid: 5593dbf6b529ffc43a3632d1abae46f5, type: 3}
+      propertyPath: m_SpriteState.m_PressedSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a4c342958458da94987b0aa1dd2c9b7a, type: 3}
+    - target: {fileID: 96883426227660269, guid: 5593dbf6b529ffc43a3632d1abae46f5, type: 3}
+      propertyPath: m_SpriteState.m_HighlightedSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c5d17b4a927bffd4bbb055e4d3baaa0f, type: 3}
     - target: {fileID: 2090358572072654955, guid: 5593dbf6b529ffc43a3632d1abae46f5, type: 3}
       propertyPath: m_Name
       value: HUD
@@ -847,8 +859,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7682457690177952959, guid: 5593dbf6b529ffc43a3632d1abae46f5, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8ccda14f1bbb5824da96939ea283b220, type: 3}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8818947411065661861, guid: 5593dbf6b529ffc43a3632d1abae46f5, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5593dbf6b529ffc43a3632d1abae46f5, type: 3}

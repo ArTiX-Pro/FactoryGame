@@ -7,11 +7,11 @@ using UnityEngine.UI;
 namespace ArTiX.FactoryGame.UI
 {
     [RequireComponent(typeof(Image))]
-    public class ItemButton : BaseButton<ItemSO>
+    public class ItemButton : ButtonExtension<ItemSO>
     {
-        public override void Initialize(Action<ItemSO> onClickEvent, in ItemSO parameter) 
+        public override void AddClickEvent(Action<ItemSO> onClickEvent, in ItemSO parameter) 
         {
-            base.Initialize(onClickEvent, parameter);
+            base.AddClickEvent(onClickEvent, parameter);
             GetComponent<Image>().sprite = parameter.Icon;
         }
     }

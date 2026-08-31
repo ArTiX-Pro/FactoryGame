@@ -29,7 +29,7 @@ namespace ArTiX.FactoryGame.UI
             foreach (RecipeSO recipe in GameManager.Instance.AvailableRecipes)
             {
                 recipeButton = Instantiate(prefabRecipeButton, buttonContainer);
-                recipeButton.Initialize(OnRecipeButtonClicked, recipe);
+                recipeButton.AddClickEvent(OnRecipeButtonClicked, recipe);
             }
 
             owner.OnConverting += UpdateConversionImage;

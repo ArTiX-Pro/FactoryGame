@@ -16,7 +16,7 @@ namespace ArTiX.FactoryGame.UI
             foreach (ItemSO resource in GameManager.Instance.AvailableResources)
             {
                 itemButton = Instantiate(prefabItemButton, buttonContainer);
-                itemButton.Initialize(SelectResourceFilter, resource);
+                itemButton.AddClickEvent(SelectResourceFilter, resource);
             }
         }
 

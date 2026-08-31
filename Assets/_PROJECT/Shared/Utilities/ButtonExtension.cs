@@ -1,21 +1,25 @@
 using ArTiX.Utils.Audio;
 using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace ArTiX.Utils
 {
-    public abstract class BaseButton<T> : Button
+    [RequireComponent(typeof(Button))]
+    public abstract class ButtonExtension<T> : MonoBehaviour
     {
         public event Action<T> OnClickEvent;
         protected T parameter;
 
-        protected override void Awake()
+        private Button button;
+
+        private void Awake()
         {
-            base.Awake();
-            onClick.AddListener(OnClick);
+            button = GetComponent<Button>();
+            button.onClick.AddListener(OnClick);
         }
 
-        public virtual void Initialize(Action<T> onClickEvent, in T parameter)
+        public virtual void AddClickEvent(Action<T> onClickEvent, in T parameter)
         {
             OnClickEvent += onClickEvent;
             this.parameter = parameter;

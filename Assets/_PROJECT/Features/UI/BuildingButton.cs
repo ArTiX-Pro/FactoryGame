@@ -7,15 +7,16 @@ using UnityEngine.UI;
 namespace ArTiX.GridBuildingSystem.UI
 {
     [RequireComponent(typeof(Image))]
-    public class BuildingButton : BaseButton<BuildingSO>, IMouseTooltip
+    public class BuildingButton : ButtonExtension<BuildingSO>, IMouseTooltip
     {
+        [SerializeField] private Image icon;
+
         public string Tooltip => parameter.Name;
 
-        public override void Initialize(Action<BuildingSO> onClickEvent, in BuildingSO parameter)
+        public override void AddClickEvent(Action<BuildingSO> onClickEvent, in BuildingSO parameter)
         {
-            base.Initialize(onClickEvent, parameter);
-
-            GetComponent<Image>().sprite = parameter.Icon;
+            base.AddClickEvent(onClickEvent, parameter);
+            icon.sprite = parameter.Icon;
         }
     }
 }

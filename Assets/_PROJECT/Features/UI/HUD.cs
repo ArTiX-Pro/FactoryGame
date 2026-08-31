@@ -2,25 +2,14 @@ using ArTiX.Effects.Tween;
 using ArTiX.GridBuildingSystem.Datas;
 using ArTiX.GridBuildingSystem.UI;
 using ArTiX.Input;
+using ArTiX.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ArTiX.FactoryGame.UI
 {
-    public class HUD : MonoBehaviour
+    public class HUD : Singleton<HUD>
     {
-        private static HUD instance;
-        public static HUD Instance
-        {
-            get
-            {
-                if (instance == null)
-                    instance = new GameObject(nameof(HUD), components: typeof(HUD)).GetComponent<HUD>();
-
-                return instance;
-            }
-        }
-
         [SerializeField] private Tween.AnimParams toggleBuildingAnim;
 
         [SerializeField] private Transform buildingPanel;
@@ -33,15 +22,9 @@ namespace ArTiX.FactoryGame.UI
 
         private Tween tween;
 
-        private void Awake()
+        protected override void Awake()
         {
-            if (instance != null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            instance = this;
+            SetInstance(this);
         }
 
         private void Start()
@@ -55,7 +38,7 @@ namespace ArTiX.FactoryGame.UI
             foreach (BuildingSO buildingData in availableBuildings)
             {
                 button = Instantiate(prefabBuildingBtn, buildingBtnsHolder);
-                button.Initialize(SelectBuilding, buildingData);
+                button.AddClickEvent(SelectBuilding, buildingData);
             }
         }
 
