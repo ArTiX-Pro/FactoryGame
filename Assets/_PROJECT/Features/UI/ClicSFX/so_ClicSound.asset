@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: so_ClicSound
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.Utils.Audio.AudioDatasSO
   clips:
-  - {fileID: 8300000, guid: 40727ea9f64e60f43808cd0162bd653a, type: 3}
+  - {fileID: 8300000, guid: 28c2e7303fc8605c9bb66371a22c1607, type: 3}
+  - {fileID: 8300000, guid: c83e31fc92bdc722b8d62fa8ebea0722, type: 3}
   mixerGroup: {fileID: 0}
   loop: 0
   minVolume: 1

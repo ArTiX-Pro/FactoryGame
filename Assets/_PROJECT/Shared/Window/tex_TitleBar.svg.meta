@@ -18,7 +18,7 @@ ScriptedImporter:
   viewportOptions: 0
   preserveViewport: 0
   advancedMode: 0
-  tessellationMode: 1
+  tessellationMode: 0
   predefinedResolutionIndex: 1
   targetResolution: 1080
   resolutionMultiplier: 1
@@ -49,5 +49,5 @@ ScriptedImporter:
       y: 0
       width: 96
       height: 24
-    SpriteID: fe79a84e8e5d7ff4bb1993b852afe4c5
+    SpriteID: 3b667c7ef6ff78d46abcf6e0829c596d
     PhysicsOutlines: []
