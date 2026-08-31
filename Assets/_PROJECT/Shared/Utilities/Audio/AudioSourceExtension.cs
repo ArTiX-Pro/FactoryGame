@@ -23,11 +23,10 @@ namespace ArTiX.Utils.Audio
 
         private void Update()
         {
-            // A looping source never stops on its own, it has to be stopped by its owner.
             if (!isPlaying || Source.isPlaying) return;
 
-            isPlaying = false;
             OnFinishPlayingEvent?.Invoke(this, EventArgs.Empty);
+            Stop();
         }
 
         public void Play(in AudioDatasSO datas)

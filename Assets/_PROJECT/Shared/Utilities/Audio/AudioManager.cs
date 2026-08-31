@@ -30,10 +30,7 @@ namespace ArTiX.Utils.Audio
 
         private AudioSourceExtension CreateSource()
         {
-            AudioSourceExtension pooled = Instantiate(sourcePrefab, transform);
-            pooled.gameObject.SetActive(false);
-
-            return pooled;
+            return Instantiate(sourcePrefab, transform);
         }
 
         public AudioSourceExtension Play(in AudioDatasSO datas) => Play(datas, transform.position, null);

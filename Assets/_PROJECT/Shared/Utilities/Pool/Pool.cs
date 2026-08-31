@@ -44,7 +44,7 @@ namespace ArTiX.Utils.Pool
 
         public void ReturnToPool(in T obj)
         {
-            if (pool.Contains(obj) || obj == null) return;
+            if (pool.Contains(obj)) return;
 
             obj.gameObject.SetActive(false);
             pool.Push(obj);
