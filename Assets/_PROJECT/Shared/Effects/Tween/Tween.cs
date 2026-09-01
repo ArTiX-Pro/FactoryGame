@@ -351,6 +351,7 @@ namespace ArTiX.Effects.Tween
 
         #region Static
 
+        private static Transform tweenParent;
         private static Pool<Tween> pool;
         private const int DEFAULT_POOL_SIZE = 30;
         private const int MAX_POOL_SIZE = DEFAULT_POOL_SIZE * 2;
@@ -378,12 +379,21 @@ namespace ArTiX.Effects.Tween
             return tween;
         }
 
+        /// <summary>
+        /// Only called by the pool.
+        /// </summary>
+        /// <returns></returns>
         private static Tween CreateTween()
         {
-            return Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(PATH_TWEEN_PREFAB)).GetComponent<Tween>();
+            tweenParent ??= new GameObject("Tweens").transform;
+            return Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(PATH_TWEEN_PREFAB), tweenParent).GetComponent<Tween>();
         }
 
-        private static void KillPool() => pool = null;
+        private static void KillPool()
+        {
+            pool = null;
+            tweenParent = null;
+        }
 
         #region Interpolation Methods
 
@@ -603,13 +613,12 @@ namespace ArTiX.Effects.Tween
         #region Variables
 
         private readonly Queue<List<Tweener>> queueTweenerList = new Queue<List<Tweener>>();
+        private List<Tweener> lastTweenerList;
 
         public event Action OnFinishedEvent;
 
         public bool IsActive { get; private set; }
         public Pool<Tween> Pool { get; set; }
-
-        private List<Tweener> lastTweenerList;
 
         private MonoBehaviour owner;
 
@@ -779,6 +788,7 @@ namespace ArTiX.Effects.Tween
         public void Kill(in MonoBehaviour owner)
         {
             if (!IsActive || owner != this.owner) return;
+
             Kill();
         }
 

@@ -67,7 +67,7 @@ namespace ArTiX.GridBuildingSystem
         {
             currentRotation = 0;
             isDragging = false;
-            ghost?.Kill();
+            ghost?.Destroy();
             ghost = null;
             ClearPathGhosts();
             GridBuildingSystem.Instance.ToggleGridVisual(false);
@@ -85,7 +85,7 @@ namespace ArTiX.GridBuildingSystem
         {
             currentBuildingDatas = buildingDatas;
             isDragging = false;
-            ghost?.Kill();
+            ghost?.Destroy();
             ghost = null;
             ClearPathGhosts();
 
@@ -99,7 +99,7 @@ namespace ArTiX.GridBuildingSystem
                 isDragging = true;
                 dragStartCell = GridBuildingSystem.Instance.GetMouseCellPos();
                 UpdatePathPreview(dragStartCell);
-                ghost.Kill();
+                ghost.Destroy();
                 ghost = null;
             }
         }
@@ -139,7 +139,7 @@ namespace ArTiX.GridBuildingSystem
             while (pathGhosts.Count > currentPath.Count)
             {
                 int lastIndex = pathGhosts.Count - 1;
-                pathGhosts[lastIndex].Kill();
+                pathGhosts[lastIndex].Destroy();
                 pathGhosts.RemoveAt(lastIndex);
             }
 
@@ -150,7 +150,7 @@ namespace ArTiX.GridBuildingSystem
         private void ClearPathGhosts()
         {
             foreach (Ghost pathGhost in pathGhosts)
-                pathGhost.Kill();
+                pathGhost.Destroy();
 
             pathGhosts.Clear();
             currentPath.Clear();

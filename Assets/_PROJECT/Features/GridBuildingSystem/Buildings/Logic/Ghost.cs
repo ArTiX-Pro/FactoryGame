@@ -75,7 +75,7 @@ namespace ArTiX.GridBuildingSystem
             }
         }
 
-        public void Kill()
+        public void Destroy()
         {
             if (positionTween != null) positionTween.Kill(this);
             if (rotationTween != null) rotationTween.Kill(this);

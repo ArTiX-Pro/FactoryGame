@@ -10,7 +10,7 @@ namespace ArTiX.GridBuildingSystem
     public class GridBuildingSystem : MonoBehaviour
     {
         private static GridBuildingSystem instance;
-        public static GridBuildingSystem Instance 
+        public static GridBuildingSystem Instance
         {
             get
             {
@@ -26,6 +26,8 @@ namespace ArTiX.GridBuildingSystem
         #region Variables
 
         [SerializeField] private GridSO datas;
+        [SerializeField] private Transform buildingsParent;
+
         private Grid<PlacedObject> grid;
         private Pathfinding pathfinding;
         private GameObject gridVisual;
@@ -90,7 +92,7 @@ namespace ArTiX.GridBuildingSystem
             // Dividing by 10 because using a plane and a plane base size is 10 units in width and height
             gridVisual.transform.localScale = new Vector3(datas.Width / 10, 1, datas.Height / 10);
             // Rotating 180° because of the occupancy map.
-            gridVisual.transform.rotation = Quaternion.Euler(0, 180,0);
+            gridVisual.transform.rotation = Quaternion.Euler(0, 180, 0);
 
             occupancyTexture = new Texture2D(datas.Width, datas.Height, TextureFormat.RGBA32, mipChain: false)
             {
@@ -230,7 +232,8 @@ namespace ArTiX.GridBuildingSystem
                 PlacedObject building = Instantiate(
                     original: placedObjectDatas.Prefab,
                     position: ConvertCellPosToWorldPos(origin),
-                    rotation: Quaternion.Euler(x: 0, -rotation, z: 0)
+                    rotation: Quaternion.Euler(x: 0, -rotation, z: 0),
+                    buildingsParent
                 );
 
                 Instantiate(datas.PrefabSpawnSmoke, ConvertCellPosToWorldPos(origin), Quaternion.identity);
