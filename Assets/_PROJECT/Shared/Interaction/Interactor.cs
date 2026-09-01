@@ -53,8 +53,10 @@ namespace ArTiX.Interaction
 
         private void CheckForInteractable(object sender, EventArgs e)
         {
-            if (EventSystem.current.IsPointerOverGameObject() && interactable != null)
+            if (EventSystem.current.IsPointerOverGameObject())
             {
+                if (interactable == null) return;
+
                 interactable.ExitCanInteract();
                 interactable = null;
                 return;
