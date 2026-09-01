@@ -27,7 +27,6 @@ namespace ArTiX.Interaction
         [SerializeField] private InteractorSO datas;
 
         private IInteractable interactable;
-        private Outline outline;
 
         private void Awake()
         {
@@ -54,18 +53,11 @@ namespace ArTiX.Interaction
 
         private void CheckForInteractable(object sender, EventArgs e)
         {
-            void DisableOutline()
+            if (EventSystem.current.IsPointerOverGameObject() && interactable != null)
             {
-                if (outline == null) return;
-                outline.enabled = false;
+                interactable.ExitCanInteract();
                 interactable = null;
-                outline = null;
-            }
-
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
-                DisableOutline();
-                return; 
+                return;
             }
 
             Ray ray = interactionCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
@@ -80,23 +72,15 @@ namespace ArTiX.Interaction
 
                 if (foundInteractable != interactable)
                 {
-                    if (outline != null) outline.enabled = false;
-
+                    interactable?.ExitCanInteract();
                     interactable = foundInteractable;
-                    if (!hit.collider.TryGetComponent(out outline))
-                    {
-                        outline = hit.collider.gameObject.AddComponent(typeof(Outline)) as Outline;
-                    }
-
-                    outline.OutlineColor = datas.OutlineColor;
-                    outline.OutlineMode = datas.OutlineMode;
-                    outline.OutlineWidth = datas.OutlineWidth;
-                    outline.enabled = true;
+                    interactable.EnterCanInteract();
                 }
             }
             else
             {
-                DisableOutline();
+                interactable?.ExitCanInteract();
+                interactable = null;
             }
         }
 

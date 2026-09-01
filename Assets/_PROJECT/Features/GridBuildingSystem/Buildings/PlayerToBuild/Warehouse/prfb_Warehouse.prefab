@@ -189,6 +189,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4133555135932531986}
+  - component: {fileID: 7603751272865876960}
   m_Layer: 6
   m_Name: GFX
   m_TagString: Untagged
@@ -214,6 +215,24 @@ Transform:
   - {fileID: 2323494607961716742}
   m_Father: {fileID: 8122123335037267399}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &7603751272865876960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3609220389939470248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Outline
+  outlineMode: 1
+  outlineColor: {r: 0, g: 0, b: 0, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &6352166761222429112
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,6 +315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Buildings.Hangar
   datas: {fileID: 11400000, guid: 18b1824a54419234683f2d927edb0753, type: 2}
+  outline: {fileID: 7603751272865876960}
 --- !u!1 &6433181803410030246
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,6 +8,8 @@ namespace ArTiX.FactoryGame.Buildings
     [RequireComponent(typeof(Inventory.Inventory))]
     public class Warehouse : PlacedObject, IInteractable
     {
+        [SerializeField] private Outline outline;
+
         private Inventory.Inventory inventory;
         private InventoryWindow window;
 
@@ -27,5 +29,9 @@ namespace ArTiX.FactoryGame.Buildings
             else
                 window.Focus();
         }
+
+        public void EnterCanInteract() => outline.enabled = true;
+
+        public void ExitCanInteract() => outline.enabled = false;
     }
 }

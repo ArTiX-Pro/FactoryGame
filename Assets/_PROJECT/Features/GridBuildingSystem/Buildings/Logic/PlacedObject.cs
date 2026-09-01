@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ArTiX.GridBuildingSystem.Buildings
 {
     [RequireComponent(typeof(BoxCollider))]
-    public abstract class PlacedObject : MonoBehaviour, IMouseTooltip
+    public abstract class PlacedObject : MonoBehaviour
     {
         [SerializeField] protected PlacedObjectSO datas;
         public PlacedObjectSO Datas => datas;
@@ -20,15 +20,13 @@ namespace ArTiX.GridBuildingSystem.Buildings
             {
                 return new Vector2Int[]
                 {
-                    Origin + Vector2Int.right, 
+                    Origin + Vector2Int.right,
                     Origin + Vector2Int.up,
-                    Origin + Vector2Int.left, 
-                    Origin + Vector2Int.down 
+                    Origin + Vector2Int.left,
+                    Origin + Vector2Int.down
                 };
             }
         }
-
-        public virtual string Tooltip => name;
 
         public virtual void Initialize(Vector2Int origin) => Origin = origin;
 

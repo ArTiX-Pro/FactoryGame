@@ -35,7 +35,7 @@ namespace ArTiX.FactoryGame.UI
             owner.OnConverting += UpdateConversionImage;
             if (!owner.IsConverting) conversionProgressImage.fillAmount = 0;
 
-            UpdateWindow(owner.CurrentRecipe);
+            UpdateWindow(owner.Recipe);
         }
 
         private void UpdateConversionImage(float conversionProgress)

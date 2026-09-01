@@ -11,8 +11,9 @@ namespace ArTiX.FactoryGame.Buildings
     [RequireComponent(typeof(BoxCollider), typeof(Inventory.Inventory))]
     public class Convertor : PlacedObject, IInteractable
     {
-        [SerializeField] private RecipeSO recipe;
-        public RecipeSO CurrentRecipe => recipe;
+        [SerializeField] private Outline outline;
+
+        public RecipeSO Recipe { get; private set; }
 
         private ConvertorWindow window;
         private STimerHandle conversionTimer;
@@ -31,16 +32,16 @@ namespace ArTiX.FactoryGame.Buildings
             base.Awake();
 
             GetComponent<BoxCollider>().isTrigger = true;
-            conversionTimer = Timer.Create(this, 0, onTimerActiveEvent: UpdateConversionProgress, 
+            conversionTimer = Timer.Create(this, 0, onTimerActiveEvent: UpdateConversionProgress,
                 onFinishedEvent: FinishConverting, name: "ConversionTimer");
 
             inventory = GetComponent<Inventory.Inventory>();
             inventory.OnAddItem += StartConversion;
         }
 
-        public void SetRecipe(in RecipeSO recipe) 
+        public void SetRecipe(in RecipeSO recipe)
         {
-            this.recipe = recipe;
+            Recipe = recipe;
             if (IsConverting)
             {
                 conversionTimer.Stop();
@@ -53,6 +54,8 @@ namespace ArTiX.FactoryGame.Buildings
             }
         }
 
+        #region Interaction
+
         public void Interact()
         {
             if (window == null)
@@ -61,6 +64,14 @@ namespace ArTiX.FactoryGame.Buildings
                 window.OnClosingWindow += OnClosingWindow;
             }
         }
+
+        public void EnterCanInteract() => outline.enabled = true;
+
+        public void ExitCanInteract() => outline.enabled = false;
+
+        #endregion
+
+        #region Conversion
 
         private void UpdateConversionProgress()
         {
@@ -72,7 +83,7 @@ namespace ArTiX.FactoryGame.Buildings
             if (CanConvertResources() && !IsConverting)
             {
                 Debug.Log("start conversion");
-                conversionTimer.SetDuration(recipe.ConversionDuration);
+                conversionTimer.SetDuration(Recipe.ConversionDuration);
                 conversionTimer.Play();
                 inventory.OnAddItem -= StartConversion;
             }
@@ -80,9 +91,9 @@ namespace ArTiX.FactoryGame.Buildings
 
         private bool CanConvertResources()
         {
-            if (recipe == null) return false;
+            if (Recipe == null) return false;
 
-            foreach (RecipeSO.SResources resourceRequired in recipe.ResourcesRequiered)
+            foreach (RecipeSO.SResources resourceRequired in Recipe.ResourcesRequiered)
             {
                 if (!inventory.CanGiveItem(resourceRequired.resource, resourceRequired.quantity)) return false;
             }
@@ -92,15 +103,17 @@ namespace ArTiX.FactoryGame.Buildings
 
         private void FinishConverting()
         {
-            foreach (RecipeSO.SResources resourcesRequired in recipe.ResourcesRequiered)
+            foreach (RecipeSO.SResources resourcesRequired in Recipe.ResourcesRequiered)
             {
                 inventory.GiveItem(resourcesRequired.resource, resourcesRequired.quantity);
             }
-            Debug.Log($"{recipe.ResourceOutput.resource} crafted !");
-            inventory.TakeItem(recipe.ResourceOutput.resource);
-            
+            Debug.Log($"{Recipe.ResourceOutput.resource} crafted !");
+            inventory.TakeItem(Recipe.ResourceOutput.resource);
+
             if (CanConvertResources()) conversionTimer.Play();
         }
+
+        #endregion
 
         private void OnClosingWindow() => window = null;
     }

@@ -9,6 +9,8 @@ namespace ArTiX.FactoryGame.Buildings
     [RequireComponent(typeof(Inventory.Inventory))]
     public class Miner : ActiveBuilding, IInteractable
     {
+        [SerializeField] private Outline outline;
+
         private Inventory.Inventory inventory;
 
         private readonly List<ResourceNode> adjacentResourceNodes = new List<ResourceNode>();
@@ -100,6 +102,10 @@ namespace ArTiX.FactoryGame.Buildings
                     as InventoryWindow;
             }
         }
+
+        public void EnterCanInteract() => outline.enabled = true;
+
+        public void ExitCanInteract() => outline.enabled = false;
 
         public void OnCloseWindow() => throw new System.NotImplementedException();
     }

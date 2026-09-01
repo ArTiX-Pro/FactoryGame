@@ -82,6 +82,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Buildings.ResourceCollector
   datas: {fileID: 11400000, guid: 2768bf12b650cb34588ea545f070b421, type: 2}
+  outline: {fileID: 6062425933834515870}
 --- !u!1 &4413510701689319247
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,6 +94,7 @@ GameObject:
   - component: {fileID: 3010989979524690871}
   - component: {fileID: 3868010356029511361}
   - component: {fileID: 4249463618302944646}
+  - component: {fileID: 6062425933834515870}
   m_Layer: 6
   m_Name: GFX
   m_TagString: Untagged
@@ -172,3 +174,21 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6062425933834515870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4413510701689319247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Outline
+  outlineMode: 1
+  outlineColor: {r: 0, g: 0, b: 0, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

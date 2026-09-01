@@ -29,6 +29,8 @@ namespace ArTiX.FactoryGame.Buildings
         [SerializeField, Tooltip("The cell is relative to the building.")] private Vector2Int inputCell;
         [SerializeField, Tooltip("The cell is relative to the building.")] private Vector2Int outputCell;
 
+        [SerializeField] private Outline outline;
+
         private IItemHolder inputHolder;
         private IItemHolder outputHolder;
 
@@ -44,11 +46,6 @@ namespace ArTiX.FactoryGame.Buildings
             base.Initialize(origin);
 
             CheckForItemHolders();
-        }
-
-        public void Interact()
-        {
-            GrabberWindow window = GrabberWindow.Create(GrabberWindow.EWindowType.Grabber, this) as GrabberWindow;
         }
 
         /// <summary>
@@ -116,6 +113,21 @@ namespace ArTiX.FactoryGame.Buildings
                 inputHolder = itemHolder;
             if (outputBuilding != null && outputBuilding.TryGetComponent(out itemHolder))
                 outputHolder = itemHolder;
+        }
+
+        public void Interact()
+        {
+            GrabberWindow window = GrabberWindow.Create(GrabberWindow.EWindowType.Grabber, this) as GrabberWindow;
+        }
+
+        public void EnterCanInteract()
+        {
+            outline.enabled = true;
+        }
+
+        public void ExitCanInteract()
+        {
+            outline.enabled = false;
         }
     }
 }
