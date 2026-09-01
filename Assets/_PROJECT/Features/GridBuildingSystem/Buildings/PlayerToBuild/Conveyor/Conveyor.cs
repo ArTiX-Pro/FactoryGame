@@ -234,20 +234,18 @@ namespace ArTiX.FactoryGame.Buildings
         private Vector2Int FrontCell => Origin + Vector2Int.right.Rotate(-transform.eulerAngles.y);
         private Vector2Int BackCell => Origin + Vector2Int.left.Rotate(-transform.eulerAngles.y);
 
-        private Tween tween;
+        private STweenHandle tween;
         private Transform worldItem;
         private Transform WorldItem
         {
             set
             {
-                if (tween != null)
-                    tween.Kill(this);
+                tween.Kill();
 
                 worldItem = value;
                 if (worldItem == null) return;
 
-                tween = Tween.Create(this);
-                worldItem.transform.TweenPosition(this, itemPos.position,
+                worldItem.transform.TweenPosition(itemPos.position,
                     animParams: new Tween.AnimParams(
                         duration: 0.5f,
                         transition: Tween.ETransition.SmoothStop5),
@@ -386,7 +384,7 @@ namespace ArTiX.FactoryGame.Buildings
         {
             if (worldItem != null)
                 Destroy(worldItem.gameObject);
-            if (tween != null) tween.Kill(this);
+            tween.Kill();
 
             belt.RemoveConveyor(this);
             base.Destroy();
@@ -401,7 +399,7 @@ namespace ArTiX.FactoryGame.Buildings
             item = this.item;
             this.item = null;
             Destroy(worldItem.gameObject);
-            if (tween != null) tween.Kill(this);
+            tween.Kill();
 
             return item;
         }

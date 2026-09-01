@@ -20,7 +20,7 @@ namespace ArTiX.FactoryGame.UI
 
         private bool isBuildingPanelActive;
 
-        private Tween tween;
+        private STweenHandle tween;
 
         protected override void Awake()
         {
@@ -46,9 +46,8 @@ namespace ArTiX.FactoryGame.UI
         {
             isBuildingPanelActive = !isBuildingPanelActive;
 
-            if (tween != null) tween.Kill(this);
-            tween = Tween.Create(this);
-            buildingPanel.TweenPosition(this,
+            tween.Kill();
+            buildingPanel.TweenPosition(
                 targetPos: new Vector3(
                     x: buildingPanel.position.x,
                     y: isBuildingPanelActive ? buildingPanelActiveHeight : buildingPanelInactiveHeight),

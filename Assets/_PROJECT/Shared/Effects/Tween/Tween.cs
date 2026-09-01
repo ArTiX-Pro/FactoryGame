@@ -164,15 +164,12 @@ namespace ArTiX.Effects.Tween
 
             private event Action<T> tweenEvent;
 
-            private Tween masterTween;
-
             protected EventTweener(UnityEngine.Object target, Tween masterTween, T startValue, T targetValue, Action<T> tweenEvent, AnimParams animParams, float delay, bool scaled, Action onFinishedStepEvent) :
                 base(target, animParams, delay, scaled, onFinishedStepEvent)
             {
                 this.startValue = startValue;
                 this.targetValue = targetValue;
                 this.tweenEvent = tweenEvent;
-                this.masterTween = masterTween;
             }
 
             protected EventTweener(UnityEngine.Object target, Tween masterTween, TweeningParams<T> tweenParams, Action<T> tweenEvent) :
@@ -181,7 +178,6 @@ namespace ArTiX.Effects.Tween
                 startValue = tweenParams.startValue;
                 targetValue = tweenParams.targetValue;
                 this.tweenEvent = tweenEvent;
-                this.masterTween = masterTween;
             }
 
             protected override void InvokeEvent()
@@ -362,21 +358,15 @@ namespace ArTiX.Effects.Tween
             Application.quitting += KillPool;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static Tween Create(in MonoBehaviour owner, in string name = "Tween")
+        public static STweenHandle Create(in string name = "Tween")
         {
             pool ??= new Pool<Tween>(CreateTween, DEFAULT_POOL_SIZE, MAX_POOL_SIZE);
 
             Tween tween = pool.GetPooledObject();
-            if (tween == null) return null;
+            if (tween == null) return default;
             tween.name = name;
-            tween.owner = owner;
 
-            return tween;
+            return new STweenHandle(tween);
         }
 
         /// <summary>
@@ -620,7 +610,7 @@ namespace ArTiX.Effects.Tween
         public bool IsActive { get; private set; }
         public Pool<Tween> Pool { get; set; }
 
-        private MonoBehaviour owner;
+        public int Version { get; private set; }
 
         #endregion
 
@@ -781,18 +771,7 @@ namespace ArTiX.Effects.Tween
 
         #endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="owner">Just put a reference to the UnityEngine.Object that created this tween.</param>
-        public void Kill(in MonoBehaviour owner)
-        {
-            if (!IsActive || owner != this.owner) return;
-
-            Kill();
-        }
-
-        private void Kill()
+        public void Kill()
         {
             lastTweenerList = null;
             OnFinishedEvent = null;
@@ -806,7 +785,13 @@ namespace ArTiX.Effects.Tween
             IsActive = false;
         }
 
-        public void Release() => Pool.ReturnToPool(this);
+        public void Release()
+        {
+            // Every route back into the pool ends the lease, so the version bump belongs here rather than in
+            // Kill(): a direct Release() would otherwise recycle the tween while handles still thought it theirs.
+            Version++;
+            Pool.ReturnToPool(this);
+        }
 
         #endregion
     }

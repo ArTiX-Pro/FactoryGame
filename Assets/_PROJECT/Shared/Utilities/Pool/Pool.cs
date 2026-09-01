@@ -38,6 +38,7 @@ namespace ArTiX.Utils.Pool
             if (totalCount >= maxSize) return null;
 
             objectTaken = Create();
+            objectTaken.gameObject.SetActive(true);
 
             return objectTaken;
         }

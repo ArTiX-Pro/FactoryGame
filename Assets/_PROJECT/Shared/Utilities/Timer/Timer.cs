@@ -29,10 +29,11 @@ namespace ArTiX.Utils
         /// <param name="onFinishedEvent"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Timer Create(MonoBehaviour target, float duration, bool startOnCreate = false, bool autodestroy = false, bool scaled = true, int repetitionNumber = 0, in bool infinite = false, Action onTimerActiveEvent = null, Action onFinishedEvent = null, string name = "Timer")
+        public static STimerHandle Create(MonoBehaviour target, float duration, bool startOnCreate = false, bool autodestroy = false, bool scaled = true, int repetitionNumber = 0, in bool infinite = false, Action onTimerActiveEvent = null, Action onFinishedEvent = null, string name = "Timer")
         {
             pool ??= new Pool<Timer>(Create, DEFAULT_POOL_SIZE, MAX_POOL_SIZE);
             Timer timer = pool.GetPooledObject();
+            if (timer == null) return default;
 
             timer.gameObject.name = name;
             timer.duration = duration;
@@ -45,7 +46,7 @@ namespace ArTiX.Utils
             timer.IsActive = startOnCreate;
             timer.target = target;
 
-            return timer;
+            return new STimerHandle(timer);
         }
 
         private static Timer Create()
@@ -61,6 +62,12 @@ namespace ArTiX.Utils
         public float RemainingTime => duration - ElapsedTime;
 
         public Pool<Timer> Pool { get; set; }
+
+        /// <summary>
+        /// Incremented every time this timer returns to the pool, which invalidates every
+        /// <see cref="STimerHandle"/> still pointing at the lease that just ended.
+        /// </summary>
+        public int Version { get; private set; }
 
         public float duration;
 
@@ -125,6 +132,10 @@ namespace ArTiX.Utils
             ElapsedTime = 0;
         }
 
+        /// <summary>
+        /// Ends the current lease and returns the timer to the pool. Called either by <see cref="Update"/> when
+        /// the target is gone or the timer autodestroys, or by a <see cref="STimerHandle"/> that still owns it.
+        /// </summary>
         public void Kill()
         {
             Stop();
@@ -133,6 +144,9 @@ namespace ArTiX.Utils
 
         public void Release()
         {
+            // Every route back into the pool ends the lease, so the version bump belongs here rather than in
+            // Kill(): a direct Release() would otherwise recycle the timer while handles still thought it theirs.
+            Version++;
             Pool.ReturnToPool(this);
         }
     }

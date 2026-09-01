@@ -15,7 +15,7 @@ namespace ArTiX.FactoryGame.Buildings
         public RecipeSO CurrentRecipe => recipe;
 
         private ConvertorWindow window;
-        private Timer conversionTimer;
+        private STimerHandle conversionTimer;
 
         private Inventory.Inventory inventory;
 
@@ -72,7 +72,7 @@ namespace ArTiX.FactoryGame.Buildings
             if (CanConvertResources() && !IsConverting)
             {
                 Debug.Log("start conversion");
-                conversionTimer.duration = recipe.ConversionDuration;
+                conversionTimer.SetDuration(recipe.ConversionDuration);
                 conversionTimer.Play();
                 inventory.OnAddItem -= StartConversion;
             }
