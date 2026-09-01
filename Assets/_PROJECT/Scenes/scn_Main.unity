@@ -683,6 +683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d8583d3acbdf6a4692bf25a6f1a40b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  ambiantSound: {fileID: 11400000, guid: 63c9f742713b7d24cae66613a47121b4, type: 2}
   availableBuildings:
   - {fileID: 11400000, guid: 18b1824a54419234683f2d927edb0753, type: 2}
   - {fileID: 11400000, guid: 2768bf12b650cb34588ea545f070b421, type: 2}

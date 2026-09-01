@@ -2,6 +2,7 @@ using ArTiX.FactoryGame.Datas;
 using ArTiX.FactoryGame.UI;
 using ArTiX.GridBuildingSystem.Datas;
 using ArTiX.Inventory;
+using ArTiX.Utils.Audio;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +21,8 @@ namespace ArTiX
                 return instance;
             }
         }
+
+        [SerializeField] private AudioDatasSO ambiantSound;
 
         [SerializeField] private List<BuildingSO> availableBuildings;
         [SerializeField] private List<RecipeSO> availableRecipes;
@@ -42,6 +45,7 @@ namespace ArTiX
         private void Start()
         {
             HUD.Instance.SetBuildingBtns(availableBuildings);
+            AudioManager.Instance.Play(ambiantSound);
         }
     }
 }
