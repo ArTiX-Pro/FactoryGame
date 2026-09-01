@@ -32,7 +32,7 @@ RectTransform:
   m_Father: {fileID: 5574619596966325695}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.05, y: 0.05}
-  m_AnchorMax: {x: 0.95, y: 0.95}
+  m_AnchorMax: {x: 0.95, y: 0.8}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -99,11 +99,15 @@ PrefabInstance:
     - target: {fileID: 1490522257407728927, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 2ae32f710feba224e80468f188f13d77, type: 2}
+      objectReference: {fileID: 11400000, guid: 2d33d8951e574754fac59e34f3ad995f, type: 2}
     - target: {fileID: 1490522257407728927, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2273666054121009321, guid: 2ae32f710feba224e80468f188f13d77, type: 2}
+      objectReference: {fileID: -5198298658984285994, guid: 2d33d8951e574754fac59e34f3ad995f, type: 2}
+    - target: {fileID: 1490522257407728927, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190080
+      objectReference: {fileID: 0}
     - target: {fileID: 1490522257407728927, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0

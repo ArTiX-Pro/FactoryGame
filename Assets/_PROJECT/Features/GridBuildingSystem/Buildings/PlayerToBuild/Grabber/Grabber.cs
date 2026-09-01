@@ -20,7 +20,7 @@ namespace ArTiX.FactoryGame.Buildings
             /// </summary>
             Everything,
             /// <summary>
-            /// Means nothing can pass
+            /// Nothing can pass
             /// </summary>
             Nothing,
             ResourceBased
@@ -40,10 +40,10 @@ namespace ArTiX.FactoryGame.Buildings
         }
 
         public override void Initialize(Vector2Int origin)
-        { 
+        {
             base.Initialize(origin);
 
-            CheckForHolders();
+            CheckForItemHolders();
         }
 
         public void Interact()
@@ -57,7 +57,7 @@ namespace ArTiX.FactoryGame.Buildings
         /// <param name="filter"></param>
         /// <param name="resource">Requiered only if filter is set to ResourceBased. 
         /// If resource is already in the filtered resource list, it will remove it from the list.</param>
-        public void SetFilter(in EFilter filter, in ItemSO resource)
+        public void SetFilter(in EFilter filter, in ItemSO resource = null)
         {
             Filter = filter;
             if (filter == EFilter.ResourceBased)
@@ -68,10 +68,10 @@ namespace ArTiX.FactoryGame.Buildings
                     if (filteredResources.Count == 0)
                         Filter = EFilter.Everything;
                 }
-                else 
+                else
                     filteredResources.Add(resource);
             }
-            else 
+            else
                 filteredResources.Clear();
 
             Activate(active: filter != EFilter.Nothing);
@@ -79,10 +79,10 @@ namespace ArTiX.FactoryGame.Buildings
 
         protected override void OnTickAction()
         {
-            if (inputHolder == null || outputHolder == null) 
+            if (inputHolder == null || outputHolder == null)
             {
-                CheckForHolders();
-                if (inputHolder == null || outputHolder == null) return; 
+                CheckForItemHolders();
+                if (inputHolder == null || outputHolder == null) return;
             }
 
             if (Filter == EFilter.ResourceBased)
@@ -103,7 +103,7 @@ namespace ArTiX.FactoryGame.Buildings
             }
         }
 
-        private void CheckForHolders()
+        private void CheckForItemHolders()
         {
             // Negating the Y angle because we look at it from the top, so in the opposite direction.
             PlacedObject inputBuilding = GridBuildingSystem.GridBuildingSystem.Instance.GetObjectOnCell(
@@ -112,9 +112,9 @@ namespace ArTiX.FactoryGame.Buildings
             PlacedObject outputBuilding = GridBuildingSystem.GridBuildingSystem.Instance.GetObjectOnCell(
                 cell: Origin + outputCell.Rotate(-transform.eulerAngles.y));
 
-            if (inputBuilding != null && inputBuilding.TryGetComponent(out IItemHolder itemHolder)) 
+            if (inputBuilding != null && inputBuilding.TryGetComponent(out IItemHolder itemHolder))
                 inputHolder = itemHolder;
-            if (outputBuilding != null && outputBuilding.TryGetComponent(out itemHolder)) 
+            if (outputBuilding != null && outputBuilding.TryGetComponent(out itemHolder))
                 outputHolder = itemHolder;
         }
     }

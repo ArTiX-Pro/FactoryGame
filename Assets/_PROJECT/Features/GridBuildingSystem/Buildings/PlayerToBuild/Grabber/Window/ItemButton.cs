@@ -6,13 +6,17 @@ using UnityEngine.UI;
 
 namespace ArTiX.FactoryGame.UI
 {
-    [RequireComponent(typeof(Image))]
-    public class ItemButton : ButtonExtension<ItemSO>
+    [RequireComponent(typeof(SpriteToggle))]
+    public class ItemButton : ButtonExtension<ItemSO>, IMouseTooltip
     {
-        public override void AddClickEvent(Action<ItemSO> onClickEvent, in ItemSO parameter) 
+        [SerializeField] private Image icon;
+
+        public string Tooltip => parameter.Name;
+
+        public override void AddClickEvent(Action<ItemSO> onClickEvent, in ItemSO parameter)
         {
             base.AddClickEvent(onClickEvent, parameter);
-            GetComponent<Image>().sprite = parameter.Icon;
+            icon.sprite = parameter.Icon;
         }
     }
 }
