@@ -23,8 +23,10 @@ namespace ArTiX.FactoryGame.UI
 
         public event Action OnClosingWindow;
 
-        protected override void Initialize()
+        public override void Initialize(Convertor owner)
         {
+            base.Initialize(owner);
+
             RecipeButton recipeButton;
             foreach (RecipeSO recipe in GameManager.Instance.AvailableRecipes)
             {
@@ -77,7 +79,7 @@ namespace ArTiX.FactoryGame.UI
         {
             owner.OnConverting -= UpdateConversionImage;
             OnClosingWindow?.Invoke();
-            base.CloseWindow(); 
+            base.CloseWindow();
         }
     }
 }

@@ -9,11 +9,13 @@ namespace ArTiX.Inventory.UI
         [SerializeField] private Transform resourceDisplayContainer;
         [SerializeField] private ItemSlotDisplay prefabResourceDisplay;
 
-        private readonly Dictionary<ItemSO, ItemSlotDisplay> resourceDisplayDictionary = 
+        private readonly Dictionary<ItemSO, ItemSlotDisplay> resourceDisplayDictionary =
             new Dictionary<ItemSO, ItemSlotDisplay>();
 
-        protected override void Initialize() 
+        public override void Initialize(Inventory owner)
         {
+            base.Initialize(owner);
+
             owner.OnAddItem += DisplayAddedItem;
             owner.OnRemoveItem += OnRemoveItemFromInventory;
             foreach (KeyValuePair<ItemSO, int> slot in owner.GetInventory())
@@ -27,13 +29,13 @@ namespace ArTiX.Inventory.UI
             if (!resourceDisplayDictionary.ContainsKey(itemSlot.Item))
             {
                 resourceDisplayDictionary.Add(
-                    key: itemSlot.Item, 
+                    key: itemSlot.Item,
                     value: Instantiate(prefabResourceDisplay, resourceDisplayContainer));
             }
 
             resourceDisplayDictionary[itemSlot.Item].SetItemSlot(itemSlot);
         }
-        
+
         private void OnRemoveItemFromInventory(object sender, Inventory.ItemSlot itemSlot)
         {
             if (itemSlot.Quantity <= 0)
@@ -49,7 +51,7 @@ namespace ArTiX.Inventory.UI
         {
             owner.OnAddItem -= DisplayAddedItem;
             owner.OnRemoveItem -= OnRemoveItemFromInventory;
-            base.CloseWindow(); 
+            base.CloseWindow();
         }
     }
 }

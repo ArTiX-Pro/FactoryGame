@@ -83,6 +83,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Buildings.ResourceCollector
   datas: {fileID: 11400000, guid: 2768bf12b650cb34588ea545f070b421, type: 2}
   outline: {fileID: 6062425933834515870}
+  prefabWindow: {fileID: 5113408899677341536, guid: 986dae626e19e9940838a422f49bef00, type: 3}
 --- !u!1 &4413510701689319247
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,8 @@
+using ArTiX.FactoryGame.UI;
 using ArTiX.GridBuildingSystem.Buildings;
 using ArTiX.Interaction;
 using ArTiX.Inventory.UI;
+using QuickOutline;
 using UnityEngine;
 
 namespace ArTiX.FactoryGame.Buildings
@@ -9,6 +11,7 @@ namespace ArTiX.FactoryGame.Buildings
     public class Warehouse : PlacedObject, IInteractable
     {
         [SerializeField] private Outline outline;
+        [SerializeField] private InventoryWindow prefabWindow;
 
         private Inventory.Inventory inventory;
         private InventoryWindow window;
@@ -23,8 +26,8 @@ namespace ArTiX.FactoryGame.Buildings
         {
             if (window == null)
             {
-                window = InventoryWindow.Create(InventoryWindow.EWindowType.Inventory, inventory,
-                    title: "Warehouse") as InventoryWindow;
+                window = Instantiate(prefabWindow, HUD.Instance.transform);
+                window.Initialize(inventory);
             }
             else
                 window.Focus();

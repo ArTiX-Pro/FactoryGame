@@ -59,7 +59,7 @@ namespace ArTiX.GridBuildingSystem
             GenerateGrid();
 
             buildingState = new BuildingState();
-            destroyState = new DestroyState();
+            destroyState = new DestroyState(datas.TexDestructionCursor, datas.MatDestruction);
         }
 
         private void Update()

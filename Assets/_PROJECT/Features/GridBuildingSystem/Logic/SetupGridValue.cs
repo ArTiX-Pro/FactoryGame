@@ -1,3 +1,5 @@
+
+#if UNITY_EDITOR
 using ArTiX.GridBuildingSystem.Datas;
 using ArTiX.Utils;
 using System.Collections.Generic;
@@ -16,9 +18,9 @@ namespace ArTiX.GridBuildingSystem.Tools
         {
             get
             {
-                if (instance == null) 
+                if (instance == null)
                     instance = new GameObject("SetupGridValue", typeof(SetupGridValue)).GetComponent<SetupGridValue>();
-                
+
                 return instance;
             }
             private set => instance = value;
@@ -112,7 +114,7 @@ namespace ArTiX.GridBuildingSystem.Tools
 
             foreach (KeyValuePair<SpriteRenderer, Vector2Int> spriteCellPair in spriteCellDic)
             {
-                if (spriteCellPair.Key.color == selectedColor) 
+                if (spriteCellPair.Key.color == selectedColor)
                     currentCells.Add(spriteCellPair.Value);
             }
 
@@ -128,3 +130,4 @@ namespace ArTiX.GridBuildingSystem.Tools
         }
     }
 }
+#endif

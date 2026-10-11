@@ -1,6 +1,5 @@
-using ArTiX.Effects.Tween;
 using ArTiX.GridBuildingSystem.Datas;
-using ArTiX.Utils;
+using DG.Tweening;
 using UnityEngine;
 
 namespace ArTiX.GridBuildingSystem
@@ -16,12 +15,11 @@ namespace ArTiX.GridBuildingSystem
         [SerializeField] private BuildingSO buildingDatas;
 
         private Vector2Int cellPos;
-        private float targetRotation;
+        private float targetWorldRotation;
 
-        private STweenHandle rotationTween;
-        private STweenHandle positionTween;
-
-        private STweenHandle colorTween;
+        private Tween positionTween;
+        private Tween rotationTween;
+        private Tween colorTween;
 
         private void Start()
         {
@@ -30,44 +28,42 @@ namespace ArTiX.GridBuildingSystem
 
         public void SetPosition(in Vector2Int cellPos)
         {
-            positionTween.Kill();
-
             this.cellPos = cellPos;
-            transform.TweenPosition(
-                targetPos: GridBuildingSystem.Instance.ConvertCellPosToWorldPos(cellPos),
-                animParams: datas.PositionAnim,
-                tween: ref positionTween);
+            positionTween?.Kill();
+            positionTween = transform.DOMove(
+                endValue: GridBuildingSystem.Instance.ConvertCellPosToWorldPos(cellPos),
+                datas.TweenPositionDuration)
+                .SetEase(datas.TweenPositionEasing);
 
             UpdateColor();
         }
 
         public void SetRotation(in float rotation)
         {
-            rotationTween.Kill();
+            targetWorldRotation = rotation;
 
-            targetRotation = rotation;
-            transform.TweenRotation(
-                targetRota: Quaternion.Euler(x: 0, rotation, z: 0),
-                animParams: datas.RotationAnim,
-                tween: ref rotationTween);
+            rotationTween?.Kill();
+            rotationTween =
+            transform.DORotateQuaternion(
+                endValue: Quaternion.Euler(x: 0, rotation, z: 0),
+                duration: datas.TweenRotationDuration)
+                .SetEase(datas.TweenRotationEasing);
 
             UpdateColor();
         }
 
         private void UpdateColor()
         {
-            bool isValid = GridBuildingSystem.Instance.CanBuild(buildingDatas, cellPos, targetRotation);
+            bool isValid = GridBuildingSystem.Instance.CanBuild(buildingDatas, cellPos, -targetWorldRotation);
 
-            colorTween.Kill();
+            colorTween?.Kill();
 
             foreach (Renderer renderer in transform.GetComponentsInChildren<Renderer>())
             {
-                renderer.material.TweenColorProperty(this,
-                    property: Utilities.COLOR,
-                    targetColor: isValid ? datas.ValidColor : datas.UnvalidColor,
-                    animParams: datas.ColorChangeAnim,
-                    tween: ref colorTween
-                );
+                colorTween = renderer.material.DOColor(
+                    endValue: isValid ? datas.ValidColor : datas.UnvalidColor,
+                    duration: datas.ColorChangeDuration
+                ).SetEase(datas.ColorChangeEasing);
             }
         }
 

@@ -390,3 +390,4 @@ MonoBehaviour:
   inputCell: {x: -1, y: 0}
   outputCell: {x: 1, y: 0}
   outline: {fileID: 6531958883404424263}
+  prefabWindow: {fileID: 8329337557133099881, guid: 8c7645d019e934345934b9b3adf145c3, type: 3}

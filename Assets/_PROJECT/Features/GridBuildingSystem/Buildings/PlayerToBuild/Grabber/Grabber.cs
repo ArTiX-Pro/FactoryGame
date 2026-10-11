@@ -3,6 +3,7 @@ using ArTiX.GridBuildingSystem.Buildings;
 using ArTiX.Interaction;
 using ArTiX.Inventory;
 using ArTiX.Utils;
+using QuickOutline;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace ArTiX.FactoryGame.Buildings
         [SerializeField, Tooltip("The cell is relative to the building.")] private Vector2Int outputCell;
 
         [SerializeField] private Outline outline;
+        [SerializeField] private GrabberWindow prefabWindow;
 
         private IItemHolder inputHolder;
         private IItemHolder outputHolder;
@@ -117,7 +119,8 @@ namespace ArTiX.FactoryGame.Buildings
 
         public void Interact()
         {
-            GrabberWindow window = GrabberWindow.Create(GrabberWindow.EWindowType.Grabber, this) as GrabberWindow;
+            GrabberWindow window = Instantiate(prefabWindow, HUD.Instance.transform);
+            window.Initialize(this);
         }
 
         public void EnterCanInteract()

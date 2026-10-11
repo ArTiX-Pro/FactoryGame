@@ -1,3 +1,4 @@
+using QuickOutline;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace ArTiX.Interaction
 
         [SerializeField] private bool infinite;
         [SerializeField, HideIf("infinite")] private float interactionDistance;
-        public float InteractionDistance 
+        public float InteractionDistance
         {
             get
             {

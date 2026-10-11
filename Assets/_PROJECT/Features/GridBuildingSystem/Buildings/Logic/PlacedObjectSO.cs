@@ -1,10 +1,14 @@
 using ArTiX.GridBuildingSystem.Buildings;
-using ArTiX.GridBuildingSystem.Tools;
 using ArTiX.Utils;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
+
+#if UNITY_EDITOR
+using ArTiX.GridBuildingSystem.Tools;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+#endif
+
 using UnityEngine;
 
 namespace ArTiX.GridBuildingSystem.Datas
@@ -17,7 +21,6 @@ namespace ArTiX.GridBuildingSystem.Datas
         public string Name => _name;
 
         [SerializeField] private PlacedObject prefab;
-
         [SerializeField] private Vector2Int[] cellArray;
 
 #if UNITY_EDITOR
@@ -31,14 +34,15 @@ namespace ArTiX.GridBuildingSystem.Datas
             SetupGridValue.Instance.Building = this;
             SetupGridValue.Instance.previousScenePath = currentScenePath;
         }
+#endif
 
         public Vector2Int[] CellArray
         {
             get => cellArray;
+#if UNITY_EDITOR
             set => cellArray = value;
-        }
-
 #endif
+        }
 
         public PlacedObject Prefab => prefab;
 

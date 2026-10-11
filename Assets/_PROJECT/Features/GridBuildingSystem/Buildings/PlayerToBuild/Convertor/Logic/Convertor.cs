@@ -3,6 +3,7 @@ using ArTiX.FactoryGame.UI;
 using ArTiX.GridBuildingSystem.Buildings;
 using ArTiX.Interaction;
 using ArTiX.Utils;
+using QuickOutline;
 using System;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace ArTiX.FactoryGame.Buildings
     public class Convertor : PlacedObject, IInteractable
     {
         [SerializeField] private Outline outline;
+        [SerializeField] private ConvertorWindow prefabWindow;
 
         public RecipeSO Recipe { get; private set; }
 
@@ -60,7 +62,8 @@ namespace ArTiX.FactoryGame.Buildings
         {
             if (window == null)
             {
-                window = ConvertorWindow.Create(ConvertorWindow.EWindowType.Convertor, this) as ConvertorWindow;
+                window = Instantiate(prefabWindow, HUD.Instance.transform);
+                window.Initialize(this);
                 window.OnClosingWindow += OnClosingWindow;
             }
         }

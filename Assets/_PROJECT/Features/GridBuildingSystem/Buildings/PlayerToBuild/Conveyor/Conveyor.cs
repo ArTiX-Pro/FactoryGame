@@ -1,8 +1,8 @@
-using ArTiX.Effects.Tween;
 using ArTiX.GridBuildingSystem.Buildings;
 using ArTiX.Inventory;
 using ArTiX.Utils;
 using ArTiX.Utils.TickSystem;
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -234,22 +234,21 @@ namespace ArTiX.FactoryGame.Buildings
         private Vector2Int FrontCell => Origin + Vector2Int.right.Rotate(-transform.eulerAngles.y);
         private Vector2Int BackCell => Origin + Vector2Int.left.Rotate(-transform.eulerAngles.y);
 
-        private STweenHandle tween;
+        private Tween worldItemTween;
         private Transform worldItem;
         private Transform WorldItem
         {
             set
             {
-                tween.Kill();
+                worldItemTween?.Kill();
 
                 worldItem = value;
                 if (worldItem == null) return;
 
-                worldItem.transform.TweenPosition(itemPos.position,
-                    animParams: new Tween.AnimParams(
-                        duration: 0.5f,
-                        transition: Tween.ETransition.SmoothStop5),
-                    tween: ref tween);
+                worldItemTween = worldItem.transform.DOMove(
+                    endValue: itemPos.position,
+                    duration: 0.5f
+                ).SetEase(Ease.OutQuint);
             }
         }
         private ItemSO item;
@@ -384,7 +383,7 @@ namespace ArTiX.FactoryGame.Buildings
         {
             if (worldItem != null)
                 Destroy(worldItem.gameObject);
-            tween.Kill();
+            worldItemTween.Kill();
 
             belt.RemoveConveyor(this);
             base.Destroy();
@@ -399,7 +398,7 @@ namespace ArTiX.FactoryGame.Buildings
             item = this.item;
             this.item = null;
             Destroy(worldItem.gameObject);
-            tween.Kill();
+            worldItemTween.Kill();
 
             return item;
         }

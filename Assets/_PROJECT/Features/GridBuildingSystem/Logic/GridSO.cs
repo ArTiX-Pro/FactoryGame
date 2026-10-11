@@ -35,5 +35,11 @@ namespace ArTiX.GridBuildingSystem.Datas
         public GameObject PrfbGridVisual => prfbGridVisual;
 
         [field: SerializeField] public ParticleSystem PrefabSpawnSmoke { get; private set; }
+
+        [SerializeField] private Texture2D texDestructionCursor;
+        public Texture2D TexDestructionCursor => texDestructionCursor;
+
+        [SerializeField] private Material matDestruction;
+        public Material MatDestruction => matDestruction;
     }
 }

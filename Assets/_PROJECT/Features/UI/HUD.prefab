@@ -518,9 +518,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53efe7e145f84394eb55230bc9d6e163, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.HUD
-  toggleBuildingAnim:
-    duration: 0.6
-    transition: 10
+  toggleBuildingAnimDuration: 0.7
+  toggleBuildingAnimEasing: 6
   buildingPanel: {fileID: 5673383656200067826}
   buildingPanelActiveHeight: 75
   buildingPanelInactiveHeight: -75

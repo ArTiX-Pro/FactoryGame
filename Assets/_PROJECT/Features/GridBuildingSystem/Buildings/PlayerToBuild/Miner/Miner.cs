@@ -1,6 +1,8 @@
+using ArTiX.FactoryGame.UI;
 using ArTiX.Interaction;
 using ArTiX.Inventory.UI;
 using ArTiX.Utils.Window;
+using QuickOutline;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +12,7 @@ namespace ArTiX.FactoryGame.Buildings
     public class Miner : ActiveBuilding, IInteractable
     {
         [SerializeField] private Outline outline;
+        [SerializeField] private InventoryWindow prefabWindow;
 
         private Inventory.Inventory inventory;
 
@@ -98,8 +101,8 @@ namespace ArTiX.FactoryGame.Buildings
         {
             if (window == null)
             {
-                window = InventoryWindow.Create(InventoryWindow.EWindowType.Inventory, inventory, title: "Miner")
-                    as InventoryWindow;
+                window = Instantiate(prefabWindow, HUD.Instance.transform);
+                window.Initialize(inventory);
             }
         }
 

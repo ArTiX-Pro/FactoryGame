@@ -202,6 +202,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Buildings.Convertor
   datas: {fileID: 11400000, guid: 4ed2dda66af1fba40b3263685d1c8eb6, type: 2}
   outline: {fileID: 8910968297671029667}
+  prefabWindow: {fileID: 2089978002337667333, guid: faa2f5db3d304c546afdc7bdd9817f79, type: 3}
 --- !u!114 &2112906649342149974
 MonoBehaviour:
   m_ObjectHideFlags: 0

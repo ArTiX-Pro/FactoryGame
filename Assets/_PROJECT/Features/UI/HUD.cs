@@ -1,8 +1,8 @@
-using ArTiX.Effects.Tween;
 using ArTiX.GridBuildingSystem.Datas;
 using ArTiX.GridBuildingSystem.UI;
 using ArTiX.Input;
 using ArTiX.Utils;
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,8 +10,8 @@ namespace ArTiX.FactoryGame.UI
 {
     public class HUD : Singleton<HUD>
     {
-        [SerializeField] private Tween.AnimParams toggleBuildingAnim;
-
+        [SerializeField] private float toggleBuildingAnimDuration;
+        [SerializeField] private Ease toggleBuildingAnimEasing;
         [SerializeField] private Transform buildingPanel;
         [SerializeField] private float buildingPanelActiveHeight, buildingPanelInactiveHeight;
 
@@ -20,7 +20,7 @@ namespace ArTiX.FactoryGame.UI
 
         private bool isBuildingPanelActive;
 
-        private STweenHandle tween;
+        private Tween tween;
 
         protected override void Awake()
         {
@@ -47,13 +47,12 @@ namespace ArTiX.FactoryGame.UI
             isBuildingPanelActive = !isBuildingPanelActive;
 
             tween.Kill();
-            buildingPanel.TweenPosition(
-                targetPos: new Vector3(
+            tween = buildingPanel.DOMove(
+                endValue: new Vector3(
                     x: buildingPanel.position.x,
                     y: isBuildingPanelActive ? buildingPanelActiveHeight : buildingPanelInactiveHeight),
-                animParams: toggleBuildingAnim,
-                tween: ref tween
-            );
+                duration: toggleBuildingAnimDuration
+            ).SetEase(toggleBuildingAnimEasing);
         }
 
         public void EnterDestructionMode()

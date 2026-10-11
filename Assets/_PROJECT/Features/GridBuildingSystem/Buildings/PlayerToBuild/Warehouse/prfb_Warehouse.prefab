@@ -316,6 +316,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Buildings.Hangar
   datas: {fileID: 11400000, guid: 18b1824a54419234683f2d927edb0753, type: 2}
   outline: {fileID: 7603751272865876960}
+  prefabWindow: {fileID: 5113408899677341536, guid: 986dae626e19e9940838a422f49bef00, type: 3}
 --- !u!1 &6433181803410030246
 GameObject:
   m_ObjectHideFlags: 0
