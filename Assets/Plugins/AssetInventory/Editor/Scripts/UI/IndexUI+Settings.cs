@@ -446,7 +446,6 @@ namespace AssetInventory
 
             element.userData = action;
             element.tooltip = action.description ?? string.Empty;
-            element.EnableInClassList("ai-list-row-alt", index % 2 == 1);
             element.EnableInClassList(SettingsActionRunningClass, action.IsRunning());
 
             Toggle toggle = element.Q<Toggle>(className: SettingsActionToggleClass);
@@ -640,11 +639,6 @@ namespace AssetInventory
         private void RebuildNativeSettingsBody()
         {
             if (_nativeSettingsBody == null) return;
-
-            if (NormalizeNativeSettingsAccordionState(AI.Config))
-            {
-                AI.SaveConfig();
-            }
 
             _nativeScrollViewState.Capture("settings-root", _nativeSettingsRootScroll);
             _nativeSettingsBody.Clear();
@@ -991,7 +985,7 @@ namespace AssetInventory
             }
         }
 
-        private Foldout CreateNativeSettingsFoldout(string title, bool value, Action<bool> onChange, params string[] classNames)
+        internal static Foldout CreateNativeSettingsFoldout(string title, bool value, Action<bool> onChange, params string[] classNames)
         {
             string tooltip;
             switch (title)
@@ -1010,66 +1004,9 @@ namespace AssetInventory
                 default: tooltip = "Choose which update and indexing tasks run during maintenance."; break;
             }
 
-            Foldout foldout = null;
-            foldout = AssetInventoryUITK.CreateFoldout(title, value, next =>
-            {
-                if (next && _nativeSettingsLeftColumn != null)
-                {
-                    List<Foldout> settingsFoldouts = _nativeSettingsLeftColumn
-                        .Query<Foldout>(className: SettingsSectionFoldoutClass)
-                        .ToList();
-                    CollapseOtherNativeSettingsFoldouts(settingsFoldouts, foldout);
-                }
-
-                onChange?.Invoke(next);
-            }, tooltip, classNames);
+            Foldout foldout = AssetInventoryUITK.CreateFoldout(title, value, onChange, tooltip, classNames);
             foldout.AddToClassList(SettingsSectionFoldoutClass);
             return foldout;
-        }
-
-        internal static void CollapseOtherNativeSettingsFoldouts(IEnumerable<Foldout> settingsFoldouts, Foldout expandedFoldout)
-        {
-            if (settingsFoldouts == null || expandedFoldout == null) return;
-
-            foreach (Foldout settingsFoldout in settingsFoldouts)
-            {
-                if (settingsFoldout == null || settingsFoldout == expandedFoldout || !settingsFoldout.value) continue;
-                settingsFoldout.value = false;
-            }
-        }
-
-        internal static bool NormalizeNativeSettingsAccordionState(AssetInventorySettings config)
-        {
-            if (config == null) return false;
-
-            bool hasExpandedSection = false;
-            bool changed = false;
-            changed |= CollapseExtraNativeSettingsSection(ref config.showActionSettings, ref hasExpandedSection);
-            changed |= CollapseExtraNativeSettingsSection(ref config.showIndexingSettings, ref hasExpandedSection);
-            changed |= CollapseExtraNativeSettingsSection(ref config.showFolderSettings, ref hasExpandedSection);
-            changed |= CollapseExtraNativeSettingsSection(ref config.showAMSettings, ref hasExpandedSection);
-            changed |= CollapseExtraNativeSettingsSection(ref config.showSyntySettings, ref hasExpandedSection);
-            changed |= CollapseExtraNativeSettingsSection(ref config.showImportSettings, ref hasExpandedSection);
-            changed |= CollapseExtraNativeSettingsSection(ref config.showPreviewSettings, ref hasExpandedSection);
-            changed |= CollapseExtraNativeSettingsSection(ref config.showBackupSettings, ref hasExpandedSection);
-            changed |= CollapseExtraNativeSettingsSection(ref config.showAISettings, ref hasExpandedSection);
-            changed |= CollapseExtraNativeSettingsSection(ref config.showLocationSettings, ref hasExpandedSection);
-            changed |= CollapseExtraNativeSettingsSection(ref config.showUISettings, ref hasExpandedSection);
-            changed |= CollapseExtraNativeSettingsSection(ref config.showAdvancedSettings, ref hasExpandedSection);
-            return changed;
-        }
-
-        private static bool CollapseExtraNativeSettingsSection(ref bool expanded, ref bool hasExpandedSection)
-        {
-            if (!expanded) return false;
-            if (!hasExpandedSection)
-            {
-                hasExpandedSection = true;
-                return false;
-            }
-
-            expanded = false;
-            return true;
         }
 
         private Foldout CreateNativeSettingsSidebarFoldout(string title, bool value, Action<bool> onChange, string tooltip)
@@ -2609,14 +2546,24 @@ namespace AssetInventory
                 hash = AddHash(hash, AI.Config.codeIndexExtensions);
                 hash = AddHash(hash, AI.Config.codeIndexMaxFileSizeKb);
                 hash = AddHash(hash, AI.Config.codeIndexSemanticRerank);
-                hash = AddHash(hash, Intelligence.IsOllamaInstalled);
-                hash = AddHash(hash, Intelligence.LoadingModels);
-                hash = AddHash(hash, Intelligence.DownloadingModel);
-                hash = AddHash(hash, _activeOllamaDownloadModel);
-                hash = AddHash(hash, _curOllamaProgress);
-                hash = AddHash(hash, _maxOllamaProgress);
-                hash = AddHash(hash, Intelligence.IsLMStudioInstalled);
-                hash = AddHash(hash, Intelligence.LoadingLMStudioModels);
+                // Availability getters start network probes, so only read the backend whose controls are visible.
+                if (AI.Config.showAISettings && (AI.Config.aiCaptionsFeatureEnabled || AI.Config.semanticSearchFeatureEnabled))
+                {
+                    if (AI.Config.aiBackend == 1)
+                    {
+                        hash = AddHash(hash, Intelligence.IsOllamaInstalled);
+                        hash = AddHash(hash, Intelligence.LoadingModels);
+                        hash = AddHash(hash, Intelligence.DownloadingModel);
+                        hash = AddHash(hash, _activeOllamaDownloadModel);
+                        hash = AddHash(hash, _curOllamaProgress);
+                        hash = AddHash(hash, _maxOllamaProgress);
+                    }
+                    else if (AI.Config.aiBackend == 2)
+                    {
+                        hash = AddHash(hash, Intelligence.IsLMStudioInstalled);
+                        hash = AddHash(hash, Intelligence.LoadingLMStudioModels);
+                    }
+                }
                 hash = AddHash(hash, _captionTestRunning);
                 hash = AddHash(hash, _captionTest);
                 return hash;
@@ -2772,7 +2719,7 @@ namespace AssetInventory
             {
                 foldout.Add(CreateNativeLMStudioModelSelector(
                     "Caption Model",
-                    "The model to use for AI captions. Must be installed in LM Studio and support vision input (VLM). Models must be in GGUF format.",
+                    "Select a vision model in LM Studio.",
                     AI.Config.lmStudioModel,
                     model => AI.Config.lmStudioModel = model,
                     ShowInstalledLMStudioModels,
@@ -3546,6 +3493,15 @@ namespace AssetInventory
                 "Diagnostics",
                 "Limit exception logging to the subsystems currently being investigated.");
             diagnostics.Add(CreateNativeAdvancedLogAreasRow());
+            diagnostics.Add(CreateNativeSettingsToggleRow(
+                "Asset Store Authentication Warnings",
+                "Log one warning per Editor session when Unity authentication is missing or expired. Disabling this does not resume paused Asset Store requests.",
+                AI.Config.logAssetStoreAuthenticationWarnings,
+                value =>
+                {
+                    AI.Config.logAssetStoreAuthenticationWarnings = value;
+                    MarkNativeAdvancedSettingsChanged();
+                }));
         }
 
         private VisualElement CreateNativeAdvancedFontSizeRow()
@@ -3651,6 +3607,7 @@ namespace AssetInventory
                 hash = AddHash(hash, AI.Config.noPackageTileTextBelow);
                 hash = AddHash(hash, AI.Config.awaitNonBlocking);
                 hash = AddHash(hash, AI.Config.logAreas);
+                hash = AddHash(hash, AI.Config.logAssetStoreAuthenticationWarnings);
                 return hash;
             }
         }
@@ -4671,10 +4628,7 @@ namespace AssetInventory
             GenericMenu menu = new GenericMenu();
             if (models != null)
             {
-                // Filter to only show vision-enabled models (VLM type)
-                IEnumerable<LMStudioModel> visionModels = models.Where(m =>
-                    !string.IsNullOrEmpty(m.type) &&
-                    (m.type.ToLowerInvariant() == "vlm" || m.type.ToLowerInvariant().Contains("vision")));
+                IEnumerable<LMStudioModel> visionModels = models.Where(m => m.SupportsVision);
 
                 if (visionModels.Any())
                 {
@@ -4719,10 +4673,7 @@ namespace AssetInventory
             GenericMenu menu = new GenericMenu();
             if (models != null)
             {
-                IEnumerable<LMStudioModel> embeddingModels = models.Where(m =>
-                    string.IsNullOrEmpty(m.type) ||
-                    m.type.ToLowerInvariant().Contains("embedding") ||
-                    m.type.ToLowerInvariant() == "embeddings");
+                IEnumerable<LMStudioModel> embeddingModels = models.Where(m => m.IsEmbedding);
 
                 if (embeddingModels.Any())
                 {

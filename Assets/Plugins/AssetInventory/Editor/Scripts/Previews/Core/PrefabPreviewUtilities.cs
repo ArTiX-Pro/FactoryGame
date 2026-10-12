@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
@@ -150,7 +149,6 @@ namespace AssetInventory
         {
             // Create Canvas GameObject
             GameObject canvasGO = new GameObject("TemporaryCanvas");
-            StageUtility.PlaceGameObjectInCurrentStage(canvasGO);
             SceneManager.MoveGameObjectToScene(canvasGO, targetScene);
 
             // Add Canvas component - use ScreenSpaceCamera for proper ContentSizeFitter support
@@ -532,6 +530,12 @@ namespace AssetInventory
                     string shaderName = shader != null ? shader.name : "";
                     bool isParticleRenderer = renderer is ParticleSystemRenderer || renderer is TrailRenderer;
 
+                    if (PipelineConverter.IsProtectedMaterial(originalMaterial))
+                    {
+                        newMaterials[i] = originalMaterial;
+                        continue;
+                    }
+
                     if (PipelineConverter.IsErrorShaderMaterial(originalMaterial))
                     {
                         if (PipelineConverter.TryCreateErrorShaderPreviewMaterial(originalMaterial, isParticleRenderer, isOnURP, isOnHDRP, out Material fallbackMaterial))
@@ -545,7 +549,8 @@ namespace AssetInventory
                     // Check if the material uses a known Built-in Render Pipeline (BIRP) shader
                     // or a simple legacy custom transparent/cutout shader that can be remapped safely.
                     // Leave everything else (URP, HDRP, Shader Graph, opaque custom shaders, etc.) untouched.
-                    if (isParticleRenderer && IsLegacyParticleShader(shaderName))
+                    if (isParticleRenderer && IsLegacyParticleShader(shaderName) &&
+                        !PipelineConverter.IsShaderGraphAssetPath(AssetDatabase.GetAssetPath(shader)))
                     {
                         Material particleMat = CreateURPParticleMaterial(shaderName, originalMaterial, isOnURP);
                         if (particleMat != null)
@@ -568,7 +573,7 @@ namespace AssetInventory
                         continue;
                     }
 
-                    PipelineConverter.MaterialConversionInfo conversionInfo = PipelineConverter.AnalyzeMaterialForConversion(originalMaterial, shaderName);
+                    PipelineConverter.MaterialConversionInfo conversionInfo = PipelineConverter.AnalyzeMaterialForConversion(originalMaterial, shaderName, previewOnly: true);
                     bool needsConversion = conversionInfo.ShouldConvert;
 
                     // Only convert recognized legacy shaders; leave everything else as-is

@@ -15,6 +15,23 @@ namespace ImpossibleRobert.Common
     public static partial class CommonUITK
     {
         public const string WindowFooterClass = "common-window-footer";
+        public const string WindowBodyClass = "common-window-body";
+
+        /// <summary>
+        /// Applies standalone window spacing without insetting scrollbars. Mark split or tab hosts with WindowBodyClass and apply this layout to their individual scrolling panes. Inspector roots retain their own padding unless explicitly opted into this layout.
+        /// </summary>
+        public static void ApplyWindowLayout(VisualElement root)
+        {
+            if (root == null) throw new ArgumentNullException(nameof(root));
+            StyleSheet sheet = LoadStyleSheetFromAnchor(
+                "CommonUITK", "Editor/UI/UITK/CommonUITK.cs", "Editor/UI/UITK/CommonWindow.uss");
+            if (sheet != null && !root.styleSheets.Contains(sheet)) root.styleSheets.Add(sheet);
+            root.AddToClassList("common-window-root");
+            root.style.paddingLeft = 0f;
+            root.style.paddingRight = 0f;
+            root.style.paddingTop = 8f;
+            root.style.paddingBottom = 0f;
+        }
 
         static readonly Dictionary<string, StyleSheet> StyleSheetCache = new Dictionary<string, StyleSheet>();
 
@@ -724,6 +741,19 @@ namespace ImpossibleRobert.Common
             return header;
         }
 
+        // Standalone rows reuse Unity's collection styling. ListView/TreeView own these classes themselves.
+        public static void ApplyListRowStyle(VisualElement row, int index = -1)
+        {
+            row.AddToClassList(BaseVerticalCollectionView.itemUssClassName);
+            if (index >= 0) row.EnableInClassList(BaseVerticalCollectionView.itemAlternativeBackgroundUssClassName, index % 2 == 1);
+            if (row is Button && row.ClassListContains(Button.ussClassName))
+            {
+                row.RemoveFromClassList(Button.ussClassName);
+                row.RegisterCallback<FocusInEvent>(_ => row.AddToClassList(BaseVerticalCollectionView.itemSelectedVariantUssClassName));
+                row.RegisterCallback<FocusOutEvent>(_ => row.RemoveFromClassList(BaseVerticalCollectionView.itemSelectedVariantUssClassName));
+            }
+        }
+
         public static VisualElement CreateTitleSubtitleActionRow(
             string title,
             string subtitle,
@@ -970,21 +1000,7 @@ namespace ImpossibleRobert.Common
         /// </summary>
         public static void ConsumeEvent(EventBase evt, bool immediate = false)
         {
-            if (evt == null) return;
-
-#if UNITY_2023_2_OR_NEWER
-            (evt.target as VisualElement)?.panel?.focusController?.IgnoreEvent(evt);
-#else
-            evt.PreventDefault();
-#endif
-            if (immediate)
-            {
-                evt.StopImmediatePropagation();
-            }
-            else
-            {
-                evt.StopPropagation();
-            }
+            UIToolkitEventUtils.ConsumeEvent(evt, immediate);
         }
 
         public static void AddClasses(VisualElement element, params string[] classNames)

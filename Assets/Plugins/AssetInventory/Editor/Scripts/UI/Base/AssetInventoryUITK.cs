@@ -250,11 +250,12 @@ namespace AssetInventory
             }
         }
 
-        internal static void ApplyWindowStyles(VisualElement root)
+        internal static void ApplyWindowStyles(VisualElement root, bool standalone = true)
         {
             if (root == null) return;
 
             CommonUITK.ApplyRoot(root, LoadStyleSheet(), RootClass, DarkClass, LightClass);
+            if (standalone) CommonUITK.ApplyWindowLayout(root);
         }
 
         internal static StyleSheet LoadStyleSheet()
@@ -475,9 +476,11 @@ namespace AssetInventory
             string subtitle,
             VisualElement leading = null,
             VisualElement trailing = null,
+            bool collectionItem = false,
             params string[] extraClasses)
         {
             CommonUITK.AddClasses(row, "ai-list-row");
+            if (!collectionItem) CommonUITK.ApplyListRowStyle(row);
             return CommonUITK.PopulateTitleSubtitleActionRow(
                 row,
                 title,
@@ -859,7 +862,7 @@ namespace AssetInventory
 
         internal static VisualElement CreateWindowFooter()
         {
-            return CommonUITK.CreateWindowFooter(14f, 12f, FooterClass, WindowFooterClass);
+            return CommonUITK.CreateWindowFooter(0f, 0f, FooterClass, WindowFooterClass);
         }
 
         internal static VisualElement CreateNavigationFooter()

@@ -3,7 +3,7 @@ guid: 6b7fc9b2dcbdb4b6eb35e24358dc0888
 AssetOrigin:
   serializedVersion: 1
   productId: 349582
-  packageName: Asset Inventory - Find Every Asset in Your Library
-  packageVersion: 4.8.0
+  packageName: Asset Inventory 4 - Find Every Asset in Your Library
+  packageVersion: 4.9.0
   assetPath: Assets/Plugins/AssetInventory/Reuse/Common/Editor/Utils/TimedCache.cs
-  uploadId: 983278
+  uploadId: 1012924

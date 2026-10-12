@@ -133,5 +133,5 @@ AssetOrigin:
   productId: 333554
   packageName: Low-Poly Desert Environment Pack
   packageVersion: 1.0
-  assetPath: Assets/Tiny Teacup Studio/Low Poly Desert Environment/Demo/DemoScene/ReflectionProbe-0.exr
+  assetPath: Assets/ThirdParty/Tiny Teacup Studio/Low Poly Desert Environment/Demo/DemoScene/ReflectionProbe-0.exr
   uploadId: 800150

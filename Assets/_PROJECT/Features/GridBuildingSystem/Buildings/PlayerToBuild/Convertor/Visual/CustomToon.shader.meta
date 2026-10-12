@@ -12,5 +12,5 @@ AssetOrigin:
   productId: 115109
   packageName: Toon Industries
   packageVersion: 1.3.2
-  assetPath: Assets/Toon Series/Shared/Shaders/CustomToon.shader
+  assetPath: Assets/_PROJECT/Features/GridBuildingSystem/Buildings/PlayerToBuild/Convertor/Visual/CustomToon.shader
   uploadId: 960702

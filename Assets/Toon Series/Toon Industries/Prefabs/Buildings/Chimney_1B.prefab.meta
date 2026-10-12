@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 2a1a2332dc3c13f48ae91c3ec76f97e2
+labels:
+- building
+- chimney
+- industrial
+- refinery
+timeCreated: 1522273348
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 115109
+  packageName: Toon Industries
+  packageVersion: 1.3.2
+  assetPath: Assets/Toon Series/Toon Industries/Prefabs/Buildings/Chimney_1B.prefab
+  uploadId: 960702

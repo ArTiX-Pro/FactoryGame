@@ -13,8 +13,8 @@
   <Project Path="Automator.Editor.csproj" />
   <Project Path="VFolders.csproj" />
   <Project Path="Brain.Editor.csproj" />
-  <Project Path="Assembly-CSharp-firstpass.csproj" />
   <Project Path="ImpossibleRobert.Common.csproj" />
+  <Project Path="Assembly-CSharp-firstpass.csproj" />
   <Project Path="LineworkLite.Editor.csproj" />
   <Project Path="SingularityGroup.HotReload.Runtime.Public.csproj" />
   <Project Path="Database.SQLite.csproj" />
