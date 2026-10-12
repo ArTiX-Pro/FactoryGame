@@ -23,9 +23,9 @@ namespace ArTiX.FactoryGame.UI
 
         public event Action OnClosingWindow;
 
-        public override void Initialize(Convertor owner)
+        public override void Initialize(Convertor owner, string title = "Convertor")
         {
-            base.Initialize(owner);
+            base.Initialize(owner, title);
 
             RecipeButton recipeButton;
             foreach (RecipeSO recipe in GameManager.Instance.AvailableRecipes)

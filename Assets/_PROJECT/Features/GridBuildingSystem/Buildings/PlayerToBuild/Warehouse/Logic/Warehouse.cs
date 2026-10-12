@@ -27,7 +27,7 @@ namespace ArTiX.FactoryGame.Buildings
             if (window == null)
             {
                 window = Instantiate(prefabWindow, HUD.Instance.transform);
-                window.Initialize(inventory);
+                window.Initialize(inventory, "Warehouse");
             }
             else
                 window.Focus();

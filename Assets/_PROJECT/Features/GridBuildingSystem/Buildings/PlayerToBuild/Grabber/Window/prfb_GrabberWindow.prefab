@@ -663,7 +663,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f3f7fc4b2a9be44db08d2aeba88607c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.FactoryGame.UI.GrabberWindow
-  title: {fileID: 3568631591531767615}
+  titleObj: {fileID: 3568631591531767615}
   buttonContainer: {fileID: 2766409082479180866}
   prefabItemButton: {fileID: 123794364060498765, guid: fba1c03ec3733954583736f7aeb5afb8, type: 3}
   everythingToggle: {fileID: 5221872111370916738}

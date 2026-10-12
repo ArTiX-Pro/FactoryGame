@@ -47,10 +47,8 @@ namespace ArTiX.FactoryGame.UI
             isBuildingPanelActive = !isBuildingPanelActive;
 
             tween.Kill();
-            tween = buildingPanel.DOMove(
-                endValue: new Vector3(
-                    x: buildingPanel.position.x,
-                    y: isBuildingPanelActive ? buildingPanelActiveHeight : buildingPanelInactiveHeight),
+            tween = buildingPanel.DOMoveY(
+                endValue: isBuildingPanelActive ? buildingPanelActiveHeight : buildingPanelInactiveHeight,
                 duration: toggleBuildingAnimDuration
             ).SetEase(toggleBuildingAnimEasing);
         }

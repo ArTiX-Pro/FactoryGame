@@ -12,9 +12,9 @@ namespace ArTiX.Inventory.UI
         private readonly Dictionary<ItemSO, ItemSlotDisplay> resourceDisplayDictionary =
             new Dictionary<ItemSO, ItemSlotDisplay>();
 
-        public override void Initialize(Inventory owner)
+        public override void Initialize(Inventory owner, string title = "Inventory")
         {
-            base.Initialize(owner);
+            base.Initialize(owner, title);
 
             owner.OnAddItem += DisplayAddedItem;
             owner.OnRemoveItem += OnRemoveItemFromInventory;

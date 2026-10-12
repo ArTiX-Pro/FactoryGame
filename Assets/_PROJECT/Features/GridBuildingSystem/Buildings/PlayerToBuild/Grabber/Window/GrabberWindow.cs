@@ -17,9 +17,9 @@ namespace ArTiX.FactoryGame.UI
 
         private Dictionary<ItemSO, SpriteToggle> itemButtonDictionary = new Dictionary<ItemSO, SpriteToggle>();
 
-        public override void Initialize(Grabber owner)
+        public override void Initialize(Grabber owner, string title = "Grabber")
         {
-            base.Initialize(owner);
+            base.Initialize(owner, title);
 
             ItemButton itemButton;
             foreach (ItemSO resource in GameManager.Instance.AvailableResources)

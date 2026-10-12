@@ -475,7 +475,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ef8091113bf3924aa8119b9fcd39f77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.FactoryGame.UI.ConvertorWindow
-  title: {fileID: 75325698687766496}
+  titleObj: {fileID: 75325698687766496}
   buttonContainer: {fileID: 7328028919199338806}
   resourceNeededContainer: {fileID: 4254716414322816567}
   outputResourceImage: {fileID: 5994790651701389452}
