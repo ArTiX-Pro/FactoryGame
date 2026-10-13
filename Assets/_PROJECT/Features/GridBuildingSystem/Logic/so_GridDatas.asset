@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccc1a63e5565c2e4eb7e77f39020d557, type: 3}
   m_Name: so_GridDatas
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Datas.GridDatas
-  width: 80
-  height: 80
+  width: 45
+  height: 45
   cellSize: 1
   lineWidth: 0.0002
   color: {r: 1, g: 1, b: 1, a: 1}
