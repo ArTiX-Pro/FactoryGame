@@ -8,7 +8,7 @@ namespace ArTiX.Utils
 
         public abstract void EnterState();
 
-        public abstract void Update();
+        public virtual void Update() { }
 
         public virtual void ExitState()
         {

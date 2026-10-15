@@ -513,7 +513,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1580578987}
   - component: {fileID: 1580578989}
-  - component: {fileID: 1580578988}
   m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
@@ -536,26 +535,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1735697203}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!154 &1580578988
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1580578986}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: e7768f54d1f39eb449aff729ac8ca838, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1580578989
 Terrain:
   m_ObjectHideFlags: 0
@@ -1005,6 +984,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 96883426227660269, guid: 5593dbf6b529ffc43a3632d1abae46f5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 8780377081886498955}
+    - target: {fileID: 1148625376251044622, guid: 5593dbf6b529ffc43a3632d1abae46f5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 8780377081886498955}
     - target: {fileID: 2090358572072654955, guid: 5593dbf6b529ffc43a3632d1abae46f5, type: 3}
       propertyPath: m_Name
       value: HUD
@@ -1156,6 +1143,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9132127203000591672, guid: d573bbfa3f7379649830be9c6369fdd4, type: 3}
   m_PrefabInstance: {fileID: 8780377081886498953}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8780377081886498955 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7653264164286922055, guid: d573bbfa3f7379649830be9c6369fdd4, type: 3}
+  m_PrefabInstance: {fileID: 8780377081886498953}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44027ee15ad184d44b8a43978cd98165, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArTiX.Utils.Audio.AudioManager
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -10,7 +10,8 @@ namespace ArTiX.GridBuildingSystem.Buildings
     public abstract class PlacedObject : MonoBehaviour
     {
         [SerializeField] protected PlacedObjectSO datas;
-        public PlacedObjectSO Datas => datas;
+
+        protected Material matDefault;
 
         public Vector2Int Origin { get; private set; }
 
@@ -33,6 +34,7 @@ namespace ArTiX.GridBuildingSystem.Buildings
         protected virtual void Awake()
         {
             GetComponent<BoxCollider>().isTrigger = true;
+            matDefault = GetComponentInChildren<Renderer>().material;
             name = datas.Name;
         }
 
@@ -51,6 +53,18 @@ namespace ArTiX.GridBuildingSystem.Buildings
         protected bool IsAdjacent(Vector2Int cell)
         {
             return Array.IndexOf(AdjacentCellArray, cell) != -1;
+        }
+
+        public virtual void EnterDestroyPreview()
+        {
+            foreach (Renderer renderer in GetComponentsInChildren<Renderer>())
+                renderer.material = DestroyState.MatDestroy;
+        }
+
+        public virtual void ExitDestroyPreview()
+        {
+            foreach (Renderer renderer in GetComponentsInChildren<Renderer>())
+                renderer.material = matDefault;
         }
 
         public virtual void Destroy()

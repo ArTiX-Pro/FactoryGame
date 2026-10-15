@@ -10,16 +10,16 @@ namespace ArTiX.GridBuildingSystem
 {
     public class DestroyState : GameState
     {
+        public static Material MatDestroy { get; private set; }
+
         private readonly Texture2D texDestroyCursor;
-        private readonly Material matDestroy;
-        private Material previousMaterial;
 
         private PlacedObject currentBuilding;
 
-        public DestroyState(Texture2D destructionCursor, Material destructionMaterial)
+        public DestroyState(Texture2D destructionCursor, Material matDestroy)
         {
             texDestroyCursor = destructionCursor;
-            matDestroy = destructionMaterial;
+            MatDestroy = matDestroy;
         }
 
         public override void EnterState()
@@ -35,11 +35,6 @@ namespace ArTiX.GridBuildingSystem
             TickSystem.Instance.OnTick += CheckForPlacedObject;
         }
 
-        public override void Update()
-        {
-
-        }
-
         public override void ExitState()
         {
             InputManager.Instance.OnSelect -= DestroyBuilding;
@@ -53,8 +48,7 @@ namespace ArTiX.GridBuildingSystem
 
             if (currentBuilding != null)
             {
-                SetBuildingMaterial(previousMaterial);
-                previousMaterial = null;
+                currentBuilding.ExitDestroyPreview();
                 currentBuilding = null;
             }
 
@@ -70,26 +64,16 @@ namespace ArTiX.GridBuildingSystem
                 if (hit.collider.TryGetComponent(out PlacedObject placedObject) && currentBuilding != placedObject)
                 {
                     if (currentBuilding != null)
-                        SetBuildingMaterial(previousMaterial);
+                        currentBuilding.ExitDestroyPreview();
 
                     currentBuilding = placedObject;
-                    previousMaterial = currentBuilding.GetComponentInChildren<Renderer>().material;
-                    SetBuildingMaterial(matDestroy);
+                    currentBuilding.EnterDestroyPreview();
                 }
             }
             else if (currentBuilding != null)
             {
-                SetBuildingMaterial(previousMaterial);
-                previousMaterial = null;
+                currentBuilding.ExitDestroyPreview();
                 currentBuilding = null;
-            }
-        }
-
-        private void SetBuildingMaterial(in Material material)
-        {
-            foreach (Renderer renderer in currentBuilding.GetComponentsInChildren<Renderer>())
-            {
-                renderer.material = material;
             }
         }
 

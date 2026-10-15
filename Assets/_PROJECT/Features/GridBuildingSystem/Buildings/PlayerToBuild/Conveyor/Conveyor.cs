@@ -1,3 +1,4 @@
+using ArTiX.GridBuildingSystem;
 using ArTiX.GridBuildingSystem.Buildings;
 using ArTiX.Inventory;
 using ArTiX.Utils;
@@ -210,6 +211,7 @@ namespace ArTiX.FactoryGame.Buildings
         #region Variables & Properties
 
         [SerializeField] private Transform itemPos;
+        [SerializeField] private Renderer baseObjectRenderer;
 
         private ConveyorBelt belt;
         private Conveyor previousConveyor;
@@ -255,6 +257,12 @@ namespace ArTiX.FactoryGame.Buildings
         public ItemSO Item => item;
 
         #endregion
+
+        protected override void Awake()
+        {
+            base.Awake();
+            matDefault = baseObjectRenderer.material;
+        }
 
         public override void Initialize(Vector2Int origin)
         {
@@ -343,6 +351,16 @@ namespace ArTiX.FactoryGame.Buildings
 
             if (belt == null)
                 Debug.LogError("I have no belt");
+        }
+
+        public override void EnterDestroyPreview()
+        {
+            baseObjectRenderer.material = DestroyState.MatDestroy;
+        }
+
+        public override void ExitDestroyPreview()
+        {
+            baseObjectRenderer.material = matDefault;
         }
 
         #region Conveyor

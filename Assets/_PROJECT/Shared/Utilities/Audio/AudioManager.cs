@@ -33,7 +33,8 @@ namespace ArTiX.Utils.Audio
             return Instantiate(sourcePrefab, transform);
         }
 
-        public AudioSourceExtension Play(in AudioDatasSO datas) => Play(datas, transform.position, null);
+        public void PlaySound(AudioDatasSO datas) => Play(datas, transform.position, null);
+        public AudioSourceExtension Play(AudioDatasSO datas) => Play(datas, transform.position, null);
         public AudioSourceExtension Play(in AudioDatasSO datas, in Vector3 position) => Play(datas, position, null);
         public AudioSourceExtension Play(in AudioDatasSO datas, in Transform follow) => Play(datas, follow.position, follow);
 

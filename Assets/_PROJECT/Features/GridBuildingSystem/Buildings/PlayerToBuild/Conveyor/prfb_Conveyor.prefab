@@ -192,6 +192,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ArTiX.GridBuildingSystem.Buildings.Conveyor
   datas: {fileID: 11400000, guid: dff1f3170b3000e428ed046aaaaae174, type: 2}
   itemPos: {fileID: 7321668629806082221}
+  baseObjectRenderer: {fileID: 3798400194550872785}
 --- !u!1 &6448707275989587337
 GameObject:
   m_ObjectHideFlags: 0

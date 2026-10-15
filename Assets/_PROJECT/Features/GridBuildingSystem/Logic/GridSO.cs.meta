@@ -1,2 +1,15 @@
 fileFormatVersion: 2
 guid: ccc1a63e5565c2e4eb7e77f39020d557
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - prfbGridVisual: {instanceID: 0}
+  - <PrefabSpawnSmoke>k__BackingField: {instanceID: 0}
+  - texDestructionCursor: {instanceID: 0}
+  - matDestruction: {fileID: 2100000, guid: f52977404b4b7a2459df8bb5321ed9d0, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
