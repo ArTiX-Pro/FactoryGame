@@ -1,21 +1,7 @@
 fileFormatVersion: 2
-guid: 162dba53189c94e8aa49d4b57d9dc885
-labels:
-- car
-- cargo
-- transport
-- vehicle
-timeCreated: 1522421882
-licenseType: Store
-NativeFormatImporter:
-  mainObjectFileID: 100100000
+guid: 7002160bb756b924baeb24286de6338e
+PrefabImporter:
+  externalObjects: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 115109
-  packageName: Toon Industries
-  packageVersion: 1.3.2
-  assetPath: Assets/Toon Series/Toon Industries/Prefabs/Cars/Pick_Up_1A.prefab
-  uploadId: 960702
