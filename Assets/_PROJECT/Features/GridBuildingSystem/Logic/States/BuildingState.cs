@@ -52,8 +52,11 @@ namespace ArTiX.GridBuildingSystem
 
         public override void Update()
         {
-            isPointerOverUI = EventSystem.current.IsPointerOverGameObject(); ;
-            ghost.gameObject.SetActive(!isPointerOverUI);
+            isPointerOverUI = EventSystem.current.IsPointerOverGameObject();
+            if (ghost != null)
+            {
+                ghost.gameObject.SetActive(!isPointerOverUI);
+            }
 
             Vector2Int cellPos = GridBuildingSystem.Instance.GetMouseCellPos();
             bool cellChanged = currentCell != cellPos;

@@ -13,6 +13,7 @@ namespace ArTiX.GridBuildingSystem
 
         [SerializeField] private GhostSO datas;
         [SerializeField] private BuildingSO buildingDatas;
+        [SerializeField] private Renderer[] rendererToModifyArray;
 
         private Vector2Int cellPos;
         private float targetWorldRotation;
@@ -22,6 +23,12 @@ namespace ArTiX.GridBuildingSystem
 
         private Color targetColor;
         private Sequence colorTweenSequence;
+
+        private void Awake()
+        {
+            if (rendererToModifyArray == null || rendererToModifyArray.Length == 0)
+                rendererToModifyArray = GetComponentsInChildren<Renderer>();
+        }
 
         private void Start()
         {
@@ -64,7 +71,7 @@ namespace ArTiX.GridBuildingSystem
             colorTweenSequence?.Kill();
             colorTweenSequence = DOTween.Sequence();
 
-            foreach (Renderer renderer in transform.GetComponentsInChildren<Renderer>())
+            foreach (Renderer renderer in rendererToModifyArray)
             {
                 colorTweenSequence.Insert(0, renderer.material.DOColor(
                     endValue: targetColor,
