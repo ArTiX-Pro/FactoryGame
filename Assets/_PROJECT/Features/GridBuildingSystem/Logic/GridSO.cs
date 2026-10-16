@@ -1,3 +1,4 @@
+using ArTiX.Utils.Audio;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -41,5 +42,8 @@ namespace ArTiX.GridBuildingSystem.Datas
 
         [SerializeField] private Material matDestruction;
         public Material MatDestruction => matDestruction;
+
+        [SerializeField] private AudioDatasSO buildingAudio;
+        public AudioDatasSO BuildingAudio => buildingAudio;
     }
 }

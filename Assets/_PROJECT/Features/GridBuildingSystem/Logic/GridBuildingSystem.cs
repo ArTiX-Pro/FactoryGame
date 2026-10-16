@@ -58,7 +58,7 @@ namespace ArTiX.GridBuildingSystem
 
             GenerateGrid();
 
-            buildingState = new BuildingState();
+            buildingState = new BuildingState(datas.BuildingAudio);
             destroyState = new DestroyState(datas.TexDestructionCursor, datas.MatDestruction);
         }
 
@@ -247,10 +247,6 @@ namespace ArTiX.GridBuildingSystem
                 occupancyTexture.Apply(updateMipmaps: false);
 
                 building.Initialize(origin);
-            }
-            else
-            {
-                // Fail effects
             }
         }
 

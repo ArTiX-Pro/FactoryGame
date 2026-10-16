@@ -2,8 +2,10 @@ using ArTiX.GridBuildingSystem.Datas;
 using ArTiX.Input;
 using ArTiX.Interaction;
 using ArTiX.Utils;
+using ArTiX.Utils.Audio;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace ArTiX.GridBuildingSystem
 {
@@ -21,12 +23,20 @@ namespace ArTiX.GridBuildingSystem
         private BuildingSO currentBuildingDatas;
         private Ghost ghost;
 
+        private bool isPointerOverUI;
         private Vector2Int currentCell;
 
         private bool isDragging;
         private Vector2Int dragStartCell;
         private List<Vector2Int> currentPath = new List<Vector2Int>();
         private readonly List<Ghost> pathGhosts = new List<Ghost>();
+
+        private AudioDatasSO buildingAudio;
+
+        public BuildingState(in AudioDatasSO buildingAudio)
+        {
+            this.buildingAudio = buildingAudio;
+        }
 
         public override void EnterState()
         {
@@ -42,6 +52,9 @@ namespace ArTiX.GridBuildingSystem
 
         public override void Update()
         {
+            isPointerOverUI = EventSystem.current.IsPointerOverGameObject(); ;
+            ghost.gameObject.SetActive(!isPointerOverUI);
+
             Vector2Int cellPos = GridBuildingSystem.Instance.GetMouseCellPos();
             bool cellChanged = currentCell != cellPos;
 
@@ -94,7 +107,7 @@ namespace ArTiX.GridBuildingSystem
 
         private void StartCreating()
         {
-            if (currentBuildingDatas.AllowDragPlacement)
+            if (currentBuildingDatas.AllowDragPlacement && !isPointerOverUI)
             {
                 isDragging = true;
                 dragStartCell = GridBuildingSystem.Instance.GetMouseCellPos();
@@ -106,8 +119,10 @@ namespace ArTiX.GridBuildingSystem
 
         private void FinishCreating()
         {
+            if (isPointerOverUI) return;
+
             if (currentBuildingDatas.AllowDragPlacement)
-            {  
+            {
                 foreach (Vector2Int cell in currentPath)
                 {
                     GridBuildingSystem.Instance.CreateBuilding(currentBuildingDatas, cell, currentRotation);
@@ -118,6 +133,8 @@ namespace ArTiX.GridBuildingSystem
             }
             else
                 GridBuildingSystem.Instance.CreateBuilding(currentBuildingDatas, currentCell, currentRotation);
+
+            AudioManager.Instance.Play(buildingAudio);
         }
 
         private void RotateBuilding(int rotateDirection)

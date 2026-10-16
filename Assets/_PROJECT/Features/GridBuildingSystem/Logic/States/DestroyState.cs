@@ -30,7 +30,7 @@ namespace ArTiX.GridBuildingSystem
             Interactor.Instance.Disable();
             GridBuildingSystem.Instance.ToggleGridVisual(true);
 
-            Cursor.SetCursor(texDestroyCursor, Vector2.zero, CursorMode.ForceSoftware);
+            Cursor.SetCursor(texDestroyCursor, Vector2.up * texDestroyCursor.height, CursorMode.ForceSoftware);
 
             TickSystem.Instance.OnTick += CheckForPlacedObject;
         }

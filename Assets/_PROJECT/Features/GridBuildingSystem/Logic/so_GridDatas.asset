@@ -20,5 +20,6 @@ MonoBehaviour:
   origin: {x: 0, y: 0.01, z: 0}
   prfbGridVisual: {fileID: 7488025045110592918, guid: cb78e3ab320ba8340a4a9ca0a3ed7669, type: 3}
   <PrefabSpawnSmoke>k__BackingField: {fileID: 7653165865364250423, guid: 283f152a339260e44b3b7853053323d4, type: 3}
-  texDestructionCursor: {fileID: 2800000, guid: 878f37a22de631c4193f0216b82553f2, type: 3}
+  texDestructionCursor: {fileID: 2800000, guid: 5a66c23b0d6984248a21465523c35eff, type: 3}
   matDestruction: {fileID: 2100000, guid: f52977404b4b7a2459df8bb5321ed9d0, type: 2}
+  buildingAudio: {fileID: 11400000, guid: 53d6db23c2561374493aab0804fee0dc, type: 2}
