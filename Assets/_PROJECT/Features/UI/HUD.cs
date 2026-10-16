@@ -5,6 +5,7 @@ using ArTiX.Utils;
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ArTiX.FactoryGame.UI
 {
@@ -13,10 +14,23 @@ namespace ArTiX.FactoryGame.UI
         [SerializeField] private float toggleBuildingAnimDuration;
         [SerializeField] private Ease toggleBuildingAnimEasing;
         [SerializeField] private Transform buildingPanel;
-        [SerializeField] private float buildingPanelActiveHeight, buildingPanelInactiveHeight;
+
+        [SerializeField] private float buildingPanelActiveHeight;
+        private float BuildingPanelActiveHeight
+        {
+            get => buildingPanelActiveHeight * CurrentScaleFactor.y;
+        }
+
+        [SerializeField] private float buildingPanelInactiveHeight;
+        private float BuildingPanelInactiveHeight
+        {
+            get => buildingPanelInactiveHeight * CurrentScaleFactor.y;
+        }
 
         [SerializeField] private BuildingButton prefabBuildingBtn;
         [SerializeField] private Transform buildingBtnsHolder;
+
+        public Vector2 CurrentScaleFactor { get; private set; }
 
         private bool isBuildingPanelActive;
 
@@ -30,6 +44,17 @@ namespace ArTiX.FactoryGame.UI
         private void Start()
         {
             InputManager.Instance.OnToggleBuildingPanel += ToggleBuildingPanel;
+        }
+
+        private void OnRectTransformDimensionsChange()
+        {
+            CanvasScaler canvasScaler = GetComponent<CanvasScaler>();
+            CurrentScaleFactor = new Vector2(Screen.width / canvasScaler.referenceResolution.x, Screen.height / canvasScaler.referenceResolution.y);
+
+            buildingPanel.position = new Vector3(
+                x: buildingPanel.position.x,
+                y: isBuildingPanelActive ? BuildingPanelActiveHeight : BuildingPanelInactiveHeight,
+                z: buildingPanel.position.z);
         }
 
         public void SetBuildingBtns(List<BuildingSO> availableBuildings)
@@ -48,7 +73,7 @@ namespace ArTiX.FactoryGame.UI
 
             tween.Kill();
             tween = buildingPanel.DOMoveY(
-                endValue: isBuildingPanelActive ? buildingPanelActiveHeight : buildingPanelInactiveHeight,
+                endValue: isBuildingPanelActive ? BuildingPanelActiveHeight : BuildingPanelInactiveHeight,
                 duration: toggleBuildingAnimDuration
             ).SetEase(toggleBuildingAnimEasing);
         }
