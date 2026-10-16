@@ -346,7 +346,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1490522257407728927, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       propertyPath: m_text
-      value: Convertor
+      value: 'Factory
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 4068111530025581882, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}
       propertyPath: m_Name
@@ -481,7 +483,7 @@ MonoBehaviour:
   outputResourceImage: {fileID: 5994790651701389452}
   conversionProgressImage: {fileID: 3801133646702840216}
   prefabRecipeButton: {fileID: 651811680874193814, guid: 38a4243f0bf67554dbafb1a1fe2db924, type: 3}
-  prefabResourceNeeded: {fileID: 4111349957748340394, guid: 25f659e03c5f6c74ca27586a3a183261, type: 3}
+  prefabResourceNeeded: {fileID: 1181304331057734036, guid: 25f659e03c5f6c74ca27586a3a183261, type: 3}
 --- !u!224 &6537265978226463932 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5700979399454131779, guid: f157b4978c7abde4395fddfe15938e1e, type: 3}

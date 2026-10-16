@@ -1,9 +1,9 @@
 using ArTiX.FactoryGame.Buildings;
 using ArTiX.FactoryGame.Datas;
+using ArTiX.Inventory.UI;
 using ArTiX.Utils;
 using ArTiX.Utils.Window;
 using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,7 +19,7 @@ namespace ArTiX.FactoryGame.UI
 
         [Header("Prefab")]
         [SerializeField] private RecipeButton prefabRecipeButton;
-        [SerializeField] private Image prefabResourceNeeded;
+        [SerializeField] private ItemSlotDisplay prefabResourceNeeded;
 
         public event Action OnClosingWindow;
 
@@ -64,14 +64,11 @@ namespace ArTiX.FactoryGame.UI
             outputResourceImage.enabled = true;
             outputResourceImage.sprite = recipe.ResourceOutput.resource.Icon;
 
-            Image resourceNeededImage;
-            foreach (RecipeSO.SResources resourcesQuantityRequired in recipe.ResourcesRequiered)
+            ItemSlotDisplay resourceNeededSlot;
+            foreach (RecipeSO.SResources resourceQuantityRequired in recipe.ResourcesRequiered)
             {
-                resourceNeededImage = Instantiate(prefabResourceNeeded, resourceNeededContainer);
-                resourceNeededImage.sprite = resourcesQuantityRequired.resource.Icon;
-
-                resourceNeededImage.GetComponentInChildren<TextMeshProUGUI>().text =
-                    resourcesQuantityRequired.quantity.ToString();
+                resourceNeededSlot = Instantiate(prefabResourceNeeded, resourceNeededContainer);
+                resourceNeededSlot.SetItemSlot(new Inventory.Inventory.ItemSlot(resourceQuantityRequired.resource, resourceQuantityRequired.quantity));
             }
         }
 
