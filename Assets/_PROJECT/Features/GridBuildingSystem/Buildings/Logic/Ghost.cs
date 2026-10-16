@@ -19,7 +19,9 @@ namespace ArTiX.GridBuildingSystem
 
         private Tween positionTween;
         private Tween rotationTween;
-        private Tween colorTween;
+
+        private Color targetColor;
+        private Sequence colorTweenSequence;
 
         private void Start()
         {
@@ -56,14 +58,18 @@ namespace ArTiX.GridBuildingSystem
         {
             bool isValid = GridBuildingSystem.Instance.CanBuild(buildingDatas, cellPos, -targetWorldRotation);
 
-            colorTween?.Kill();
+            Color newTargetColor = isValid ? datas.ValidColor : datas.UnvalidColor;
+            if (newTargetColor == targetColor) return;
+            targetColor = newTargetColor;
+            colorTweenSequence?.Kill();
+            colorTweenSequence = DOTween.Sequence();
 
             foreach (Renderer renderer in transform.GetComponentsInChildren<Renderer>())
             {
-                colorTween = renderer.material.DOColor(
-                    endValue: isValid ? datas.ValidColor : datas.UnvalidColor,
+                colorTweenSequence.Insert(0, renderer.material.DOColor(
+                    endValue: targetColor,
                     duration: datas.ColorChangeDuration
-                ).SetEase(datas.ColorChangeEasing);
+                ).SetEase(datas.ColorChangeEasing));
             }
         }
 
@@ -71,7 +77,7 @@ namespace ArTiX.GridBuildingSystem
         {
             positionTween.Kill();
             rotationTween.Kill();
-            colorTween.Kill();
+            colorTweenSequence.Kill();
 
             Destroy(gameObject);
         }
