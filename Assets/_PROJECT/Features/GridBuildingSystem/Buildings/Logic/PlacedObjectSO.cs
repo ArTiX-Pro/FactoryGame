@@ -46,12 +46,12 @@ namespace ArTiX.GridBuildingSystem.Datas
 
         public PlacedObject Prefab => prefab;
 
-        public List<Vector2Int> GetOccupiedCells(in Vector2Int offset, in float rotation)
+        public List<Vector2Int> GetOccupiedCells(in Vector2Int offset, in float logicRotation)
         {
             List<Vector2Int> occupiedCells = new List<Vector2Int>();
             foreach (Vector2Int cell in cellArray)
             {
-                occupiedCells.Add(cell.Rotate(rotation) + offset);
+                occupiedCells.Add(cell.Rotate(logicRotation) + offset);
             }
 
             return occupiedCells;

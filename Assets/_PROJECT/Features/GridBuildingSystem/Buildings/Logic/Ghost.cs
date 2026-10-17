@@ -17,6 +17,7 @@ namespace ArTiX.GridBuildingSystem
 
         private Vector2Int cellPos;
         private float targetWorldRotation;
+        public float GetTargetWorldRotation() => targetWorldRotation;
 
         private Tween positionTween;
         private Tween rotationTween;
@@ -47,14 +48,15 @@ namespace ArTiX.GridBuildingSystem
             UpdateColor();
         }
 
-        public void SetRotation(in float rotation)
+        public void SetRotation(in float worldRotation)
         {
-            targetWorldRotation = rotation;
+            if (Mathf.Abs(targetWorldRotation - worldRotation) < 0.001f) return;
+
+            targetWorldRotation = worldRotation;
 
             rotationTween?.Kill();
-            rotationTween =
-            transform.DORotateQuaternion(
-                endValue: Quaternion.Euler(x: 0, rotation, z: 0),
+            rotationTween = transform.DORotateQuaternion(
+                endValue: Quaternion.Euler(x: 0, worldRotation, z: 0),
                 duration: datas.TweenRotationDuration)
                 .SetEase(datas.TweenRotationEasing);
 

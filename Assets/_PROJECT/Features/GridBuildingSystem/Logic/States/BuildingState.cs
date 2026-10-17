@@ -13,12 +13,12 @@ namespace ArTiX.GridBuildingSystem
     {
         private const float ROTATION_DELTA = 90f;
         private const float MAX_ROTATION = 360;
-        private float currentRotation;
+        private float currentLogicRotation;
         /// <summary>
-        /// Because the Y axis goes UP and we want to rotate our building positively by looking FROM up,
+        /// World rotation and logic rotation are opposite,
         /// we need to invert the rotation.
         /// </summary>
-        private float WorldRotation => -currentRotation;
+        private float WorldRotation => -currentLogicRotation;
 
         private BuildingSO currentBuildingDatas;
         private Ghost ghost;
@@ -29,7 +29,7 @@ namespace ArTiX.GridBuildingSystem
         private bool isDragging;
         private Vector2Int dragStartCell;
         private List<Vector2Int> currentPath = new List<Vector2Int>();
-        private readonly List<Ghost> pathGhosts = new List<Ghost>();
+        private readonly List<Ghost> pathGhostList = new List<Ghost>();
 
         private AudioDatasSO buildingAudio;
 
@@ -43,10 +43,10 @@ namespace ArTiX.GridBuildingSystem
             InputManager.Instance.OnStartCreatingBuilding += StartCreating;
             InputManager.Instance.OnFinishCreating += FinishCreating;
             InputManager.Instance.OnCancel += ExitState;
-            InputManager.Instance.OnRotate += RotateBuilding;
+            InputManager.Instance.OnRotate += RotateGhost;
 
             Interactor.Instance.Disable();
-            currentRotation = 0;
+            currentLogicRotation = 0;
             GridBuildingSystem.Instance.ToggleGridVisual(true);
         }
 
@@ -81,7 +81,7 @@ namespace ArTiX.GridBuildingSystem
 
         public override void ExitState()
         {
-            currentRotation = 0;
+            currentLogicRotation = 0;
             isDragging = false;
             ghost?.Destroy();
             ghost = null;
@@ -92,7 +92,7 @@ namespace ArTiX.GridBuildingSystem
             InputManager.Instance.OnStartCreatingBuilding -= StartCreating;
             InputManager.Instance.OnFinishCreating -= FinishCreating;
             InputManager.Instance.OnCancel -= ExitState;
-            InputManager.Instance.OnRotate -= RotateBuilding;
+            InputManager.Instance.OnRotate -= RotateGhost;
 
             base.ExitState();
         }
@@ -101,7 +101,8 @@ namespace ArTiX.GridBuildingSystem
         {
             currentBuildingDatas = buildingDatas;
             isDragging = false;
-            ghost?.Destroy();
+            if (ghost != null)
+                ghost.Destroy();
             ghost = null;
             ClearPathGhosts();
 
@@ -126,24 +127,25 @@ namespace ArTiX.GridBuildingSystem
 
             if (currentBuildingDatas.AllowDragPlacement)
             {
-                foreach (Vector2Int cell in currentPath)
+                int pathCount = currentPath.Count;
+                for (int i = 0; i < pathCount; i++)
                 {
-                    GridBuildingSystem.Instance.CreateBuilding(currentBuildingDatas, cell, currentRotation);
+                    GridBuildingSystem.Instance.CreateBuilding(currentBuildingDatas, currentPath[i], pathGhostList[i].GetTargetWorldRotation());
                 }
                 isDragging = false;
                 ClearPathGhosts();
                 ghost = Ghost.Create(currentBuildingDatas.Ghost);
             }
             else
-                GridBuildingSystem.Instance.CreateBuilding(currentBuildingDatas, currentCell, currentRotation);
+                GridBuildingSystem.Instance.CreateBuilding(currentBuildingDatas, currentCell, WorldRotation);
 
             AudioManager.Instance.Play(buildingAudio);
         }
 
-        private void RotateBuilding(int rotateDirection)
+        private void RotateGhost(int rotateDirection)
         {
-            currentRotation = (currentRotation + (ROTATION_DELTA * rotateDirection)) % MAX_ROTATION;
-            ghost?.SetRotation(WorldRotation);
+            currentLogicRotation = (currentLogicRotation + (ROTATION_DELTA * rotateDirection)) % MAX_ROTATION;
+            ghost.SetRotation(WorldRotation);
         }
 
         private void UpdatePathPreview(in Vector2Int end)
@@ -153,26 +155,45 @@ namespace ArTiX.GridBuildingSystem
             currentPath.Clear();
             if (path != null) currentPath = path;
 
-            while (pathGhosts.Count < currentPath.Count)
-                pathGhosts.Add(Ghost.Create(currentBuildingDatas.Ghost));
+            int pathCount = currentPath.Count;
+            while (pathGhostList.Count < pathCount)
+                pathGhostList.Add(Ghost.Create(currentBuildingDatas.Ghost));
 
-            while (pathGhosts.Count > currentPath.Count)
+            while (pathGhostList.Count > pathCount)
             {
-                int lastIndex = pathGhosts.Count - 1;
-                pathGhosts[lastIndex].Destroy();
-                pathGhosts.RemoveAt(lastIndex);
+                int lastIndex = pathGhostList.Count - 1;
+                pathGhostList[lastIndex].Destroy();
+                pathGhostList.RemoveAt(lastIndex);
             }
 
-            for (int i = 0; i < currentPath.Count; i++)
-                pathGhosts[i].SetPosition(path[i]);
+            Vector2Int currentToNextGhost;
+            for (int i = 0; i < pathCount; i++)
+            {
+                pathGhostList[i].SetPosition(path[i]);
+
+                if (i < pathCount - 1)
+                {
+                    currentToNextGhost = currentPath[i + 1] - currentPath[i];
+
+                    pathGhostList[i].SetRotation(
+                        worldRotation: Vector3.SignedAngle(
+                            from: Vector3.right,
+                            to: new Vector3(currentToNextGhost.x, 0, currentToNextGhost.y),
+                            axis: Vector3.up
+                        )
+                    );
+                }
+                else if (i > 0)
+                    pathGhostList[i].SetRotation(pathGhostList[i - 1].GetTargetWorldRotation());
+            }
         }
 
         private void ClearPathGhosts()
         {
-            foreach (Ghost pathGhost in pathGhosts)
+            foreach (Ghost pathGhost in pathGhostList)
                 pathGhost.Destroy();
 
-            pathGhosts.Clear();
+            pathGhostList.Clear();
             currentPath.Clear();
         }
     }

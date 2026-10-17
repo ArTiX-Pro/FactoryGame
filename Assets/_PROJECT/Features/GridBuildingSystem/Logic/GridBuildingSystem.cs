@@ -225,20 +225,20 @@ namespace ArTiX.GridBuildingSystem
             return path;
         }
 
-        public void CreateBuilding(PlacedObjectSO placedObjectDatas, Vector2Int origin, float rotation = 0)
+        public void CreateBuilding(PlacedObjectSO placedObjectDatas, Vector2Int origin, float worldRotation = 0)
         {
             if (CanBuild(placedObjectDatas, origin))
             {
                 PlacedObject building = Instantiate(
                     original: placedObjectDatas.Prefab,
                     position: ConvertCellPosToWorldPos(origin),
-                    rotation: Quaternion.Euler(x: 0, -rotation, z: 0),
+                    rotation: Quaternion.Euler(0, worldRotation, 0),
                     buildingsParent
                 );
 
                 Instantiate(datas.PrefabSpawnSmoke, ConvertCellPosToWorldPos(origin), Quaternion.identity);
 
-                foreach (Vector2Int cell in placedObjectDatas.GetOccupiedCells(origin, rotation))
+                foreach (Vector2Int cell in placedObjectDatas.GetOccupiedCells(origin, -worldRotation))
                 {
                     grid.SetCellValue(cell, building);
                     pathfinding.SetIsWalkable(cell.x, cell.y, false);
@@ -250,9 +250,9 @@ namespace ArTiX.GridBuildingSystem
             }
         }
 
-        public bool CanBuild(in PlacedObjectSO placedObjectDatas, in Vector2Int origin, in float rotation = 0)
+        public bool CanBuild(in PlacedObjectSO placedObjectDatas, in Vector2Int origin, in float logicRotation = 0)
         {
-            foreach (Vector2Int cell in placedObjectDatas.GetOccupiedCells(origin, rotation))
+            foreach (Vector2Int cell in placedObjectDatas.GetOccupiedCells(origin, logicRotation))
             {
                 if (grid.GetCellValue(cell) != null || !grid.IsCellWithinGrid(cell))
                     return false;
