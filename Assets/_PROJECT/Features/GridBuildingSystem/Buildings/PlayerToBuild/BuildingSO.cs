@@ -7,7 +7,6 @@ namespace ArTiX.GridBuildingSystem.Datas
     public class BuildingSO : PlacedObjectSO
     {
         [Title("Building datas")]
-        [SerializeField] private string objName;
         [SerializeField] private Sprite icon;
         [SerializeField] private Ghost ghost;
         [SerializeField] private bool allowDragPlacement;

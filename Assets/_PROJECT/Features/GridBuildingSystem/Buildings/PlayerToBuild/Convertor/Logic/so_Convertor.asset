@@ -15,11 +15,11 @@ MonoBehaviour:
   _name: Factory
   prefab: {fileID: 1963761662857068457, guid: d65dbc1c287a64935b2472c66a27caf2, type: 3}
   cellArray:
+  - {x: 0, y: 0}
   - {x: -1, y: -1}
   - {x: -1, y: 0}
   - {x: -1, y: 1}
   - {x: 0, y: -1}
-  - {x: 0, y: 0}
   - {x: 0, y: 1}
   - {x: 1, y: -1}
   - {x: 1, y: 0}

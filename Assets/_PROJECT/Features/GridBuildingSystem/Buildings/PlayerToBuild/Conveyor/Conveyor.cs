@@ -348,9 +348,6 @@ namespace ArTiX.FactoryGame.Buildings
                     UpdateRotation();
                     break;
             }
-
-            if (belt == null)
-                Debug.LogError("I have no belt");
         }
 
         public override void EnterDestroyPreview()

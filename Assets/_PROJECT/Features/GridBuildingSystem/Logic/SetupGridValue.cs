@@ -103,6 +103,13 @@ namespace ArTiX.GridBuildingSystem.Tools
 
                     cellSprite.color = currentCells.Contains(checkedCell) ? selectedColor : unselectedColor;
 
+                    if (checkedCell == Vector2Int.zero)
+                    {
+                        DestroyImmediate(cellSprite.GetComponent<Collider>());
+                        cellSprite.color = Color.blue;
+                        cellSprite.gameObject.name = "MiddleCell";
+                    }
+
                     spriteCellDic.Add(cellSprite, checkedCell);
                 }
             }
@@ -110,7 +117,10 @@ namespace ArTiX.GridBuildingSystem.Tools
 
         public void Validate()
         {
-            List<Vector2Int> currentCells = new List<Vector2Int>();
+            List<Vector2Int> currentCells = new List<Vector2Int>
+            {
+                Vector2Int.zero
+            };
 
             foreach (KeyValuePair<SpriteRenderer, Vector2Int> spriteCellPair in spriteCellDic)
             {

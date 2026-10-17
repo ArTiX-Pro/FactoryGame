@@ -63,7 +63,7 @@ namespace ArTiX.FactoryGame.Buildings
             if (window == null)
             {
                 window = Instantiate(prefabWindow, HUD.Instance.transform);
-                window.Initialize(this);
+                window.Initialize(this, datas.Name);
                 window.OnClosingWindow += OnClosingWindow;
             }
         }
